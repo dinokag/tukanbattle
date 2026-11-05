@@ -1389,6 +1389,21 @@ convTree(document.body);MO.observe(document.body,MOC);
     if(e.target.closest("[data-usell]")){stop(e);var g=U.won;closeM();sell([g.uid],function(s){return"Продано: +"+s+" 🪶"});uRender();return}
   },true);
 })();
+
+/* ===== Требуется подписка на канал ===== */
+(function(){
+  var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
+  if(!init)return;
+  fetch((window.TOUCAN_API_BASE||location.origin)+"/api/me",{headers:{"X-Telegram-Init-Data":init}}).then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})}).then(function(x){
+    if(x.ok||!x.d||x.d.error!=="not_subscribed")return;
+    var o=document.createElement("div");o.style.cssText="position:fixed;inset:0;z-index:99999;background:#120d1f;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:28px;text-align:center;font-family:inherit";
+    o.innerHTML='<div style="font-size:56px">🦜</div><h2 style="margin:0">Нужна подписка на канал</h2><p style="margin:0;opacity:.8">Чтобы пользоваться ботом, подпишитесь на канал. Потом вернитесь в чат с ботом и нажмите «✅ Проверить».</p>';
+    function btn(t,f){var b=document.createElement("button");b.textContent=t;b.style.cssText="border:0;border-radius:14px;padding:14px 22px;font:inherit;font-weight:800;background:#ffd23f;color:#222;min-width:220px";b.onclick=f;o.appendChild(b)}
+    if(x.d.channel)btn("📢 Подписаться",function(){tg.openTelegramLink?tg.openTelegramLink(x.d.channel):window.open(x.d.channel)});
+    btn("Закрыть",function(){tg.close()});
+    document.body.appendChild(o);
+  }).catch(function(){});
+})();
 </script>
 </body>
 </html>

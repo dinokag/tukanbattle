@@ -70,14 +70,46 @@ def poll():
     while True:
         try:
             for up in tg("getUpdates",offset=off,timeout=30):
-                off=up["update_id"]+1;m=up.get("message") or {}
+                off=up["update_id"]+1;m=up.get("message") or {};cb=up.get("callback_query")
+                if cb and cb.get("data")=="check":check(cb);continue
                 t=m.get("text") or "";f=m.get("from")
                 if f and t.startswith("/start"):
                     a=t.split(" ",1)[1] if " " in t else "";ref=int(a[4:]) if a.startswith("ref_") and a[4:].isdigit() else None
                     touch(f,ref)
-                    kb={"inline_keyboard":[[{"text":"🦜 Играть","web_app":{"url":WEBAPP}}]]} if WEBAPP else None
-                    tg("sendMessage",chat_id=m["chat"]["id"],text="Добро пожаловать в Тукан Батл! Жми «Играть».",reply_markup=kb)
+                    welcome(m["chat"]["id"],f)
         except Exception as e:print("poll",e);time.sleep(5)
+CLINK=os.environ.get("CHANNEL_LINK") or (("https://t.me/"+CHANNEL.lstrip("@")) if CHANNEL.startswith("@") else "")
+MEMB={}
+def is_member(u):
+    if not CHANNEL:return True
+    if MEMB.get(u,0)>time.time():return True
+    try:st=tg("getChatMember",chat_id=CHANNEL,user_id=u)["status"]
+    except Exception as e:print("member",e);return True
+    ok=st in("member","administrator","creator")
+    if ok:MEMB[u]=time.time()+600
+    return ok
+def play_kb():return {"inline_keyboard":[[{"text":"🦜 Играть","web_app":{"url":WEBAPP}}]]} if WEBAPP else None
+def sub_kb():
+    rows=[]
+    if CLINK:rows.append([{"text":"📢 Подписаться","url":CLINK}])
+    rows.append([{"text":"✅ Проверить","callback_data":"check"}]);return {"inline_keyboard":rows}
+def welcome(chat,f):
+    name=f.get("first_name") or "друг"
+    if is_member(f["id"]):tg("sendMessage",chat_id=chat,text="Привет, %s! 🦜 Добро пожаловать в Тукан Батл. Жми «Играть»."%name,reply_markup=play_kb())
+    else:tg("sendMessage",chat_id=chat,text="Привет, %s! 🦜 Добро пожаловать в Тукан Батл!\n\nЧтобы пользоваться ботом, подпишитесь на наш канал, а затем нажмите «Проверить»."%name,reply_markup=sub_kb())
+def check(cb):
+    f=cb["from"];touch(f)
+    if not is_member(f["id"]):
+        tg("answerCallbackQuery",callback_query_id=cb["id"],text="Вы ещё не подписаны на канал. Подпишитесь и нажмите «Проверить» снова.",show_alert=True);return
+    msg="Отлично, подписка подтверждена! Жми «Играть»."
+    with L:
+        db.execute("begin immediate")
+        try:
+            r=claim_sub(f["id"]);db.execute("commit")
+            if r.get("claimed"):msg="Отлично, подписка подтверждена! Вам начислено 1000 🪶. Жми «Играть»."
+        except BaseException:db.execute("rollback")
+    tg("answerCallbackQuery",callback_query_id=cb["id"])
+    tg("sendMessage",chat_id=cb["message"]["chat"]["id"],text=msg,reply_markup=play_kb())
 LASTB=[0]
 def backup(force=False):
     if not(TOKEN and BACKUP):return
@@ -238,6 +270,7 @@ class H(BaseHTTPRequestHandler):
         usr=auth(s.headers.get("X-Telegram-Init-Data",""))
         if not usr:return s.send(401,{"error":"bad_init_data"})
         u=usr["id"];touch(usr)
+        if not is_member(u):return s.send(403,{"error":"not_subscribed","channel":CLINK})
         try:
             with L:
                 db.execute("begin immediate")
