@@ -1408,28 +1408,28 @@ convTree(document.body);MO.observe(document.body,MOC);
 /* ===== Кликер ===== */
 (function(){
   var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
-  var PACK=1000,REWARD=500,CPS=20,srv=0,pend=0,ts=[],timer=0,busy=0;
+  var PACK=1000,REWARD=500,CPS=20,srv=0,pend=0,ts=[],timer=0,busy=0,mult=1;
   var st=document.createElement("style");
   st.textContent="#ckbtn{width:210px;height:210px;margin:16px auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:104px;background:radial-gradient(circle at 30% 28%,#fff0a8,#ffb23a 60%,#e2791d);box-shadow:0 10px 0 #a85510,0 18px 30px rgba(0,0,0,.35);user-select:none;-webkit-user-select:none;touch-action:manipulation;cursor:pointer;transition:transform .05s,box-shadow .05s}#ckbtn:active,#ckbtn.p{transform:translateY(6px);box-shadow:0 4px 0 #a85510,0 8px 16px rgba(0,0,0,.35)}#ckn{font-size:44px;font-weight:900}.ckf{position:fixed;pointer-events:none;font-weight:900;font-size:22px;color:#ffe27a;text-shadow:0 2px 4px #000;animation:ckup .7s ease-out forwards;z-index:50}@keyframes ckup{to{transform:translateY(-60px);opacity:0}}";
   document.head.appendChild(st);
   $("home").insertAdjacentHTML("beforeend",'<button class="row c-nuts" data-go="click"><span class="ico">👆</span><div><h3>Кликер</h3><p>1000 кликов = 500 🪶</p></div></button>');
-  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="click"><button class="back" data-go="home">← Назад</button><h2>Кликер</h2><p class="sub">Тапай по тукану и копи клики. Не больше 20 кликов в секунду.</p><div class="card" style="text-align:center;cursor:default"><div id="ckn">0</div><div class="hint">кликов в запасе</div></div><div id="ckbtn" role="button" aria-label="Клик">🦜</div><div class="card" style="cursor:default"><h3>🛒 Магазин</h3><p>За каждые 1000 кликов — 500 🪶</p><button class="main" id="ckbuy" type="button">Купить 500 🪶 за 1000 кликов</button><button class="main glass" id="ckall" type="button">Обменять все клики</button><p class="note" id="ckmsg"></p></div></section>');
+  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="click"><button class="back" data-go="home">← Назад</button><h2>Кликер</h2><p class="sub">Тапай по тукану и копи клики. Не больше 20 кликов в секунду.</p><div class="card" style="text-align:center;cursor:default"><div id="ckn">0</div><div class="hint" id="ckh">кликов в запасе</div></div><div id="ckbtn" role="button" aria-label="Клик">🦜</div><div class="card" style="cursor:default"><h3>🛒 Магазин</h3><p>За каждые 1000 кликов — 500 🪶</p><button class="main" id="ckbuy" type="button">Купить 500 🪶 за 1000 кликов</button><button class="main glass" id="ckall" type="button">Обменять все клики</button><p class="note" id="ckmsg"></p></div></section>');
   function api(p,b){return fetch((window.TOUCAN_API_BASE||location.origin)+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
   function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
-  function show(){$("ckn").textContent=fmt(srv+pend);$("ckbuy").disabled=srv+pend<PACK;$("ckall").disabled=srv+pend<PACK;$("ckmsg").textContent=(srv+pend)<PACK?"Нужно ещё "+fmt(PACK-srv-pend)+" кликов до обмена.":""}
+  function show(){var t=srv+pend*mult;$("ckn").textContent=fmt(t);$("ckbuy").disabled=t<PACK;$("ckall").disabled=t<PACK;$("ckh").textContent=mult>1?"кликов в запасе · бустер x"+mult:"кликов в запасе";$("ckmsg").textContent=t<PACK?"Нужно ещё "+fmt(PACK-t)+" кликов до обмена.":""}
   function flush(){
     if(busy||!pend)return Promise.resolve();
     var n=pend;pend=0;busy=1;
-    return api("/api/clicker/tap",{n:n}).then(function(r){srv=r.clicks}).catch(function(){pend+=n}).then(function(){busy=0;show()})
+    return api("/api/clicker/tap",{n:n}).then(function(r){srv=r.clicks;mult=r.mult||1}).catch(function(){pend+=n}).then(function(){busy=0;show()})
   }
-  function load(){api("/api/clicker/tap",{n:0}).then(function(r){srv=r.clicks;show()}).catch(function(){})}
+  function load(){api("/api/clicker/tap",{n:0}).then(function(r){srv=r.clicks;mult=r.mult||1;show()}).catch(function(){})}
   function tap(e){
     e.preventDefault();var now=performance.now();
     ts=ts.filter(function(t){return now-t<1000});
     if(ts.length>=CPS)return;
     ts.push(now);pend++;show();
     var b=$("ckbtn");b.classList.add("p");setTimeout(function(){b.classList.remove("p")},50);
-    var f=document.createElement("div");f.className="ckf";f.textContent="+1";var r=b.getBoundingClientRect();
+    var f=document.createElement("div");f.className="ckf";f.textContent="+"+mult;var r=b.getBoundingClientRect();
     f.style.left=(r.left+r.width/2+(Math.random()*80-40))+"px";f.style.top=(r.top+30)+"px";document.body.appendChild(f);setTimeout(function(){f.remove()},700);
     if(!timer)timer=setInterval(function(){if(!pend){clearInterval(timer);timer=0}flush()},1100);
   }
@@ -1446,6 +1446,79 @@ convTree(document.body);MO.observe(document.body,MOC);
     og(id);if(id==="click"){load();show()}else flush()
   };
   document.addEventListener("visibilitychange",function(){if(document.hidden)flush()});
+  window.addEventListener("mult",function(e){mult=e.detail||1;show()});
+})();
+
+/* ===== Реальные дропы в LIVE и «Лучший дроп» ===== */
+(function(){
+  var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
+  if(!init)return;
+  var REAL={on:false,list:[],idx:0,last:0},base=window.TOUCAN_API_BASE||location.origin;
+  function api(p,b){return fetch(base+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
+  function map(x){var cs=CASES.filter(function(k){return k.id===x.case})[0];if(!cs||!cs.items[x.i])return null;var it=cs.items[x.i];return{n:escLB(x.who)+" · "+it.n,e:it.e,v:x.v,r:it.r}}
+  var PH={n:"Дропов пока нет. Открой гнездо первым!",e:"🪹",v:0,r:"common",nov:1};
+  window.feedUser=function(){};
+  window.fitem=function(d){return '<div class="lt-i d-'+d.r+'"><span class="emoji">'+d.e+'</span><span class="t"><b>'+d.n+'</b>'+(d.nov?'':'<i>'+fmt(d.v)+' 🪶</i>')+'</span></div>'};
+  window.nextDrop=function(){
+    var d=FEED.q.length?FEED.q.shift():(REAL.list.length?REAL.list[REAL.idx++%REAL.list.length]:PH);
+    if(!d.nov&&d.v>FEED.top.v)setTop(d,true);return d};
+  setTop({n:"Загрузка…",e:"🏆",v:0,r:"gold"},false);
+  function poll(first){
+    api("/api/drops",{since:REAL.last}).then(function(r){
+      var ds=r.drops.map(function(x){REAL.last=Math.max(REAL.last,x.id);return map(x)}).filter(Boolean);
+      if(first){
+        REAL.list=ds.slice();REAL.on=true;
+        var t=r.top&&map(r.top);setTop(t||{n:"Пока нет дропов",e:"🏆",v:0,r:"gold"},false);
+        ltK.innerHTML="";FEED.off=0;ffill();
+      }else ds.forEach(function(d){FEED.q.push(d);REAL.list.push(d);if(REAL.list.length>40)REAL.list.shift()});
+    }).catch(function(){});
+  }
+  poll(true);setInterval(function(){if(!document.hidden&&REAL.on)poll(false)},6000);
+})();
+
+/* ===== Магазин: перья и бустеры кликера за звёзды ===== */
+(function(){
+  var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
+  var RATE=200,MIN=10,MAX=10000,mult=1,busy=0,PRE=[10,50,100,500,1000,5000,10000];
+  var st=document.createElement("style");
+  st.textContent=".schips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.schip{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:inherit;border-radius:12px;padding:10px 4px;font:inherit;font-weight:800;font-size:13px}.schip.on{background:rgba(255,210,63,.25);border-color:#ffd23f}#shopn{width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:inherit;font:inherit;font-size:18px;font-weight:800;text-align:center}.sbadge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:99px;background:#2e9e5b;color:#fff;font-size:11px;font-weight:800}";
+  document.head.appendChild(st);
+  document.querySelector('nav button[data-go="prof"]').insertAdjacentHTML("beforebegin",'<button data-go="shop"><span>🛒</span>Магазин</button>');
+  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="shop"><h2>Магазин</h2><p class="sub">Оплата звёздами Telegram ⭐</p><div class="card" style="cursor:default"><h3>🪶 Перья за звёзды</h3><p id="srate">Курс: 10 ⭐ = 2 000 🪶</p><div class="schips" id="schips"></div><input id="shopn" type="number" inputmode="numeric" min="10" max="10000" step="1" value="10" aria-label="Количество звёзд"><p class="note" id="sprev"></p><button class="main" id="sbuy" type="button">Купить перья</button></div><div class="card" style="cursor:default;margin-top:10px"><h3>👆 Клики x2 <span class="sbadge" id="sb2" hidden>Куплено</span></h3><p>Каждый клик в кликере считается за 2. Навсегда.</p><button class="main" id="sx2" type="button">Купить за 50 ⭐</button></div><div class="card" style="cursor:default;margin-top:10px"><h3>👆 Клики x3 <span class="sbadge" id="sb3" hidden>Куплено</span></h3><p>Каждый клик в кликере считается за 3. Навсегда.</p><button class="main" id="sx3" type="button">Купить за 150 ⭐</button></div><p class="note">Перья — виртуальная валюта игры: они не имеют денежной стоимости, не выводятся и не обмениваются на деньги или звёзды. Условия: /terms, проблемы с оплатой: /paysupport в чате с ботом.</p></section>');
+  function n(){var v=parseInt($("shopn").value,10);return isNaN(v)?0:v}
+  function prev(){var v=n(),ok=v>=MIN&&v<=MAX;$("sprev").textContent=ok?"Вы получите "+fmt(v*RATE)+" 🪶":"Введите от "+MIN+" до "+fmt(MAX)+" звёзд";$("sbuy").disabled=!ok||busy;
+    document.querySelectorAll(".schip").forEach(function(b){b.classList.toggle("on",+b.dataset.s===v)})}
+  $("schips").innerHTML=PRE.map(function(s){return '<button class="schip" type="button" data-s="'+s+'">'+fmt(s)+' ⭐</button>'}).join("");
+  $("schips").addEventListener("click",function(e){var b=e.target.closest("[data-s]");if(b){$("shopn").value=b.dataset.s;prev()}});
+  $("shopn").addEventListener("input",prev);
+  function boosts(){[2,3].forEach(function(m){var o=mult>=m;$("sb"+m).hidden=!o;$("sx"+m).disabled=o||busy;$("sx"+m).textContent=o?"Уже куплено":"Купить за "+(m===2?50:150)+" ⭐"})}
+  function api(p,b){return fetch((window.TOUCAN_API_BASE||location.origin)+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
+  function load(){api("/api/me").then(function(d){mult=d.mult||1;RATE=d.rate||RATE;$("srate").textContent="Курс: 10 ⭐ = "+fmt(10*RATE)+" 🪶";prev();boosts()}).catch(function(){})}
+  function waitGrant(b0,m0,k){
+    api("/api/me").then(function(d){
+      if(d.balance!==b0||(d.mult||1)!==m0){coins=d.balance;upd();mult=d.mult||1;window.dispatchEvent(new CustomEvent("mult",{detail:mult}));boosts();toast("Покупка зачислена ✅");return}
+      if(k<10)setTimeout(function(){waitGrant(b0,m0,k+1)},1200);else toast("Платёж обрабатывается. Если ничего не пришло, напишите /paysupport боту.")
+    }).catch(function(){if(k<10)setTimeout(function(){waitGrant(b0,m0,k+1)},1500)})}
+  function buy(body){
+    if(busy)return;
+    if(!tg||!tg.openInvoice){toast("Обновите Telegram для оплаты звёздами");return}
+    busy=1;prev();boosts();var b0=coins,m0=mult;
+    api("/api/shop/invoice",body).then(function(r){
+      tg.openInvoice(r.link,function(s){
+        busy=0;prev();boosts();
+        if(s==="paid"){toast("Оплата прошла, зачисляем…");waitGrant(b0,m0,0)}
+        else if(s==="cancelled")toast("Оплата отменена");
+        else if(s==="failed")toast("Оплата не прошла");
+      })
+    }).catch(function(e){busy=0;prev();boosts();toast(e&&e.error==="already_owned"?"Это уже куплено":e&&e.error==="bad_amount"?"Сумма вне допустимого диапазона":"Не удалось создать счёт, попробуйте позже")})}
+  $("sbuy").onclick=function(){var v=n();if(v>=MIN&&v<=MAX)buy({kind:"feathers",stars:v})};
+  $("sx2").onclick=function(){buy({kind:"x2"})};$("sx3").onclick=function(){buy({kind:"x3"})};
+  prev();boosts();
+  var og=window.go;window.go=function(id){
+    if(id==="shop"&&!init){toast("Магазин доступен в Telegram");return}
+    og(id);
+    if(id==="shop"){document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.go==="shop")});load()}
+  };
 })();
 </script>
 </body>
