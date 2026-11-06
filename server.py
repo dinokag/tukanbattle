@@ -30,11 +30,18 @@ def restore():
 restore()
 db=sqlite3.connect(DBP,check_same_thread=False,isolation_level=None)
 db.executescript("""create table if not exists u(id integer primary key,balance integer,daily integer default 0,username text,first_name text,ref integer,sub integer default 0,refpaid integer default 0);
+create table if not exists promo(code text primary key,feathers integer,max_uses integer,used integer default 0,expires integer default 0);
+create table if not exists promo_used(code text,user integer,primary key(code,user));
 create table if not exists mines(user integer primary key,bet integer,n integer,traps text,safe text);
 create table if not exists crash(user integer primary key,bet integer,cp real,t0 real);
 create table if not exists inv(uid integer primary key autoincrement,user integer,case_id text,idx integer,v integer);
 create table if not exists req(user integer,rid text,resp text,primary key(user,rid));
 create table if not exists ledger(user integer,delta integer,reason text,ts integer);""")
+def mig():
+    cols={r[1] for r in db.execute("pragma table_info(u)")}
+    for c,d in (("banned","integer default 0"),("clicks","integer default 0"),("ckday","text"),("ckcnt","integer default 0")):
+        if c not in cols:db.execute("alter table u add column %s %s"%(c,d))
+mig()
 L=threading.Lock()
 def auth(init):
     if not TOKEN or not init:return None
@@ -72,10 +79,13 @@ def poll():
             for up in tg("getUpdates",offset=off,timeout=30):
                 off=up["update_id"]+1;m=up.get("message") or {};cb=up.get("callback_query")
                 if cb and cb.get("data")=="check":check(cb);continue
+                if cb and cb.get("data")=="adm_stats" and cb["from"]["id"] in ADMINS:say(cb["message"]["chat"]["id"],tx(stats));tg("answerCallbackQuery",callback_query_id=cb["id"]);continue
                 t=m.get("text") or "";f=m.get("from")
+                if f and t.startswith("/") and not t.startswith("/start"):handle_cmd(f,m["chat"]["id"],t);continue
                 if f and t.startswith("/start"):
                     a=t.split(" ",1)[1] if " " in t else "";ref=int(a[4:]) if a.startswith("ref_") and a[4:].isdigit() else None
                     touch(f,ref)
+                    if tx(lambda:banned(f["id"])):say(m["chat"]["id"],"⛔ Доступ ограничен.");continue
                     welcome(m["chat"]["id"],f)
         except Exception as e:print("poll",e);time.sleep(5)
 CLINK=os.environ.get("CHANNEL_LINK") or (("https://t.me/"+CHANNEL.lstrip("@")) if CHANNEL.startswith("@") else "")
@@ -99,6 +109,7 @@ def welcome(chat,f):
     else:tg("sendMessage",chat_id=chat,text="Привет, %s! 🦜 Добро пожаловать в Тукан Батл!\n\nЧтобы пользоваться ботом, подпишитесь на наш канал, а затем нажмите «Проверить»."%name,reply_markup=sub_kb())
 def check(cb):
     f=cb["from"];touch(f)
+    if tx(lambda:banned(f["id"])):tg("answerCallbackQuery",callback_query_id=cb["id"],text="Доступ ограничен.",show_alert=True);return
     if not is_member(f["id"]):
         tg("answerCallbackQuery",callback_query_id=cb["id"],text="Вы ещё не подписаны на канал. Подпишитесь и нажмите «Проверить» снова.",show_alert=True);return
     msg="Отлично, подписка подтверждена! Жми «Играть»."
@@ -110,6 +121,154 @@ def check(cb):
         except BaseException:db.execute("rollback")
     tg("answerCallbackQuery",callback_query_id=cb["id"])
     tg("sendMessage",chat_id=cb["message"]["chat"]["id"],text=msg,reply_markup=play_kb())
+CPS=int(os.environ.get("CPS_MAX","20"));PACK=int(os.environ.get("CLICK_PACK","1000"));REWARD=int(os.environ.get("CLICK_REWARD","500"));CDAY=int(os.environ.get("CLICK_DAILY_MAX","0"))
+TB={}
+def tokens(u,n):
+    now=time.time();t,l=TB.get(u,(float(CPS),now));t=min(float(CPS),t+(now-l)*CPS);k=min(n,int(t+1e-9));TB[u]=(t-k,now);return k
+ADMINS={int(x) for x in os.environ.get("ADMIN_IDS","").replace(" ","").split(",") if x.lstrip("-").isdigit()}
+if not ADMINS and BACKUP.lstrip("-").isdigit():ADMINS={int(BACKUP)}
+def tx(fn):
+    with L:
+        db.execute("begin immediate")
+        try:r=fn();db.execute("commit");return r
+        except BaseException:db.execute("rollback");raise
+def banned(u):
+    r=db.execute("select banned from u where id=?",(u,)).fetchone();return bool(r and r[0])
+def say(chat,text,**kw):
+    try:tg("sendMessage",chat_id=chat,text=str(text)[:4000],**kw)
+    except Exception as e:print("say",e)
+def who(a):
+    a=a.strip()
+    if a.lstrip("-").isdigit():r=db.execute("select id from u where id=?",(int(a),)).fetchone()
+    else:r=db.execute("select id from u where lower(username)=lower(?)",(a.lstrip("@"),)).fetchone()
+    if not r:raise Err(404,"Игрок не найден: "+a)
+    return r[0]
+def card(i):
+    r=db.execute("select id,username,first_name,balance,clicks,banned,ref,sub from u where id=?",(i,)).fetchone()
+    n=db.execute("select count(*),coalesce(sum(v),0) from inv where user=?",(i,)).fetchone()
+    return "👤 %s @%s\nID: %d\nБаланс: %d 🪶\nПредметов: %d (на %d 🪶)\nКликов: %d\nПодписка: %s\nПригласил: %s\nБан: %s"%(r[2] or "-",r[1] or "-",r[0],r[3],n[0],n[1],r[4] or 0,"да" if r[7] else "нет",r[6] or "-","ДА" if r[5] else "нет")
+def stats():
+    r=db.execute("select count(*),coalesce(sum(balance),0),coalesce(sum(banned),0),coalesce(sum(sub),0),coalesce(sum(clicks),0) from u").fetchone()
+    it=db.execute("select count(*),coalesce(sum(v),0) from inv").fetchone();pr=db.execute("select count(*) from promo").fetchone()[0]
+    return "📊 Статистика\nИгроков: %d\nПодписаны: %d\nЗабанены: %d\nСумма балансов: %d 🪶\nПредметов в инвентарях: %d (на %d 🪶)\nКликов в запасе: %d\nПромокодов: %d"%(r[0],r[3],r[2],r[1],it[0],it[1],r[4],pr)
+def redeem(u,code):
+    code=code.strip().upper();r=db.execute("select feathers,max_uses,used,expires from promo where code=?",(code,)).fetchone()
+    if not r:return "Промокод не найден."
+    if r[3] and r[3]<time.time():return "Срок действия промокода истёк."
+    if r[1] and r[2]>=r[1]:return "Промокод уже использован максимальное число раз."
+    if db.execute("select 1 from promo_used where code=? and user=?",(code,u)).fetchone():return "Вы уже активировали этот промокод."
+    db.execute("insert into promo_used values(?,?)",(code,u));db.execute("update promo set used=used+1 where code=?",(code,));bal(u);add(u,r[0],"promo:"+code)
+    return "🎉 Промокод активирован! +%d 🪶"%r[0]
+HELP="""🛠 Админ-команды
+📊 /stats — статистика
+👤 /user ID|@ник — карточка игрока
+🔎 /find текст — поиск по имени или нику
+🏆 /top [N] — топ по балансу
+💰 /give ID|@ник N — выдать перья
+➖ /take ID|@ник N — забрать перья
+✏️ /setbal ID|@ник N — установить баланс
+🎁 /giveall N — выдать всем перья
+🎒 /items [case_id] — гнёзда и предметы
+🎁 /giveitem ID|@ник case_id номер — выдать предмет
+🗑 /clearinv ID|@ник — очистить инвентарь
+🔄 /resetdaily ID|@ник — вернуть бесплатное гнездо
+👆 /addclicks ID|@ник N — выдать клики
+🚫 /ban ID|@ник — бан, /unban ID|@ник — разбан, /banned — список
+🎟 /promoadd КОД перья макс_использований [дней] — создать промокод
+🎟 /promolist — список, /promodel КОД — удалить
+✉️ /msg ID|@ник текст — сообщение игроку
+📣 /broadcast текст — рассылка всем, /broadcastplay текст — с кнопкой «Играть»
+💾 /backup — сохранить копию базы сейчас
+Игрокам: /promo КОД — активировать промокод."""
+def admin_tx(cmd,rest,a):
+    def N(x):
+        try:return int(x)
+        except Exception:raise Err(400,"Нужно целое число: "+str(x))
+    def need(k):
+        if len(a)<k:raise Err(400,"Мало аргументов. Список команд: /admin")
+    if cmd in("/admin","/help"):return HELP
+    if cmd=="/stats":return stats()
+    if cmd=="/user":need(1);return card(who(a[0]))
+    if cmd=="/find":
+        need(1);q="%"+rest.strip().lower()+"%"
+        rows=db.execute("select id,username,first_name,balance from u where lower(coalesce(username,'')) like ? or lower(coalesce(first_name,'')) like ? limit 20",(q,q)).fetchall()
+        return "\n".join("%d @%s %s — %d 🪶"%(r[0],r[1] or "-",r[2] or "-",r[3]) for r in rows) or "Ничего не найдено."
+    if cmd=="/top":
+        n=N(a[0]) if a else 10
+        return "\n".join("%d. %d @%s %s — %d 🪶"%(k+1,r[0],r[1] or "-",r[2] or "-",r[3]) for k,r in enumerate(db.execute("select id,username,first_name,balance from u order by balance desc limit ?",(max(1,min(50,n)),))))
+    if cmd in("/give","/take","/setbal"):
+        need(2);i=who(a[0]);n=N(a[1]);cur=bal(i)
+        new=cur+n if cmd=="/give" else max(0,cur-n) if cmd=="/take" else max(0,n)
+        add(i,new-cur,"admin:"+cmd[1:]);return "Готово. Баланс игрока: %d 🪶"%bal(i)
+    if cmd=="/giveall":
+        need(1);n=N(a[0]);db.execute("insert into ledger select id,?,'admin:giveall',? from u where banned=0",(n,int(time.time())));db.execute("update u set balance=balance+? where banned=0",(n,))
+        return "Выдано всем: %d 🪶"%n
+    if cmd=="/items":
+        if not a:return "Гнёзда: "+", ".join(CASES)
+        c=CASES.get(a[0])
+        if not c:raise Err(404,"Нет такого гнезда")
+        return "\n".join("%d. %s — %d 🪶"%(k,i["n"],i["v"]) for k,i in enumerate(c["items"]))
+    if cmd=="/giveitem":
+        need(3);i=who(a[0]);c=CASES.get(a[1])
+        if not c:raise Err(404,"Нет такого гнезда (список: /items)")
+        k=N(a[2])
+        if not 0<=k<len(c["items"]):raise Err(400,"Нет такого номера (список: /items "+a[1]+")")
+        db.execute("insert into inv(user,case_id,idx,v) values(?,?,?,?)",(i,c["id"],k,c["items"][k]["v"]));return "Выдано: "+c["items"][k]["n"]
+    if cmd=="/clearinv":need(1);i=who(a[0]);db.execute("delete from inv where user=?",(i,));return "Инвентарь очищен."
+    if cmd=="/resetdaily":need(1);i=who(a[0]);db.execute("update u set daily=0 where id=?",(i,));return "Бесплатное гнездо снова доступно."
+    if cmd=="/addclicks":need(2);i=who(a[0]);db.execute("update u set clicks=max(0,clicks+?) where id=?",(N(a[1]),i));return "Готово."
+    if cmd in("/ban","/unban"):
+        need(1);i=who(a[0])
+        if i in ADMINS:raise Err(400,"Админа банить нельзя")
+        db.execute("update u set banned=? where id=?",(1 if cmd=="/ban" else 0,i));return "Игрок %d: %s"%(i,"забанен" if cmd=="/ban" else "разбанен")
+    if cmd=="/banned":
+        return "\n".join("%d @%s %s"%r for r in db.execute("select id,coalesce(username,'-'),coalesce(first_name,'-') from u where banned=1")) or "Банов нет."
+    if cmd=="/promoadd":
+        need(3);code=a[0].upper();f=N(a[1]);mx=N(a[2]);days=N(a[3]) if len(a)>3 else 0
+        if f<=0 or mx<0 or days<0:raise Err(400,"Перья > 0, лимит и дни >= 0 (0 = без лимита)")
+        db.execute("insert or replace into promo(code,feathers,max_uses,used,expires) values(?,?,?,0,?)",(code,f,mx,int(time.time()+days*86400) if days else 0))
+        return "Промокод %s: +%d 🪶, лимит %s, срок %s"%(code,f,mx or "∞",("%d дн."%days) if days else "без срока")
+    if cmd=="/promolist":
+        return "\n".join("%s: +%d 🪶, использовано %d/%s%s"%(r[0],r[1],r[3],r[2] or "∞"," (истёк)" if r[4] and r[4]<time.time() else "") for r in db.execute("select code,feathers,max_uses,used,expires from promo")) or "Промокодов нет."
+    if cmd=="/promodel":
+        need(1);db.execute("delete from promo where code=?",(a[0].upper(),));return "Удалено."
+    raise Err(404,"Неизвестная команда. Список: /admin")
+ADMIN_CMDS={"/admin","/help","/stats","/user","/find","/top","/give","/take","/setbal","/giveall","/items","/giveitem","/clearinv","/resetdaily","/addclicks","/ban","/unban","/banned","/promoadd","/promolist","/promodel","/msg","/broadcast","/broadcastplay","/backup"}
+def broadcast(ids,text,kb,admin_chat):
+    ok=bad=0
+    for i in ids:
+        try:
+            p={"chat_id":i,"text":text}
+            if kb:p["reply_markup"]=kb
+            tg("sendMessage",**p);ok+=1
+        except Exception:bad+=1
+        time.sleep(0.05)
+    say(admin_chat,"📣 Рассылка завершена. Доставлено: %d, не доставлено: %d"%(ok,bad))
+def admin(t,chat):
+    p=t.split(None,1);cmd=p[0].split("@")[0].lower();rest=p[1] if len(p)>1 else "";a=rest.split()
+    if cmd=="/backup":backup(True);return "💾 Копия базы отправлена."
+    if cmd=="/msg":
+        if len(a)<2:raise Err(400,"Формат: /msg ID|@ник текст")
+        i=tx(lambda:who(a[0]));say(i,rest.split(None,1)[1]);return "Отправлено."
+    if cmd in("/broadcast","/broadcastplay"):
+        if not rest.strip():raise Err(400,"Формат: /broadcast текст")
+        ids=tx(lambda:[r[0] for r in db.execute("select id from u where banned=0")])
+        threading.Thread(target=broadcast,args=(ids,rest.strip(),play_kb() if cmd=="/broadcastplay" else None,chat),daemon=True).start()
+        return "📣 Рассылка запущена: %d получателей."%len(ids)
+    return tx(lambda:admin_tx(cmd,rest,a))
+def handle_cmd(f,chat,t):
+    try:
+        touch(f);cmd=t.split()[0].split("@")[0].lower()
+        if tx(lambda:banned(f["id"])):return say(chat,"⛔ Доступ ограничен.")
+        if f["id"] in ADMINS and cmd in ADMIN_CMDS:
+            kb={"inline_keyboard":[[{"text":"📊 Статистика","callback_data":"adm_stats"}]]} if cmd in("/admin","/help") else None
+            return say(chat,admin(t,chat),**({"reply_markup":kb} if kb else {}))
+        if cmd=="/promo":
+            if not is_member(f["id"]):return welcome(chat,f)
+            p=t.split(None,1)
+            return say(chat,tx(lambda:redeem(f["id"],p[1])) if len(p)>1 else "Напишите: /promo КОД")
+    except Err as e:say(chat,e.msg)
+    except Exception as e:print("cmd",e)
 LASTB=[0]
 def backup(force=False):
     if not(TOKEN and BACKUP):return
@@ -146,7 +305,7 @@ class Err(Exception):
     def __init__(s,code,msg):s.code=code;s.msg=msg
 def act(u,path,b):
     rid=str(b.get("request_id",""))[:64]
-    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
+    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
     if path=="/api/referral-link":
         if not BOTNAME[0]:raise Err(503,"no_bot")
         return {"referral_link":"https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)}
@@ -159,6 +318,13 @@ def act(u,path,b):
         if not r:return {"none":True}
         if math.exp(.22*max(0,time.time()-r[1]-.25))>=r[0]:db.execute("delete from crash where user=?",(u,));return {"crashed":True,"cp":r[0]}
         return {"crashed":False}
+    if path=="/api/clicker/tap":
+        n=max(0,min(CPS,int(b.get("n",0))));k=tokens(u,n) if n else 0;bal(u)
+        if k and CDAY:
+            d=time.strftime("%Y-%m-%d");r=db.execute("select ckday,ckcnt from u where id=?",(u,)).fetchone()
+            c=r[1] if r[0]==d else 0;k=max(0,min(k,CDAY-c));db.execute("update u set ckday=?,ckcnt=? where id=?",(d,c+k,u))
+        if k:db.execute("update u set clicks=clicks+? where id=?",(k,u))
+        return {"accepted":k,"clicks":db.execute("select clicks from u where id=?",(u,)).fetchone()[0],"daily_limit":CDAY}
     if not rid:raise Err(400,"bad_request")
     old=db.execute("select resp from req where user=? and rid=?",(u,rid)).fetchone()
     if old:return json.loads(old[0])
@@ -184,6 +350,12 @@ def act(u,path,b):
             r=db.execute("select v from inv where uid=? and user=?",(i,u)).fetchone()
             if r:tot+=r[0];db.execute("delete from inv where uid=?",(i,))
         add(u,tot,"sell");out={"sold":tot}
+    elif path=="/api/clicker/buy":
+        packs=int(b.get("packs",1))
+        if not 1<=packs<=10000:raise Err(400,"bad_request")
+        have=db.execute("select clicks from u where id=?",(u,)).fetchone()[0]
+        if have<packs*PACK:raise Err(402,"not_enough_clicks")
+        db.execute("update u set clicks=clicks-? where id=?",(packs*PACK,u));add(u,packs*REWARD,"clicker");out={"clicks":have-packs*PACK}
     elif path=="/api/crash/start":
         bet=int(b.get("bet",0))
         if not 50<=bet<=100000:raise Err(400,"bad_request")
@@ -270,6 +442,8 @@ class H(BaseHTTPRequestHandler):
         usr=auth(s.headers.get("X-Telegram-Init-Data",""))
         if not usr:return s.send(401,{"error":"bad_init_data"})
         u=usr["id"];touch(usr)
+        with L:bn=banned(u)
+        if bn:return s.send(403,{"error":"banned"})
         if not is_member(u):return s.send(403,{"error":"not_subscribed","channel":CLINK})
         try:
             with L:

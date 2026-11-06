@@ -1395,14 +1395,57 @@ convTree(document.body);MO.observe(document.body,MOC);
   var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
   if(!init)return;
   fetch((window.TOUCAN_API_BASE||location.origin)+"/api/me",{headers:{"X-Telegram-Init-Data":init}}).then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})}).then(function(x){
-    if(x.ok||!x.d||x.d.error!=="not_subscribed")return;
+    if(x.ok||!x.d||(x.d.error!=="not_subscribed"&&x.d.error!=="banned"))return;var BAN=x.d.error==="banned";
     var o=document.createElement("div");o.style.cssText="position:fixed;inset:0;z-index:99999;background:#120d1f;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:28px;text-align:center;font-family:inherit";
-    o.innerHTML='<div style="font-size:56px">🦜</div><h2 style="margin:0">Нужна подписка на канал</h2><p style="margin:0;opacity:.8">Чтобы пользоваться ботом, подпишитесь на канал. Потом вернитесь в чат с ботом и нажмите «✅ Проверить».</p>';
+    o.innerHTML='<div style="font-size:56px">🦜</div>'+(BAN?'<h2 style="margin:0">Доступ ограничен</h2><p style="margin:0;opacity:.8">Ваш аккаунт заблокирован администратором.</p>':'<h2 style="margin:0">Нужна подписка на канал</h2><p style="margin:0;opacity:.8">Чтобы пользоваться ботом, подпишитесь на канал. Потом вернитесь в чат с ботом и нажмите «✅ Проверить».</p>');
     function btn(t,f){var b=document.createElement("button");b.textContent=t;b.style.cssText="border:0;border-radius:14px;padding:14px 22px;font:inherit;font-weight:800;background:#ffd23f;color:#222;min-width:220px";b.onclick=f;o.appendChild(b)}
-    if(x.d.channel)btn("📢 Подписаться",function(){tg.openTelegramLink?tg.openTelegramLink(x.d.channel):window.open(x.d.channel)});
+    if(!BAN&&x.d.channel)btn("📢 Подписаться",function(){tg.openTelegramLink?tg.openTelegramLink(x.d.channel):window.open(x.d.channel)});
     btn("Закрыть",function(){tg.close()});
     document.body.appendChild(o);
   }).catch(function(){});
+})();
+
+/* ===== Кликер ===== */
+(function(){
+  var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
+  var PACK=1000,REWARD=500,CPS=20,srv=0,pend=0,ts=[],timer=0,busy=0;
+  var st=document.createElement("style");
+  st.textContent="#ckbtn{width:210px;height:210px;margin:16px auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:104px;background:radial-gradient(circle at 30% 28%,#fff0a8,#ffb23a 60%,#e2791d);box-shadow:0 10px 0 #a85510,0 18px 30px rgba(0,0,0,.35);user-select:none;-webkit-user-select:none;touch-action:manipulation;cursor:pointer;transition:transform .05s,box-shadow .05s}#ckbtn:active,#ckbtn.p{transform:translateY(6px);box-shadow:0 4px 0 #a85510,0 8px 16px rgba(0,0,0,.35)}#ckn{font-size:44px;font-weight:900}.ckf{position:fixed;pointer-events:none;font-weight:900;font-size:22px;color:#ffe27a;text-shadow:0 2px 4px #000;animation:ckup .7s ease-out forwards;z-index:50}@keyframes ckup{to{transform:translateY(-60px);opacity:0}}";
+  document.head.appendChild(st);
+  $("home").insertAdjacentHTML("beforeend",'<button class="row c-nuts" data-go="click"><span class="ico">👆</span><div><h3>Кликер</h3><p>1000 кликов = 500 🪶</p></div></button>');
+  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="click"><button class="back" data-go="home">← Назад</button><h2>Кликер</h2><p class="sub">Тапай по тукану и копи клики. Не больше 20 кликов в секунду.</p><div class="card" style="text-align:center;cursor:default"><div id="ckn">0</div><div class="hint">кликов в запасе</div></div><div id="ckbtn" role="button" aria-label="Клик">🦜</div><div class="card" style="cursor:default"><h3>🛒 Магазин</h3><p>За каждые 1000 кликов — 500 🪶</p><button class="main" id="ckbuy" type="button">Купить 500 🪶 за 1000 кликов</button><button class="main glass" id="ckall" type="button">Обменять все клики</button><p class="note" id="ckmsg"></p></div></section>');
+  function api(p,b){return fetch((window.TOUCAN_API_BASE||location.origin)+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
+  function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
+  function show(){$("ckn").textContent=fmt(srv+pend);$("ckbuy").disabled=srv+pend<PACK;$("ckall").disabled=srv+pend<PACK;$("ckmsg").textContent=(srv+pend)<PACK?"Нужно ещё "+fmt(PACK-srv-pend)+" кликов до обмена.":""}
+  function flush(){
+    if(busy||!pend)return Promise.resolve();
+    var n=pend;pend=0;busy=1;
+    return api("/api/clicker/tap",{n:n}).then(function(r){srv=r.clicks}).catch(function(){pend+=n}).then(function(){busy=0;show()})
+  }
+  function load(){api("/api/clicker/tap",{n:0}).then(function(r){srv=r.clicks;show()}).catch(function(){})}
+  function tap(e){
+    e.preventDefault();var now=performance.now();
+    ts=ts.filter(function(t){return now-t<1000});
+    if(ts.length>=CPS)return;
+    ts.push(now);pend++;show();
+    var b=$("ckbtn");b.classList.add("p");setTimeout(function(){b.classList.remove("p")},50);
+    var f=document.createElement("div");f.className="ckf";f.textContent="+1";var r=b.getBoundingClientRect();
+    f.style.left=(r.left+r.width/2+(Math.random()*80-40))+"px";f.style.top=(r.top+30)+"px";document.body.appendChild(f);setTimeout(function(){f.remove()},700);
+    if(!timer)timer=setInterval(function(){if(!pend){clearInterval(timer);timer=0}flush()},1100);
+  }
+  $("ckbtn").addEventListener("pointerdown",tap);
+  function buy(all){
+    flush().then(function(){
+      var packs=all?Math.floor(srv/PACK):1;if(packs<1||srv<packs*PACK){toast("Не хватает кликов");return}
+      return api("/api/clicker/buy",{request_id:rid(),packs:packs}).then(function(r){srv=r.clicks;coins=r.balance;upd();show();toast("+"+fmt(packs*REWARD)+" 🪶 за "+fmt(packs*PACK)+" кликов")})
+    }).catch(function(e){toast(e&&e.error==="not_enough_clicks"?"Не хватает кликов":"Ошибка связи с сервером")})
+  }
+  $("ckbuy").onclick=function(){buy(false)};$("ckall").onclick=function(){buy(true)};
+  var og=window.go;window.go=function(id){
+    if(id==="click"&&!init){toast("Кликер доступен в Telegram");return}
+    og(id);if(id==="click"){load();show()}else flush()
+  };
+  document.addEventListener("visibilitychange",function(){if(document.hidden)flush()});
 })();
 </script>
 </body>
