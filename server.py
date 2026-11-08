@@ -41,7 +41,7 @@ create table if not exists req(user integer,rid text,resp text,primary key(user,
 create table if not exists ledger(user integer,delta integer,reason text,ts integer);""")
 def mig():
     cols={r[1] for r in db.execute("pragma table_info(u)")}
-    for c,d in (("banned","integer default 0"),("clicks","integer default 0"),("ckday","text"),("ckcnt","integer default 0"),("mult","integer default 1")):
+    for c,d in (("banned","integer default 0"),("clicks","integer default 0"),("ckday","text"),("ckcnt","integer default 0"),("mult","integer default 1"),("nick","integer default 0")):
         if c not in cols:db.execute("alter table u add column %s %s"%(c,d))
 mig()
 L=threading.Lock()
@@ -163,7 +163,7 @@ def check(cb):
     tg("answerCallbackQuery",callback_query_id=cb["id"])
     tg("sendMessage",chat_id=cb["message"]["chat"]["id"],text=msg,reply_markup=play_kb())
 CPS=int(os.environ.get("CPS_MAX","20"));PACK=int(os.environ.get("CLICK_PACK","1000"));REWARD=int(os.environ.get("CLICK_REWARD","500"));CDAY=int(os.environ.get("CLICK_DAILY_MAX","0"))
-RATE=int(os.environ.get("STAR_RATE","1"));MIN_STARS=25;MAX_STARS=10000;BOOST={"x2":(2,50),"x3":(3,150)}
+RATE=int(os.environ.get("STAR_RATE","1"));MIN_STARS=10;MAX_STARS=10000;BOOST={"x2":(2,50),"x3":(3,150)}
 SUPPORT=os.environ.get("SUPPORT_CONTACT","администратору бота")
 def drop(u,cid,k,v):
     r=db.execute("select first_name,username from u where id=?",(u,)).fetchone();nm=((r[0] or r[1] or "Игрок") if r else "Игрок").strip()
@@ -377,6 +377,16 @@ def claim_sub(u):
         db.execute("update u set refpaid=1 where id=?",(u,))
         if db.execute("select 1 from u where id=?",(r[1],)).fetchone():add(r[1],5,"referral:%d"%u)
     return {"claimed":True,"sub":True,"balance":bal(u)}
+NICKTAG=os.environ.get("NICK_TAG","@TukanBattle_bot").lower()
+def claim_nick(u):
+    r=db.execute("select nick from u where id=?",(u,)).fetchone()
+    if r[0]:return {"claimed":False,"nick":True,"balance":bal(u)}
+    try:ch=tg("getChat",chat_id=u)
+    except Exception:raise Err(502,"tg_error")
+    name=((ch.get("first_name") or "")+" "+(ch.get("last_name") or "")).lower()
+    if NICKTAG not in name:return {"claimed":False,"nick":False,"balance":bal(u)}
+    db.execute("update u set nick=1 where id=?",(u,));add(u,5,"nick")
+    return {"claimed":True,"nick":True,"balance":bal(u)}
 PM=[15,6,2.2,1.1,.5,.3,.5,1.1,2.2,6,15]
 def emult(k,m):
     x=0.92
@@ -400,13 +410,14 @@ def invite(u):
     except Exception as e:print("prepared",e)
     return out
 def act(u,path,b):
-    if path.startswith("/api/clicker/"):raise Err(403,"clicker_closed")
+    if path.startswith("/api/clicker/") or path.startswith("/api/battle/"):raise Err(403,"closed")
     rid=str(b.get("request_id",""))[:64]
-    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"mult":(db.execute("select mult from u where id=?",(u,)).fetchone() or [1])[0] or 1,"rate":RATE,"sub":bool((db.execute("select sub from u where id=?",(u,)).fetchone() or [0])[0]),"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
+    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"mult":(db.execute("select mult from u where id=?",(u,)).fetchone() or [1])[0] or 1,"rate":RATE,"sub":bool((db.execute("select sub from u where id=?",(u,)).fetchone() or [0])[0]),"nick":bool((db.execute("select nick from u where id=?",(u,)).fetchone() or [0])[0]),"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
     if path=="/api/referral-link":
         if not BOTNAME[0]:raise Err(503,"no_bot")
         return {"referral_link":"https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)}
     if path=="/api/claim-subscription":bal(u);return claim_sub(u)
+    if path=="/api/claim-nick":bal(u);return claim_nick(u)
     if path=="/api/leaderboard":
         top=db.execute("select id,username,first_name,balance from u order by balance desc limit 20").fetchall();b=bal(u)
         return {"players":[{"username":x[1],"first_name":x[2],"balance":x[3],"is_me":x[0]==u} for x in top],"me":{"rank":db.execute("select count(*)+1 from u where balance>?",(b,)).fetchone()[0],"balance":b}}
@@ -450,8 +461,8 @@ def act(u,path,b):
         if not c or not 1<=n<=10:raise Err(400,"bad_request")
         if c["cost"]==0:
             n=1
-            if time.time()-db.execute("select daily from u where id=?",(u,)).fetchone()[0]<DAY:raise Err(409,"daily_used")
-            db.execute("update u set daily=? where id=?",(int(time.time()),u))
+            now=int(time.time())
+            if db.execute("update u set daily=? where id=? and ?-daily>=?",(now,u,now,DAY)).rowcount!=1:raise Err(409,"daily_used")
         if bal(u)<c["cost"]*n:raise Err(402,"insufficient_funds")
         add(u,-c["cost"]*n,"open:"+c["id"]);got=[]
         for _ in range(n):
@@ -474,7 +485,7 @@ def act(u,path,b):
         db.execute("update u set clicks=clicks-? where id=?",(packs*PACK,u));add(u,packs*REWARD,"clicker");out={"clicks":have-packs*PACK}
     elif path=="/api/crash/start":
         bet=int(b.get("bet",0))
-        if not 5<=bet<=100000:raise Err(400,"bad_request")
+        if not 10<=bet<=100000:raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
         cp=min(100,max(1,0.9/(1-secrets.randbelow(10**9)/10**9)));cp=math.floor(cp*100)/100
         add(u,-bet,"crash");db.execute("insert or replace into crash values(?,?,?,?)",(u,bet,cp,time.time()));out={}
@@ -492,7 +503,7 @@ def act(u,path,b):
         its=[db.execute("select v from inv where uid=? and user=?",(x,u)).fetchone() for x in uids]
         if any(i is None for i in its):raise Err(409,"no_item")
         t=f+sum(i[0] for i in its);tv=ITEMS[tn][2]
-        if t<5 or not tv>t*1.05 or tv>t*80:raise Err(400,"bad_request")
+        if t<10 or not tv>t*1.05 or tv>t*80:raise Err(400,"bad_request")
         if bal(u)<f:raise Err(402,"insufficient_funds")
         ch=min(75,t/tv*92);win=secrets.randbelow(10**6)/10**4<ch
         add(u,-f,"upgrade")
@@ -512,14 +523,14 @@ def act(u,path,b):
         out={"a":ia,"b":ib,"uids":uids}
     elif path=="/api/plinko/drop":
         bet=int(b.get("bet",0))
-        if not 5<=bet<=100000:raise Err(400,"bad_request")
+        if not 10<=bet<=100000:raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
         ks=[0]
         for _ in range(10):ks.append(ks[-1]+secrets.randbelow(2))
         win=math.floor(bet*PM[ks[-1]]);add(u,-bet,"plinko");add(u,win,"plinko_win");out={"ks":ks,"win":win}
     elif path=="/api/mines/start":
         bet=int(b.get("bet",0));n=int(b.get("mines",0))
-        if not(5<=bet<=100000 and 2<=n<=24):raise Err(400,"bad_request")
+        if not(10<=bet<=100000 and 2<=n<=24):raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
         add(u,-bet,"mines");t=set()
         while len(t)<n:t.add(secrets.randbelow(25))
@@ -572,6 +583,7 @@ class H(BaseHTTPRequestHandler):
                 except BaseException:db.execute("rollback");raise
             s.send(200,r)
         except Err as e:s.send(e.code,{"error":e.msg})
+        except (ValueError,TypeError,KeyError,AttributeError,OverflowError):s.send(400,{"error":"bad_request"})
         except Exception:s.send(500,{"error":"server"})
     def log_message(s,*a):pass
 def bye(*a):backup(True);sys.exit(0)
