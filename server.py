@@ -6,7 +6,7 @@ import hashlib,hmac,json,math,os,secrets,signal,sqlite3,sys,threading,time,urlli
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from urllib.parse import parse_qsl
 D=os.path.dirname(os.path.abspath(__file__))
-TOKEN=os.environ.get("BOT_TOKEN","");WEBAPP=os.environ.get("WEBAPP_URL","");CHANNEL=os.environ.get("CHANNEL","");BACKUP=os.environ.get("BACKUP_CHAT","");START=2000;DAY=86400;BOTNAME=[""]
+TOKEN=os.environ.get("BOT_TOKEN","");WEBAPP=os.environ.get("WEBAPP_URL","");CHANNEL=os.environ.get("CHANNEL","");BACKUP=os.environ.get("BACKUP_CHAT","");START=0;DAY=86400;BOTNAME=[""]
 CASES={c["id"]:c for c in json.load(open(os.path.join(D,"cases.json"),encoding="utf-8"))}
 DBP=os.environ.get("DB_PATH",os.path.join(D,"game.db"))
 def tg(method,**p):
@@ -83,7 +83,11 @@ def poll():
                 pq=up.get("pre_checkout_query")
                 if pq:pre_checkout(pq);continue
                 if cb and cb.get("data")=="check":check(cb);continue
-                if cb and cb.get("data")=="adm_stats" and cb["from"]["id"] in ADMINS:say(cb["message"]["chat"]["id"],tx(stats));tg("answerCallbackQuery",callback_query_id=cb["id"]);continue
+                if cb and str(cb.get("data","")).startswith("adm_") and cb["from"]["id"] in ADMINS:
+                    ch=cb["message"]["chat"]["id"]
+                    try:say(ch,admin({"adm_top":"/top","adm_pay":"/payments","adm_promo":"/promolist"}.get(cb["data"],"/stats"),ch))
+                    except Exception as e:say(ch,getattr(e,"msg",str(e)))
+                    tg("answerCallbackQuery",callback_query_id=cb["id"]);continue
                 t=m.get("text") or "";f=m.get("from")
                 if f and m.get("successful_payment"):paid(f,m["successful_payment"]);continue
                 if f and t.startswith("/") and not t.startswith("/start"):handle_cmd(f,m["chat"]["id"],t);continue
@@ -101,7 +105,7 @@ def is_member(u):
     try:st=tg("getChatMember",chat_id=CHANNEL,user_id=u)["status"]
     except Exception as e:print("member",e);return True
     ok=st in("member","administrator","creator")
-    if ok:MEMB[u]=time.time()+600
+    if ok:MEMB[u]=time.time()+60
     return ok
 def play_kb():return {"inline_keyboard":[[{"text":"🦜 Играть","web_app":{"url":WEBAPP}}]]} if WEBAPP else None
 def sub_kb():
@@ -140,7 +144,7 @@ def paid(f,sp):
     def go():
         if db.execute("select 1 from pay where charge=?",(cid,)).fetchone():return None
         db.execute("insert into pay(charge,user,kind,stars,ts) values(?,?,?,?,?)",(cid,u,kind,stars,int(time.time())));bal(u)
-        if kind=="feathers":add(u,stars*RATE,"stars:%d"%stars);return "✅ Оплата получена! Зачислено %d 🪶"%(stars*RATE)
+        if kind=="feathers":add(u,stars*RATE,"stars:%d"%stars);return "✅ Оплата получена! Зачислено %d ★"%(stars*RATE)
         db.execute("update u set mult=max(coalesce(mult,1),?) where id=?",(BOOST[kind][0],u));return "✅ Оплата получена! Клики теперь x%d."%BOOST[kind][0]
     msg=tx(go)
     if msg:say(f["id"],msg)
@@ -154,12 +158,12 @@ def check(cb):
         db.execute("begin immediate")
         try:
             r=claim_sub(f["id"]);db.execute("commit")
-            if r.get("claimed"):msg="Отлично, подписка подтверждена! Вам начислено 1000 🪶. Жми «Играть»."
+            if r.get("claimed"):msg="Отлично, подписка подтверждена! Вам начислено 5 ★. Жми «Играть»."
         except BaseException:db.execute("rollback")
     tg("answerCallbackQuery",callback_query_id=cb["id"])
     tg("sendMessage",chat_id=cb["message"]["chat"]["id"],text=msg,reply_markup=play_kb())
 CPS=int(os.environ.get("CPS_MAX","20"));PACK=int(os.environ.get("CLICK_PACK","1000"));REWARD=int(os.environ.get("CLICK_REWARD","500"));CDAY=int(os.environ.get("CLICK_DAILY_MAX","0"))
-RATE=int(os.environ.get("STAR_RATE","200"));MIN_STARS=10;MAX_STARS=10000;BOOST={"x2":(2,50),"x3":(3,150)}
+RATE=int(os.environ.get("STAR_RATE","1"));MIN_STARS=25;MAX_STARS=10000;BOOST={"x2":(2,50),"x3":(3,150)}
 SUPPORT=os.environ.get("SUPPORT_CONTACT","администратору бота")
 def drop(u,cid,k,v):
     r=db.execute("select first_name,username from u where id=?",(u,)).fetchone();nm=((r[0] or r[1] or "Игрок") if r else "Игрок").strip()
@@ -187,13 +191,17 @@ def who(a):
     if not r:raise Err(404,"Игрок не найден: "+a)
     return r[0]
 def card(i):
-    r=db.execute("select id,username,first_name,balance,clicks,banned,ref,sub from u where id=?",(i,)).fetchone()
+    r=db.execute("select id,username,first_name,balance,banned,ref,sub,refpaid from u where id=?",(i,)).fetchone()
     n=db.execute("select count(*),coalesce(sum(v),0) from inv where user=?",(i,)).fetchone()
-    return "👤 %s @%s\nID: %d\nБаланс: %d 🪶\nПредметов: %d (на %d 🪶)\nКликов: %d (x%d)\nПодписка: %s\nПригласил: %s\nБан: %s"%(r[2] or "-",r[1] or "-",r[0],r[3],n[0],n[1],r[4] or 0,(db.execute("select mult from u where id=?",(i,)).fetchone()[0] or 1),"да" if r[7] else "нет",r[6] or "-","ДА" if r[5] else "нет")
+    p=db.execute("select count(*),coalesce(sum(stars),0) from pay where user=? and refunded=0",(i,)).fetchone()
+    q=db.execute("select count(*),coalesce(sum(refpaid),0) from u where ref=?",(i,)).fetchone()
+    return "👤 %s @%s\nID: %d\nБаланс: %d ★\nПредметов: %d (на %d ★)\nПополнил: %d ⭐ (%d раз)\nПодписка: %s\nПригласил его: %s%s\nПриглашено: %d, засчитано: %d\nБан: %s"%(r[2] or "-",r[1] or "-",r[0],r[3],n[0],n[1],p[1],p[0],"да" if r[6] else "нет",r[5] or "-"," (засчитан)" if r[7] else "",q[0],q[1],"ДА" if r[4] else "нет")
 def stats():
-    r=db.execute("select count(*),coalesce(sum(balance),0),coalesce(sum(banned),0),coalesce(sum(sub),0),coalesce(sum(clicks),0) from u").fetchone()
+    r=db.execute("select count(*),coalesce(sum(balance),0),coalesce(sum(banned),0),coalesce(sum(sub),0),coalesce(sum(refpaid),0) from u").fetchone()
     it=db.execute("select count(*),coalesce(sum(v),0) from inv").fetchone();pr=db.execute("select count(*) from promo").fetchone()[0]
-    return "📊 Статистика\nИгроков: %d\nПодписаны: %d\nЗабанены: %d\nСумма балансов: %d 🪶\nПредметов в инвентарях: %d (на %d 🪶)\nКликов в запасе: %d\nПромокодов: %d"%(r[0],r[3],r[2],r[1],it[0],it[1],r[4],pr)
+    pa=db.execute("select count(*),coalesce(sum(stars),0) from pay where refunded=0").fetchone()
+    p24=db.execute("select count(*),coalesce(sum(stars),0) from pay where refunded=0 and ts>?",(int(time.time())-86400,)).fetchone()
+    return "📊 Статистика\nИгроков: %d\nПодписаны на канал: %d\nЗабанены: %d\nСумма балансов: %d ★\nПризов в инвентарях: %d (на %d ★)\nПополнений: %d на %d ⭐\nЗа 24 часа: %d на %d ⭐\nРефералов засчитано: %d (выдано %d ★)\nПромокодов: %d"%(r[0],r[3],r[2],r[1],it[0],it[1],pa[0],pa[1],p24[0],p24[1],r[4],r[4]*5,pr)
 def redeem(u,code):
     code=code.strip().upper();r=db.execute("select feathers,max_uses,used,expires from promo where code=?",(code,)).fetchone()
     if not r:return "Промокод не найден."
@@ -201,30 +209,30 @@ def redeem(u,code):
     if r[1] and r[2]>=r[1]:return "Промокод уже использован максимальное число раз."
     if db.execute("select 1 from promo_used where code=? and user=?",(code,u)).fetchone():return "Вы уже активировали этот промокод."
     db.execute("insert into promo_used values(?,?)",(code,u));db.execute("update promo set used=used+1 where code=?",(code,));bal(u);add(u,r[0],"promo:"+code)
-    return "🎉 Промокод активирован! +%d 🪶"%r[0]
-HELP="""🛠 Админ-команды
-📊 /stats — статистика
+    return "🎉 Промокод активирован! +%d ★"%r[0]
+HELP="""🛠 Админ-панель
+📊 /stats — статистика (игроки, пополнения, рефералы)
 👤 /user ID|@ник — карточка игрока
 🔎 /find текст — поиск по имени или нику
 🏆 /top [N] — топ по балансу
-💰 /give ID|@ник N — выдать перья
-➖ /take ID|@ник N — забрать перья
+👥 /refs ID|@ник — кого пригласил игрок
+💰 /give ID|@ник N — выдать ★
+➖ /take ID|@ник N — забрать ★
 ✏️ /setbal ID|@ник N — установить баланс
-🎁 /giveall N — выдать всем перья
-🎒 /items [case_id] — гнёзда и предметы
-🎁 /giveitem ID|@ник case_id номер — выдать предмет
+🎁 /giveall N — выдать всем ★
+🎒 /items [case_id] — гнёзда и призы
+🎁 /giveitem ID|@ник case_id номер — выдать приз
 🗑 /clearinv ID|@ник — очистить инвентарь
 🔄 /resetdaily ID|@ник — вернуть бесплатное гнездо
-👆 /addclicks ID|@ник N — выдать клики
-⚡ /givex2 ID|@ник, /givex3 ID|@ник — выдать бустер кликов, /resetmult ID|@ник — убрать бустер
 🚫 /ban ID|@ник — бан, /unban ID|@ник — разбан, /banned — список
-🎟 /promoadd КОД перья макс_использований [дней] — создать промокод
+🎟 /promoadd КОД ★ макс_использований [дней] — создать промокод
 🎟 /promolist — список, /promodel КОД — удалить
 ✉️ /msg ID|@ник текст — сообщение игроку
 📣 /broadcast текст — рассылка всем, /broadcastplay текст — с кнопкой «Играть»
-💳 /payments — последние оплаты звёздами, /refund CHARGE_ID — вернуть звёзды
+💳 /payments — оплаты звёздами, /refund CHARGE_ID — вернуть звёзды
 💾 /backup — сохранить копию базы сейчас
-Игрокам: /promo КОД — активировать промокод."""
+Игрокам: /promo КОД — активировать промокод.
+Баланс ★ — внутриигровая валюта (1 ⭐ при пополнении = 1 ★), вывода нет."""
 def admin_tx(cmd,rest,a):
     def N(x):
         try:return int(x)
@@ -237,22 +245,22 @@ def admin_tx(cmd,rest,a):
     if cmd=="/find":
         need(1);q="%"+rest.strip().lower()+"%"
         rows=db.execute("select id,username,first_name,balance from u where lower(coalesce(username,'')) like ? or lower(coalesce(first_name,'')) like ? limit 20",(q,q)).fetchall()
-        return "\n".join("%d @%s %s — %d 🪶"%(r[0],r[1] or "-",r[2] or "-",r[3]) for r in rows) or "Ничего не найдено."
+        return "\n".join("%d @%s %s — %d ★"%(r[0],r[1] or "-",r[2] or "-",r[3]) for r in rows) or "Ничего не найдено."
     if cmd=="/top":
         n=N(a[0]) if a else 10
-        return "\n".join("%d. %d @%s %s — %d 🪶"%(k+1,r[0],r[1] or "-",r[2] or "-",r[3]) for k,r in enumerate(db.execute("select id,username,first_name,balance from u order by balance desc limit ?",(max(1,min(50,n)),))))
+        return "\n".join("%d. %d @%s %s — %d ★"%(k+1,r[0],r[1] or "-",r[2] or "-",r[3]) for k,r in enumerate(db.execute("select id,username,first_name,balance from u order by balance desc limit ?",(max(1,min(50,n)),))))
     if cmd in("/give","/take","/setbal"):
         need(2);i=who(a[0]);n=N(a[1]);cur=bal(i)
         new=cur+n if cmd=="/give" else max(0,cur-n) if cmd=="/take" else max(0,n)
-        add(i,new-cur,"admin:"+cmd[1:]);return "Готово. Баланс игрока: %d 🪶"%bal(i)
+        add(i,new-cur,"admin:"+cmd[1:]);return "Готово. Баланс игрока: %d ★"%bal(i)
     if cmd=="/giveall":
         need(1);n=N(a[0]);db.execute("insert into ledger select id,?,'admin:giveall',? from u where banned=0",(n,int(time.time())));db.execute("update u set balance=balance+? where banned=0",(n,))
-        return "Выдано всем: %d 🪶"%n
+        return "Выдано всем: %d ★"%n
     if cmd=="/items":
         if not a:return "Гнёзда: "+", ".join(CASES)
         c=CASES.get(a[0])
         if not c:raise Err(404,"Нет такого гнезда")
-        return "\n".join("%d. %s — %d 🪶"%(k,i["n"],i["v"]) for k,i in enumerate(c["items"]))
+        return "\n".join("%d. %s — %d ★"%(k,i["n"],i["v"]) for k,i in enumerate(c["items"]))
     if cmd=="/giveitem":
         need(3);i=who(a[0]);c=CASES.get(a[1])
         if not c:raise Err(404,"Нет такого гнезда (список: /items)")
@@ -273,15 +281,20 @@ def admin_tx(cmd,rest,a):
         return "\n".join("%d @%s %s"%r for r in db.execute("select id,coalesce(username,'-'),coalesce(first_name,'-') from u where banned=1")) or "Банов нет."
     if cmd=="/promoadd":
         need(3);code=a[0].upper();f=N(a[1]);mx=N(a[2]);days=N(a[3]) if len(a)>3 else 0
-        if f<=0 or mx<0 or days<0:raise Err(400,"Перья > 0, лимит и дни >= 0 (0 = без лимита)")
+        if f<=0 or mx<0 or days<0:raise Err(400,"★ > 0, лимит и дни >= 0 (0 = без лимита)")
         db.execute("insert or replace into promo(code,feathers,max_uses,used,expires) values(?,?,?,0,?)",(code,f,mx,int(time.time()+days*86400) if days else 0))
-        return "Промокод %s: +%d 🪶, лимит %s, срок %s"%(code,f,mx or "∞",("%d дн."%days) if days else "без срока")
+        return "Промокод %s: +%d ★, лимит %s, срок %s"%(code,f,mx or "∞",("%d дн."%days) if days else "без срока")
     if cmd=="/promolist":
-        return "\n".join("%s: +%d 🪶, использовано %d/%s%s"%(r[0],r[1],r[3],r[2] or "∞"," (истёк)" if r[4] and r[4]<time.time() else "") for r in db.execute("select code,feathers,max_uses,used,expires from promo")) or "Промокодов нет."
+        return "\n".join("%s: +%d ★, использовано %d/%s%s"%(r[0],r[1],r[3],r[2] or "∞"," (истёк)" if r[4] and r[4]<time.time() else "") for r in db.execute("select code,feathers,max_uses,used,expires from promo")) or "Промокодов нет."
     if cmd=="/promodel":
         need(1);db.execute("delete from promo where code=?",(a[0].upper(),));return "Удалено."
+    if cmd=="/refs":
+        need(1);i=who(a[0])
+        tt=db.execute("select count(*),coalesce(sum(refpaid),0) from u where ref=?",(i,)).fetchone()
+        rows=db.execute("select id,coalesce(username,'-'),coalesce(first_name,'-'),sub,refpaid from u where ref=? order by rowid desc limit 15",(i,)).fetchall()
+        return "👥 Приглашено: %d, засчитано: %d (выдано %d ★)\n"%(tt[0],tt[1],tt[1]*5)+"\n".join("%d @%s %s — %s"%(r[0],r[1],r[2],"засчитан" if r[4] else ("подписан" if r[3] else "не подписан")) for r in rows)
     raise Err(404,"Неизвестная команда. Список: /admin")
-ADMIN_CMDS={"/admin","/help","/stats","/user","/find","/top","/give","/take","/setbal","/giveall","/items","/giveitem","/clearinv","/resetdaily","/addclicks","/ban","/unban","/banned","/promoadd","/promolist","/promodel","/msg","/broadcast","/broadcastplay","/backup","/payments","/refund","/givex2","/givex3","/resetmult"}
+ADMIN_CMDS={"/admin","/help","/stats","/user","/find","/top","/give","/take","/setbal","/giveall","/items","/giveitem","/clearinv","/resetdaily","/addclicks","/ban","/unban","/banned","/promoadd","/promolist","/promodel","/msg","/broadcast","/broadcastplay","/backup","/payments","/refund","/refs","/givex2","/givex3","/resetmult"}
 def broadcast(ids,text,kb,admin_chat):
     ok=bad=0
     for i in ids:
@@ -328,12 +341,12 @@ def admin(t,chat):
 def handle_cmd(f,chat,t):
     try:
         touch(f);cmd=t.split()[0].split("@")[0].lower()
-        if cmd=="/terms":return say(chat,"📄 Условия\n• Перья — виртуальная валюта игры. Она не имеет денежной стоимости, не выводится и не обменивается на деньги или Telegram Stars.\n• Звёзды, потраченные на перья и бустеры, не возвращаются, если покупка выдана верно.\n• Выпадение предметов случайно, шансы зависят от гнезда.\n• Если оплата прошла, а покупки нет, напишите /paysupport.")
+        if cmd=="/terms":return say(chat,"📄 Условия\n• Средний возврат в гнёздах — около 90% от цены гнезда; шансы призов указаны в игре.\n• ★ — внутриигровая валюта (при пополнении 1 Telegram Star = 1 ★). Она не является Telegram Stars, не имеет денежной стоимости, не выводится и не обменивается на деньги или Stars.\n• Звёзды, потраченные на пополнение, не возвращаются, если покупка выдана верно.\n• Выпадение предметов случайно, шансы зависят от гнезда.\n• Если оплата прошла, а покупки нет, напишите /paysupport.")
         if cmd=="/support":return say(chat,"Вопросы по игре: "+SUPPORT)
         if cmd=="/paysupport":return say(chat,"💳 Проблема с оплатой? Напишите "+SUPPORT+": укажите ваш Telegram ID и время оплаты. Если покупка не выдана по нашей вине, мы вернём звёзды.")
         if tx(lambda:banned(f["id"])):return say(chat,"⛔ Доступ ограничен.")
         if f["id"] in ADMINS and cmd in ADMIN_CMDS:
-            kb={"inline_keyboard":[[{"text":"📊 Статистика","callback_data":"adm_stats"}]]} if cmd in("/admin","/help") else None
+            kb={"inline_keyboard":[[{"text":"📊 Статистика","callback_data":"adm_stats"},{"text":"🏆 Топ","callback_data":"adm_top"}],[{"text":"💳 Оплаты","callback_data":"adm_pay"},{"text":"🎟 Промокоды","callback_data":"adm_promo"}]]} if cmd in("/admin","/help") else None
             return say(chat,admin(t,chat),**({"reply_markup":kb} if kb else {}))
         if cmd=="/promo":
             if not is_member(f["id"]):return welcome(chat,f)
@@ -355,15 +368,15 @@ def backup_loop():
 def claim_sub(u):
     if not CHANNEL:raise Err(503,"no_channel")
     r=db.execute("select sub,ref,refpaid from u where id=?",(u,)).fetchone()
-    if r[0]:return {"claimed":False,"balance":bal(u)}
+    if r[0]:return {"claimed":False,"sub":True,"balance":bal(u)}
     try:st=tg("getChatMember",chat_id=CHANNEL,user_id=u)["status"]
     except Exception:raise Err(502,"tg_error")
-    if st not in("member","administrator","creator"):return {"claimed":False,"balance":bal(u)}
-    db.execute("update u set sub=1 where id=?",(u,));add(u,1000,"sub")
+    if st not in("member","administrator","creator"):return {"claimed":False,"sub":False,"balance":bal(u)}
+    db.execute("update u set sub=1 where id=?",(u,));add(u,5,"sub")
     if r[1] and not r[2]:
         db.execute("update u set refpaid=1 where id=?",(u,))
-        if db.execute("select 1 from u where id=?",(r[1],)).fetchone():add(r[1],1000,"referral:%d"%u)
-    return {"claimed":True,"balance":bal(u)}
+        if db.execute("select 1 from u where id=?",(r[1],)).fetchone():add(r[1],5,"referral:%d"%u)
+    return {"claimed":True,"sub":True,"balance":bal(u)}
 PM=[15,6,2.2,1.1,.5,.3,.5,1.1,2.2,6,15]
 def emult(k,m):
     x=0.92
@@ -375,9 +388,21 @@ for _c in CASES.values():
         for _k,_i in enumerate(_c["items"]):ITEMS.setdefault(_i["n"],(_c["id"],_k,_i["v"]))
 class Err(Exception):
     def __init__(s,code,msg):s.code=code;s.msg=msg
+def invite(u):
+    if not BOTNAME[0]:raise Err(503,"no_bot")
+    link="https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)
+    who=CHANNEL if CHANNEL.startswith("@") else "Тукан Батл"
+    text="Заходи на %s и выигрывай лучшие призы! 🦜"%who
+    out={"referral_link":link,"text":text}
+    try:
+        res={"type":"article","id":"inv%d"%u,"title":"Тукан Батл","description":"Приглашение в игру","input_message_content":{"message_text":text},"reply_markup":{"inline_keyboard":[[{"text":"▶️ Играть","url":link}]]}}
+        out["message_id"]=tg("savePreparedInlineMessage",user_id=u,result=res,allow_user_chats=True,allow_group_chats=True,allow_channel_chats=False,allow_bot_chats=False)["id"]
+    except Exception as e:print("prepared",e)
+    return out
 def act(u,path,b):
+    if path.startswith("/api/clicker/"):raise Err(403,"clicker_closed")
     rid=str(b.get("request_id",""))[:64]
-    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"mult":(db.execute("select mult from u where id=?",(u,)).fetchone() or [1])[0] or 1,"rate":RATE,"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
+    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"mult":(db.execute("select mult from u where id=?",(u,)).fetchone() or [1])[0] or 1,"rate":RATE,"sub":bool((db.execute("select sub from u where id=?",(u,)).fetchone() or [0])[0]),"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
     if path=="/api/referral-link":
         if not BOTNAME[0]:raise Err(503,"no_bot")
         return {"referral_link":"https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)}
@@ -407,8 +432,8 @@ def act(u,path,b):
         if kind=="feathers":
             stars=int(b.get("stars",0))
             if not MIN_STARS<=stars<=MAX_STARS:raise Err(400,"bad_amount")
-            title,desc="%d перьев"%(stars*RATE),"Пополнение баланса перьев (виртуальная валюта игры)"
-        elif kind in BOOST:
+            title,desc="%d ★ на баланс"%(stars*RATE),"Пополнение игрового баланса. ★ — внутриигровая валюта: вывод и обмен невозможны."
+        elif kind in ():
             mm,stars=BOOST[kind]
             if (db.execute("select mult from u where id=?",(u,)).fetchone()[0] or 1)>=mm:raise Err(409,"already_owned")
             title,desc="Клики x%d"%mm,"Каждый клик в кликере считается за %d"%mm
@@ -449,7 +474,7 @@ def act(u,path,b):
         db.execute("update u set clicks=clicks-? where id=?",(packs*PACK,u));add(u,packs*REWARD,"clicker");out={"clicks":have-packs*PACK}
     elif path=="/api/crash/start":
         bet=int(b.get("bet",0))
-        if not 50<=bet<=100000:raise Err(400,"bad_request")
+        if not 5<=bet<=100000:raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
         cp=min(100,max(1,0.9/(1-secrets.randbelow(10**9)/10**9)));cp=math.floor(cp*100)/100
         add(u,-bet,"crash");db.execute("insert or replace into crash values(?,?,?,?)",(u,bet,cp,time.time()));out={}
@@ -467,7 +492,7 @@ def act(u,path,b):
         its=[db.execute("select v from inv where uid=? and user=?",(x,u)).fetchone() for x in uids]
         if any(i is None for i in its):raise Err(409,"no_item")
         t=f+sum(i[0] for i in its);tv=ITEMS[tn][2]
-        if t<25 or not tv>t*1.05 or tv>t*80:raise Err(400,"bad_request")
+        if t<5 or not tv>t*1.05 or tv>t*80:raise Err(400,"bad_request")
         if bal(u)<f:raise Err(402,"insufficient_funds")
         ch=min(75,t/tv*92);win=secrets.randbelow(10**6)/10**4<ch
         add(u,-f,"upgrade")
@@ -487,14 +512,14 @@ def act(u,path,b):
         out={"a":ia,"b":ib,"uids":uids}
     elif path=="/api/plinko/drop":
         bet=int(b.get("bet",0))
-        if not 25<=bet<=100000:raise Err(400,"bad_request")
+        if not 5<=bet<=100000:raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
         ks=[0]
         for _ in range(10):ks.append(ks[-1]+secrets.randbelow(2))
         win=math.floor(bet*PM[ks[-1]]);add(u,-bet,"plinko");add(u,win,"plinko_win");out={"ks":ks,"win":win}
     elif path=="/api/mines/start":
         bet=int(b.get("bet",0));n=int(b.get("mines",0))
-        if not(50<=bet<=100000 and 2<=n<=24):raise Err(400,"bad_request")
+        if not(5<=bet<=100000 and 2<=n<=24):raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
         add(u,-bet,"mines");t=set()
         while len(t)<n:t.add(secrets.randbelow(25))
@@ -537,6 +562,9 @@ class H(BaseHTTPRequestHandler):
         with L:bn=banned(u)
         if bn:return s.send(403,{"error":"banned"})
         if not is_member(u):return s.send(403,{"error":"not_subscribed","channel":CLINK})
+        if s.path.split("?")[0]=="/api/invite-message":
+            try:return s.send(200,invite(u))
+            except Err as e:return s.send(e.code,{"error":e.msg})
         try:
             with L:
                 db.execute("begin immediate")

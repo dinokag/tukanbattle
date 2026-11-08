@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Тукан Батл</title>
 <meta name="description" content="Тукан Батл — игровые гнёзда, батлы и награды.">
-<meta name="theme-color" content="#060b1c">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#07080d">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark;--bg:#120d1f;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.12);--ink:#f6f1e4;--mute:#a9a9b4;--crest:#ffd23f;--beak:#2b2b2b;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -437,13 +437,155 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
 @media(min-width:700px){.app{max-width:520px;padding-top:18px}.demo-note{font-size:14px}}
 </style>
 
-</head>
-<body>
+
+<style id="theme-v2">
+:root{--bg:#07080d;--card:rgba(255,255,255,.045);--line:rgba(255,255,255,.085);--ink:#f4f5f8;--mute:#8b90a3;--crest:#ffb938;--beak:#1a1204;--acc:#8b6cff;--r:20px}
+body{font-family:"Manrope",system-ui,sans-serif;background:radial-gradient(620px 420px at 88% -8%,rgba(139,108,255,.24),transparent 70%),radial-gradient(520px 420px at -12% 28%,rgba(255,168,64,.10),transparent 70%),radial-gradient(500px 400px at 60% 110%,rgba(60,140,255,.10),transparent 70%),var(--bg);background-attachment:fixed;font-feature-settings:"tnum" 1;-webkit-font-smoothing:antialiased}
+.app{padding:12px 16px 120px}
+header{padding:4px 0 6px}
+.logo{font-size:19px;font-weight:800;letter-spacing:-.03em}
+.bal{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:999px;box-shadow:0 8px 24px -12px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06);font-weight:800;font-size:16px}
+.bal b{font-size:15px}
+.bal em{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;font-style:normal;font-weight:800;color:var(--beak);background:linear-gradient(180deg,#ffd479,#ffa81f);box-shadow:0 4px 12px -2px rgba(255,170,30,.55)}
+.live{margin:10px 0 6px;padding:5px 12px 5px 5px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.live u{background:linear-gradient(135deg,#ff4d6d,#c23cff);border-radius:11px;font-size:11px;letter-spacing:.08em;padding:7px 10px}
+.lt-i{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:13px}
+.topd{border-radius:18px;background:linear-gradient(120deg,rgba(255,185,56,.16),rgba(139,108,255,.14));border:1px solid rgba(255,200,100,.22)}
+.panel{animation:vin .42s cubic-bezier(.2,.8,.2,1)}
+@keyframes vin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{font-size:28px;font-weight:800;letter-spacing:-.035em;margin:6px 0 4px}
+.sub{color:var(--mute);font-size:14.5px;line-height:1.45;margin:0 0 16px}
+.back{display:inline-flex;align-items:center;gap:4px;padding:8px 14px;margin:2px 0 8px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--ink);font-weight:600;font-size:14px}
+.hero h2{background:linear-gradient(90deg,#fff,#b9a6ff)}
+.ban,.row{position:relative;overflow:hidden;border-radius:24px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.025));box-shadow:0 18px 40px -22px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .18s,border-color .2s}
+.ban:active,.row:active,.card:active,.ctile:active{transform:scale(.975)}
+.row{min-height:88px;padding:14px 18px;margin:0 0 12px;gap:16px}
+.row::before,.ban::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(260px 120px at 100% 0,var(--g,rgba(139,108,255,.28)),transparent 70%)}
+.c-free,.c-fly,.c-nest,.c-up,.c-battle,.c-nuts,.c-egg{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.025))}
+.c-nest{--g:rgba(70,140,255,.34)}.c-fly{--g:rgba(255,120,90,.32)}.c-battle{--g:rgba(120,90,255,.34)}.c-nuts{--g:rgba(255,70,110,.30)}.c-egg{--g:rgba(40,210,200,.30)}
+.ban{--g:rgba(255,185,56,.26);padding:14px 16px;margin-bottom:12px}
+.ban.gold{border-color:rgba(255,190,70,.3);--g:rgba(255,185,56,.30)}
+.row .ico,.ban .ico{display:grid;place-items:center;width:58px;height:58px;font-size:30px;flex:none;border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 24px -10px rgba(0,0,0,.8)}
+.row h3,.ban h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:0}
+.row p,.ban p{color:var(--mute);font-size:13.5px;margin:3px 0 0}
+.tag{background:rgba(255,255,255,.92);color:#12121a;font-size:12px;font-weight:700;padding:3px 11px;margin-top:6px}
+.tag.d{background:rgba(255,255,255,.12);color:#e9eaf2}
+.ban .btn{margin-left:auto;padding:9px 16px;border-radius:999px;font-weight:800;font-size:13px;color:var(--beak);background:linear-gradient(180deg,#ffd479,#ffa81f);box-shadow:0 8px 20px -6px rgba(255,170,30,.6)}
+.peek{margin:0}.peek .head,.peek .claws{display:none}.peek .row{margin-bottom:12px}
+.card,.result,.note,.gbox{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.result{padding:16px;line-height:1.45}
+.note{border:0;background:none;box-shadow:none;color:var(--mute);font-size:12.5px;padding:8px 2px}
+.card h3{font-size:16px;font-weight:700}
+button.main,a.main{display:block;text-align:center;text-decoration:none;width:100%;margin-top:12px;border:0;border-radius:18px;padding:16px;font:inherit;font-weight:800;font-size:16px;letter-spacing:-.01em;color:var(--beak);background:linear-gradient(180deg,#ffd479 0,#ffb02e 55%,#ff9a16 100%);box-shadow:0 14px 30px -10px rgba(255,160,30,.6),inset 0 1px 0 rgba(255,255,255,.55);transition:transform .15s,filter .2s,box-shadow .2s}
+button.main:active,a.main:active{transform:scale(.97);filter:brightness(.96)}
+button.main:disabled{opacity:.42;box-shadow:none;filter:grayscale(.4)}
+button.main.glass,.main.task-link{background:rgba(255,255,255,.07);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.bet{display:flex;gap:8px;margin-top:12px}
+.bi{flex:1;min-width:0;text-align:center;font:inherit;font-weight:800;font-size:18px;color:var(--ink);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:16px;padding:13px;outline:none;transition:border-color .2s,box-shadow .2s}
+.bi:focus{border-color:rgba(255,185,56,.6);box-shadow:0 0 0 4px rgba(255,185,56,.12)}
+.bb,.chip{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);font:inherit;font-weight:700;font-size:14px;border-radius:14px;padding:11px 14px;transition:background .2s,transform .12s}
+.bb:active,.chip:active{transform:scale(.94)}
+.chip{padding:8px 14px;border-radius:999px;font-size:13px;color:var(--mute)}
+.chip.on{background:rgba(255,185,56,.15);color:#ffd68a;border-color:rgba(255,185,56,.45)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.hint,.bh{color:var(--mute);font-size:12.5px}
+.sl{width:100%;accent-color:#ffb02e}
+.tabs button,.seg button{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--mute);border-radius:14px;font-weight:700}
+.tabs button.on,.seg button.on{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.ctile{border-radius:22px;border:1px solid var(--line);background:linear-gradient(170deg,rgba(255,255,255,.09),rgba(255,255,255,.02));box-shadow:0 16px 34px -20px #000,inset 0 1px 0 rgba(255,255,255,.08);transition:transform .18s}
+.ctile b{font-weight:800;letter-spacing:-.01em}
+.ctile .cp{font-weight:800;color:#ffd68a;background:rgba(255,185,56,.12);border-radius:999px;padding:4px 10px;font-size:13px}
+.fban{border-radius:22px;border:1px solid rgba(255,185,56,.3);background:linear-gradient(120deg,rgba(255,185,56,.18),rgba(139,108,255,.14))}
+.drop,.inv-item,.lbr,.mbox,.ug-card{border-radius:18px}
+.drop,.inv-item,.lbr{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line)}
+.inv-item button,.sellall{border-radius:12px;font-weight:800}
+.lbr{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:8px;font-weight:600}
+.lbr b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lbr.me,.card.mine{border-color:rgba(255,185,56,.45);background:linear-gradient(120deg,rgba(255,185,56,.14),rgba(255,255,255,.03))}
+.avatar{background:radial-gradient(circle at 30% 25%,#ffe3a6,#ff9f1c 60%,#8a4b00);box-shadow:0 14px 34px -10px rgba(255,160,30,.55)}
+.bar{background:rgba(255,255,255,.07);height:8px}.bar i{background:linear-gradient(90deg,#8b6cff,#ffb938)}
+.modal{background:rgba(4,5,10,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.mbox{background:linear-gradient(180deg,#1c1d2b,#10111a);border:1px solid rgba(255,255,255,.14);border-radius:30px;box-shadow:0 40px 90px -20px #000}
+.mbox h3{font-weight:800;letter-spacing:-.02em}
+nav{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:456px;margin:0 auto;padding:6px;gap:2px;border:1px solid rgba(255,255,255,.1);border-radius:28px;background:rgba(18,19,28,.72);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);box-shadow:0 20px 50px -12px #000,inset 0 1px 0 rgba(255,255,255,.08)}
+nav button{max-width:none;padding:8px 2px 7px;border-radius:22px;font-weight:700;font-size:11px;letter-spacing:.01em;transition:background .25s,color .25s}
+nav button span{font-size:21px;margin-bottom:1px;filter:grayscale(.6) opacity(.75);transition:filter .25s,transform .25s}
+nav button.on{color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+nav button.on span{filter:none;transform:translateY(-1px) scale(1.08)}
+nav i{background:linear-gradient(180deg,#ff6a7f,#ff2e55);top:2px;right:12px;box-shadow:0 0 0 2px #12131c}
+.toast{bottom:104px;background:rgba(244,245,248,.96);color:#12121a;border-radius:16px;font-weight:700;box-shadow:0 18px 40px -10px #000}
+.demo-note{display:none}
+::-webkit-scrollbar{width:0;height:0}
+@media(prefers-reduced-motion:reduce){.panel{animation:none}}
+</style>
+<style id="theme-v3">
+.i3{display:inline-block;width:1.25em;height:1.25em;vertical-align:-.28em;overflow:visible;flex:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+.logo .i3{width:30px;height:30px;vertical-align:-8px;margin-right:4px}
+.bal b .i3,.bal .i3{width:20px;height:20px;vertical-align:-5px}
+.row .ico .i3,.ban .ico .i3{width:44px;height:44px;vertical-align:0}
+.cico .i3{width:62px;height:62px}
+.emoji .i3,.cell .i3,.big .i3,.duo span .i3{width:78%;height:78%;vertical-align:0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45))}
+.mbox .big .i3{width:86%;height:86%}
+.avatar .i3{width:62px;height:62px}
+.lbr .a .i3{width:26px;height:26px;vertical-align:-7px}
+nav button span .i3{width:26px;height:26px;vertical-align:0}
+.cell,.drop .emoji,.inv-item .emoji,.duo span,.mbox .big,.lt-i .emoji,.topd .emoji{background:radial-gradient(circle at 50% 28%,rgba(255,255,255,.14),transparent 62%),linear-gradient(165deg,color-mix(in srgb,var(--pa,#8a8fa8) 42%,#0c0d16),#0b0c14)!important;border:1px solid color-mix(in srgb,var(--pa,#8a8fa8) 45%,transparent)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 24px -12px color-mix(in srgb,var(--pa,#000) 70%,transparent)}
+.row .ico,.ban .ico{background:radial-gradient(circle at 50% 25%,rgba(255,255,255,.16),transparent 65%),rgba(255,255,255,.04)}
+.avatar{background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.18),transparent 60%),#12131c;border:1px solid var(--line)}
+</style><style id="theme-v4">
+body{background:radial-gradient(700px 520px at 100% 0,rgba(255,61,154,.38),transparent 62%),radial-gradient(640px 520px at 0 38%,rgba(106,61,255,.36),transparent 62%),#0b0716!important}
+header .logo{font-size:20px}
+.ban,.row{border:0!important;box-shadow:0 22px 44px -20px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.35)!important;color:#fff!important;overflow:hidden}
+.ban::before,.row::before{display:none!important}
+.ban{min-height:124px;padding:18px 20px!important;border-radius:28px!important;background:linear-gradient(135deg,#ff4fa3,#7b4dff)!important}
+.ban.gold{min-height:96px;background:linear-gradient(135deg,#ffb02e,#ff5d7a)!important}
+.row{min-height:112px;padding:18px 20px!important;border-radius:28px!important}
+.c-nest{background:linear-gradient(135deg,#2f7bff,#7b4dff)!important}
+.c-fly{background:linear-gradient(135deg,#ff6a3d,#ff3d9a)!important}
+.c-battle{background:linear-gradient(135deg,#5b3dff,#b13dff)!important}
+.c-nuts{background:linear-gradient(135deg,#ff3d6e,#ff8a3d)!important}
+.c-egg{background:linear-gradient(135deg,#14c8b4,#2f7bff)!important}
+.ban .ico,.row .ico{order:2;margin-left:auto;width:92px!important;height:92px!important;background:none!important;border:0!important;box-shadow:none!important;transform:rotate(-8deg);flex:none}
+.ban .ico .i3,.row .ico .i3{width:88px!important;height:88px!important;filter:drop-shadow(0 12px 14px rgba(0,0,0,.45))}
+.ban h3,.row h3{font-size:24px!important;color:#fff}
+.ban p,.row p{color:rgba(255,255,255,.82)!important;font-size:14px}
+.ban .btn{margin-left:0;display:inline-block;margin-top:8px;background:#fff!important;color:#2a1250!important;box-shadow:0 8px 18px -6px rgba(0,0,0,.5)!important}
+.ban>div{flex:1}
+.tag{background:rgba(255,255,255,.95)!important;color:#2a1250!important}
+button.main,a.main{background:linear-gradient(135deg,#ff4fa3,#7b4dff)!important;color:#fff!important;box-shadow:0 16px 32px -10px rgba(255,79,163,.6),inset 0 1px 0 rgba(255,255,255,.4)!important}
+button.main.glass,.main.task-link{background:rgba(255,255,255,.08)!important;color:#fff!important;box-shadow:none!important}
+.bal em{background:linear-gradient(135deg,#ff4fa3,#7b4dff)!important;color:#fff!important;box-shadow:0 4px 12px -2px rgba(255,79,163,.7)!important}
+.chip.on{background:rgba(255,79,163,.2)!important;color:#ffb3d9!important;border-color:rgba(255,79,163,.6)!important}
+nav button.on{background:linear-gradient(135deg,rgba(255,79,163,.35),rgba(123,77,255,.35))!important}
+nav i{background:#ff4fa3!important}
+.bi:focus{border-color:rgba(255,79,163,.7)!important;box-shadow:0 0 0 4px rgba(255,79,163,.15)!important}
+.sl{accent-color:#ff4fa3}
+.bar i{background:linear-gradient(90deg,#7b4dff,#ff4fa3)!important}
+</style><style id="theme-v5">
+.row[data-go="click"],#click,#shop .card:has(#sx2),#shop .card:has(#sx3){display:none!important}
+.pbal{font-size:42px;font-weight:800;letter-spacing:-.03em;margin:2px 0 4px}
+.bal{cursor:pointer}
+</style><style id="theme-v6">
+.ban,.row{position:relative;overflow:hidden}
+.ban{padding-right:132px!important}
+.row{padding-right:150px!important;min-height:124px!important}
+.ban .ico,.row .ico{position:absolute!important;right:6px;top:50%;width:132px!important;height:132px!important;margin:0!important;transform:translateY(-50%) rotate(-6deg)!important;background:none!important;border:0!important;box-shadow:none!important;display:block!important;order:0!important}
+.row .ico .art,.ban .ico .art{width:100%!important;height:100%!important;display:block;vertical-align:0;filter:drop-shadow(0 14px 16px rgba(0,0,0,.5))}
+.row.c-nest .ico{width:150px!important;height:150px!important;right:0}
+.ban .ico{width:112px!important;height:112px!important}
+.cico .e3{width:88px!important;height:88px!important}
+.row h3,.ban h3{position:relative;z-index:1}
+</style><style id="theme-v8">
+.task-card.done{border-color:rgba(61,220,151,.5)!important;background:linear-gradient(135deg,rgba(61,220,151,.15),rgba(255,255,255,.03))!important}
+.task-card.done h3::after{content:"Выполнено";margin-left:8px;font-size:11px;font-weight:800;color:#0b2a1c;background:#3ddc97;border-radius:999px;padding:3px 9px;vertical-align:2px}
+.task-card.done p{color:#9fe8c6}
+</style></head>
+<body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="x-sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></linearGradient><radialGradient id="x-gl"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><symbol id="x-sdw" viewBox="0 0 64 64"><ellipse cx="32" cy="58" rx="19" ry="4" fill="#000" opacity=".3"/></symbol><symbol id="s-gem" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M32 6 52 20 32 58 12 20Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 20 22 6h20l10 14Z" fill="#fff" opacity=".3"/><path d="M32 58 12 20h40Z" fill="#000" opacity=".2"/><path d="M12 20h20v38Z" fill="#fff" opacity=".1"/><path d="M22 6 32 20 42 6M12 20h40" stroke="#fff" stroke-opacity=".5" fill="none" stroke-width="1.2"/><path d="M32 6 52 20 32 58 12 20Z" fill="url(#x-sh)"/><path d="M19 15l5-6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".9"/></symbol><symbol id="s-orb" viewBox="0 0 64 64"><use href="#x-sdw"/><circle cx="32" cy="32" r="22" fill="var(--c)"/><circle cx="32" cy="32" r="22" fill="url(#x-sh)"/><circle cx="32" cy="32" r="21.2" fill="none" stroke="var(--d)" stroke-opacity=".6" stroke-width="1.6"/><ellipse cx="24" cy="21" rx="9" ry="5.5" fill="url(#x-gl)" transform="rotate(-30 24 21)"/></symbol><symbol id="s-star" viewBox="0 0 64 64"><use href="#x-sdw"/><path id="x-sp" d="M32 8 39 24 56 25 43 37 48 54 32 45 16 54 21 37 8 25 25 24Z" fill="var(--d)" stroke="var(--d)" stroke-width="7" stroke-linejoin="round"/><path d="M32 8 39 24 56 25 43 37 48 54 32 45 16 54 21 37 8 25 25 24Z" fill="var(--c)" stroke="var(--c)" stroke-width="3.5" stroke-linejoin="round"/><path d="M32 8 39 24 56 25 43 37 48 54 32 45 16 54 21 37 8 25 25 24Z" fill="url(#x-sh)" stroke="url(#x-sh)" stroke-width="3.5" stroke-linejoin="round"/><ellipse cx="26" cy="22" rx="7" ry="3.5" fill="url(#x-gl)" transform="rotate(-30 26 22)"/></symbol><symbol id="s-heart" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M32 56C12 42 6 31 6 21a13 13 0 0 1 26-3 13 13 0 0 1 26 3c0 10-6 21-26 35Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M32 56C12 42 6 31 6 21a13 13 0 0 1 26-3 13 13 0 0 1 26 3c0 10-6 21-26 35Z" fill="url(#x-sh)"/><ellipse cx="19" cy="20" rx="6" ry="3.5" fill="url(#x-gl)" transform="rotate(-35 19 20)"/></symbol><symbol id="s-coin" viewBox="0 0 64 64"><use href="#x-sdw"/><circle cx="32" cy="32" r="23" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><circle cx="32" cy="32" r="17" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/><circle cx="32" cy="32" r="17" fill="none" stroke="#000" stroke-opacity=".15" stroke-width="1" transform="translate(0 1)"/><path d="M32 21l3.2 7 7.6.7-5.7 5 1.8 7.5L32 37l-6.9 4.2 1.8-7.5-5.7-5 7.6-.7Z" fill="#fff" opacity=".85"/><circle cx="32" cy="32" r="23" fill="url(#x-sh)"/><ellipse cx="23" cy="19" rx="10" ry="5" fill="url(#x-gl)" transform="rotate(-30 23 19)"/></symbol><symbol id="s-crown" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M9 49 7 21 21 33 32 12 43 33 57 21 55 49Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 49 7 21 21 33 32 12 43 33 57 21 55 49Z" fill="url(#x-sh)"/><path d="M9 49h46v7H9Z" fill="var(--d)"/><circle cx="32" cy="43" r="3.4" fill="#fff" opacity=".9"/><circle cx="19" cy="43" r="2.4" fill="#fff" opacity=".7"/><circle cx="45" cy="43" r="2.4" fill="#fff" opacity=".7"/></symbol><symbol id="s-rocket" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M20 36 9 48l1 6 12-6ZM44 36l11 12-1 6-12-6Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M26 46h12l-6 14Z" fill="#ffb52e"/><path d="M32 5C42 14 46 28 44 46H20C18 28 22 14 32 5Z" fill="#f4f6fb" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M32 5C36 9 39 14 41 21H23C25 14 28 9 32 5Z" fill="var(--c)"/><path d="M32 5C42 14 46 28 44 46H20C18 28 22 14 32 5Z" fill="url(#x-sh)"/><circle cx="32" cy="32" r="5.5" fill="#1c2a4a" stroke="#fff" stroke-width="2"/></symbol><symbol id="s-bomb" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M34 17c4-6 9-4 11-9" stroke="#c9a36b" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="46" cy="8" r="4" fill="#ffd34d"/><circle cx="30" cy="37" r="19" fill="var(--c)"/><rect x="23" y="15" width="13" height="7" rx="2" fill="#6b7088"/><circle cx="30" cy="37" r="19" fill="url(#x-sh)"/><ellipse cx="23" cy="29" rx="7" ry="4" fill="url(#x-gl)" transform="rotate(-30 23 29)"/></symbol><symbol id="s-egg" viewBox="0 0 64 64"><use href="#x-sdw"/><path id="x-ep" d="M32 9C44 9 52 29 52 40a20 18 0 0 1-40 0C12 29 20 9 32 9Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M32 9C44 9 52 29 52 40a20 18 0 0 1-40 0C12 29 20 9 32 9Z" fill="url(#x-sh)"/><ellipse cx="24" cy="26" rx="6" ry="10" fill="url(#x-gl)" transform="rotate(15 24 26)"/></symbol><symbol id="s-trophy" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M18 14H9c0 10 4 16 11 17M46 14h9c0 10-4 16-11 17" stroke="var(--d)" stroke-width="5.5" fill="none" stroke-linecap="round"/><path d="M18 14H9c0 10 4 16 11 17M46 14h9c0 10-4 16-11 17" stroke="var(--c)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M28 41h8v9h-8Z" fill="var(--d)"/><rect x="20" y="49" width="24" height="8" rx="2.5" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M18 8h28v16c0 10-6 17-14 17S18 34 18 24Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M18 8h28v16c0 10-6 17-14 17S18 34 18 24Z" fill="url(#x-sh)"/><ellipse cx="25" cy="19" rx="3.5" ry="8" fill="url(#x-gl)" transform="rotate(0 25 19)"/></symbol><symbol id="s-cube" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M10 20 32 32v26L10 46Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M54 20 32 32v26l22-12Z" fill="var(--d)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M32 8 54 20 32 32 10 20Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M32 8 54 20 32 32 10 20Z" fill="#fff" opacity=".4"/><path d="M10 20 32 32v26L10 46Z" fill="#fff" opacity=".08"/></symbol><symbol id="s-gift" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M13 28h38v28a3 3 0 0 1-3 3H16a3 3 0 0 1-3-3Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 28h38v28a3 3 0 0 1-3 3H16a3 3 0 0 1-3-3Z" fill="url(#x-sh)"/><path d="M43 28h8v28a3 3 0 0 1-3 3h-5Z" fill="#000" opacity=".2"/><path d="M10 20h44a2 2 0 0 1 2 2v7H8v-7a2 2 0 0 1 2-2Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 20h44a2 2 0 0 1 2 2v7H8v-7a2 2 0 0 1 2-2Z" fill="#fff" opacity=".2"/><path d="M28 20h8v39h-8Z" fill="#ffd36b"/><path d="M32 20C24 6 11 11 20 19ZM32 20C40 6 53 11 44 19Z" fill="#ffd36b" stroke="#c98a1c" stroke-width="1.5" stroke-linejoin="round"/><circle cx="32" cy="19" r="4.2" fill="#ffc23a" stroke="#c98a1c" stroke-width="1.2"/></symbol><symbol id="s-bird" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M20 54C13 40 17 18 34 13c11-2 17 6 15 19-1 10-9 22-29 22Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="33" cy="42" rx="9" ry="12" fill="#ffe9a6"/><path d="M20 54C13 40 17 18 34 13c11-2 17 6 15 19-1 10-9 22-29 22Z" fill="url(#x-sh)"/><path d="M43 18c10-2 19 2 18 11-1 8-10 11-19 8Z" fill="#ff9a16" stroke="#a84f08" stroke-width="1.5" stroke-linejoin="round"/><path d="M43 27c6 0 12 0 17-1.5" stroke="#ffd479" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="39" cy="24" r="4.4" fill="#fff"/><circle cx="40" cy="24.5" r="2.2" fill="#0b0c14"/></symbol><symbol id="s-feather" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M54 8C32 8 14 22 11 45L9 57l5-1 3-8C40 50 56 34 54 8Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M54 8C32 8 14 22 11 45L9 57l5-1 3-8C40 50 56 34 54 8Z" fill="url(#x-sh)"/><path d="M52 11C36 22 22 36 12 55" stroke="#fff" stroke-opacity=".85" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M42 20l-3 9M33 27l-3 8M25 36l-3 7" stroke="var(--d)" stroke-opacity=".5" stroke-width="1.6" stroke-linecap="round"/></symbol><symbol id="s-arrow" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M32 6 54 30H41v22H23V30H10Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M32 6 54 30H41v22H23V30H10Z" fill="url(#x-sh)"/><ellipse cx="25" cy="22" rx="6" ry="3" fill="url(#x-gl)" transform="rotate(-40 25 22)"/></symbol><symbol id="s-user" viewBox="0 0 64 64"><use href="#x-sdw"/><path d="M10 57c0-14 10-21 22-21s22 7 22 21Z" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><circle cx="32" cy="22" r="12" fill="var(--c)" stroke="var(--d)" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 57c0-14 10-21 22-21s22 7 22 21Z" fill="url(#x-sh)"/><circle cx="32" cy="22" r="12" fill="url(#x-sh)"/><ellipse cx="27" cy="17" rx="5" ry="3" fill="url(#x-gl)" transform="rotate(-30 27 17)"/></symbol></defs></svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbefc0"/><stop offset="0.333333" stop-color="#e2b84e"/><stop offset="0.666667" stop-color="#a8761c"/><stop offset="1" stop-color="#5e3d0a"/></linearGradient><linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.333333" stop-color="#c8d2e6"/><stop offset="0.666667" stop-color="#7c89a6"/><stop offset="1" stop-color="#3a4460"/></linearGradient><linearGradient id="gDark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5266"/><stop offset="0.5" stop-color="#1a1e2c"/><stop offset="1" stop-color="#07090f"/></linearGradient><linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a34"/><stop offset="0.5" stop-color="#5a3720"/><stop offset="1" stop-color="#2a160b"/></linearGradient><linearGradient id="gWood2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a06a3e"/><stop offset="0.5" stop-color="#6a4024"/><stop offset="1" stop-color="#331a0d"/></linearGradient><linearGradient id="gNavy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3f86"/><stop offset="0.5" stop-color="#12214f"/><stop offset="1" stop-color="#070e26"/></linearGradient><linearGradient id="gBib" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff7dc"/><stop offset="0.5" stop-color="#e8cf8a"/><stop offset="1" stop-color="#a88a3a"/></linearGradient><linearGradient id="gBeak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="0.5" stop-color="#f08a2a"/><stop offset="1" stop-color="#7a2a08"/></linearGradient><linearGradient id="gRedM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8505c"/><stop offset="0.5" stop-color="#8a1a26"/><stop offset="1" stop-color="#3a0810"/></linearGradient><linearGradient id="gT0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c08a"/><stop offset="0.333333" stop-color="#c98a4e"/><stop offset="0.666667" stop-color="#8a5326"/><stop offset="1" stop-color="#4a2a10"/></linearGradient><linearGradient id="gT1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0f4fa"/><stop offset="0.333333" stop-color="#b4c0d6"/><stop offset="0.666667" stop-color="#6a7894"/><stop offset="1" stop-color="#2c3550"/></linearGradient><linearGradient id="gT2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.333333" stop-color="#d8dfec"/><stop offset="0.666667" stop-color="#8e9ab4"/><stop offset="1" stop-color="#4a5470"/></linearGradient><linearGradient id="gT3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbefc0"/><stop offset="0.333333" stop-color="#e2b84e"/><stop offset="0.666667" stop-color="#a8761c"/><stop offset="1" stop-color="#5e3d0a"/></linearGradient><linearGradient id="gT4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe0d0"/><stop offset="0.333333" stop-color="#e8a58a"/><stop offset="0.666667" stop-color="#a8604a"/><stop offset="1" stop-color="#5a2a1e"/></linearGradient><linearGradient id="gT5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8fcff"/><stop offset="0.333333" stop-color="#c8e0f0"/><stop offset="0.666667" stop-color="#7a98b8"/><stop offset="1" stop-color="#34506e"/></linearGradient><linearGradient id="gT6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a90a8"/><stop offset="0.333333" stop-color="#3a3f56"/><stop offset="0.666667" stop-color="#1a1d2e"/><stop offset="1" stop-color="#07080e"/></linearGradient><linearGradient id="gT7" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.333333" stop-color="#cfeaff"/><stop offset="0.666667" stop-color="#7ab0e0"/><stop offset="1" stop-color="#2e5a90"/></linearGradient><linearGradient id="gT8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bff5d8"/><stop offset="0.333333" stop-color="#3ac48a"/><stop offset="0.666667" stop-color="#10704a"/><stop offset="1" stop-color="#04301e"/></linearGradient><linearGradient id="gT9" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc0cc"/><stop offset="0.333333" stop-color="#d83a58"/><stop offset="0.666667" stop-color="#8a1028"/><stop offset="1" stop-color="#3a0410"/></linearGradient><linearGradient id="gT10" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c0d4ff"/><stop offset="0.333333" stop-color="#4a72e0"/><stop offset="0.666667" stop-color="#1a3a9a"/><stop offset="1" stop-color="#081a50"/></linearGradient><linearGradient id="gT11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dc90"/><stop offset="0.333333" stop-color="#c89a30"/><stop offset="0.666667" stop-color="#5a4010"/><stop offset="1" stop-color="#1a1004"/></linearGradient><radialGradient id="rWhite" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#f1ead8"/><stop offset="1" stop-color="#b8ab88"/></radialGradient><radialGradient id="rBomb" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#7a8296"/><stop offset="0.5" stop-color="#1e2230"/><stop offset="1" stop-color="#05060a"/></radialGradient><radialGradient id="rPearl" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#e6e2f0"/><stop offset="1" stop-color="#8f89ab"/></radialGradient><radialGradient id="rOrb" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#cfe0ff"/><stop offset="0.5" stop-color="#3c5aa8"/><stop offset="1" stop-color="#0a1230"/></radialGradient><radialGradient id="rShine"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="rkB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a5570"/><stop offset="0.333333" stop-color="#f2f5fb"/><stop offset="0.666667" stop-color="#cfd6e6"/><stop offset="1" stop-color="#4a5570"/></linearGradient><linearGradient id="rkR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d8505c"/><stop offset="0.5" stop-color="#8a1a26"/><stop offset="1" stop-color="#3a0810"/></linearGradient><linearGradient id="rkF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a7490"/><stop offset="0.5" stop-color="#2a3248"/><stop offset="1" stop-color="#10141f"/></linearGradient><radialGradient id="rkG" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#9ad0ff"/><stop offset="0.5" stop-color="#1f4a9a"/><stop offset="1" stop-color="#071a44"/></radialGradient><linearGradient id="rkFl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c0"/><stop offset="0.5" stop-color="#ffa200"/><stop offset="1" stop-color="#ff3c00"/></linearGradient></defs><symbol id="i-feather" viewBox="0 0 100 100"><ellipse cx="50" cy="94" rx="30" ry="4" fill="#000" opacity=".4"/><circle cx="50" cy="53" r="42" fill="#5e3d0a"/><circle cx="50" cy="49" r="42" fill="url(#gGold)"/><circle cx="50" cy="49" r="36" fill="none" stroke="#6a4410" stroke-width="2" opacity=".7"/><circle cx="50" cy="49" r="39" fill="none" stroke="#fff1b0" stroke-width="1" opacity=".6"/><path d="M32 67C34 41 50 27 70 27C68 49 54 63 36 65Z" fill="#5a3a08" opacity=".6" transform="translate(1.6 1.6)"/><path d="M32 67C34 41 50 27 70 27C68 49 54 63 36 65Z" fill="url(#gGold)" stroke="#fff3c0" stroke-width=".8"/><path d="M32 67C44 55 56 43 68 29" stroke="#8a5e14" stroke-width="2" fill="none"/><path d="M18 32Q30 14 56 13" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".45"/></symbol><symbol id="i-gift" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="34" ry="4.5" fill="#000" opacity=".4"/><rect x="16" y="46" width="68" height="44" rx="4" fill="url(#gNavy)"/><rect x="11" y="32" width="78" height="17" rx="4" fill="url(#gNavy)"/><rect x="44" y="32" width="12" height="58" fill="url(#gGold)"/><rect x="11" y="38" width="78" height="6" fill="url(#gGold)"/><path d="M50 32C36 10 18 18 30 30ZM50 32C64 10 82 18 70 30Z" fill="url(#gGold)" stroke="#fff3c0" stroke-width="1"/><circle cx="50" cy="32" r="5" fill="url(#gGold)"/><path d="M16 50H84" stroke="#fff" stroke-opacity=".18" stroke-width="2"/></symbol><symbol id="i-chest0" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT0)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT0)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT0)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT0)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#e0603a" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest1" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT1)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT1)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT1)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT1)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#4aa0e0" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest2" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT2)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT2)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT2)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT2)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#e0e8f4" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest3" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT3)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT3)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT3)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT3)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#e03a3a" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest4" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT4)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT4)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT4)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT4)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#f0a0c0" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest5" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT5)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT5)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT5)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT5)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#60d0f0" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest6" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT6)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT6)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT6)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT6)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#d02030" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest7" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT7)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT7)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT7)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT7)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#a0e0ff" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest8" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT8)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT8)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT8)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT8)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#30e090" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest9" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT9)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT9)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT9)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT9)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#ff3050" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest10" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT10)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT10)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT10)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT10)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#4080ff" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-chest11" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="38" ry="4.5" fill="#000" opacity=".4"/><path d="M14 48H86V84Q86 90 80 90H20Q14 90 14 84Z" fill="url(#gWood)"/><path d="M32 48V90M50 48V90M68 48V90" stroke="#000" stroke-opacity=".35" stroke-width="1.2"/><path d="M14 48V38Q14 18 50 18Q86 18 86 38V48Z" fill="url(#gWood2)"/><path d="M32 21V48M50 18V48M68 21V48" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/><rect x="14" y="44" width="72" height="7" fill="url(#gT11)"/><rect x="22" y="24" width="7" height="66" fill="url(#gT11)"/><rect x="71" y="24" width="7" height="66" fill="url(#gT11)"/><circle cx="25.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="56" r="1.8" fill="#f2e6b8"/><circle cx="25.5" cy="84" r="1.8" fill="#f2e6b8"/><circle cx="74.5" cy="84" r="1.8" fill="#f2e6b8"/><rect x="42" y="40" width="16" height="22" rx="3" fill="url(#gT11)" stroke="#000" stroke-opacity=".35"/><circle cx="50" cy="48" r="4.2" fill="#f0d060" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/><ellipse cx="48.6" cy="46.6" rx="1.4" ry="1" fill="#fff" opacity=".8"/><path d="M50 53V59" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M18 36Q22 24 50 21" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".22"/></symbol><symbol id="i-trophy" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="26" ry="4.5" fill="#000" opacity=".4"/><rect x="30" y="82" width="40" height="9" rx="3" fill="url(#gDark)"/><rect x="36" y="76" width="28" height="8" rx="2" fill="url(#gGold)"/><rect x="44" y="62" width="12" height="16" fill="url(#gGold)"/><path d="M24 14H76V38Q76 62 50 66Q24 62 24 38Z" fill="url(#gGold)"/><ellipse cx="50" cy="14" rx="26" ry="4.5" fill="#f6e3a0" stroke="#8a5e14" stroke-width="1"/><path d="M24 22H12Q10 44 30 48M76 22H88Q90 44 70 48" fill="none" stroke="url(#gGold)" stroke-width="5" stroke-linecap="round"/><path d="M32 22Q32 46 44 57" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".5"/><path d="M42 34h16M42 42h16" stroke="#7a5412" stroke-width="1.5" opacity=".6"/></symbol><symbol id="i-bomb" viewBox="0 0 100 100"><ellipse cx="46" cy="93" rx="30" ry="4.5" fill="#000" opacity=".4"/><circle cx="46" cy="58" r="34" fill="url(#rBomb)"/><ellipse cx="34" cy="42" rx="11" ry="6" fill="#fff" opacity=".4" transform="rotate(-35 34 42)"/><rect x="58" y="20" width="15" height="13" rx="3" fill="url(#gSilver)" transform="rotate(28 65 26)"/><path d="M72 18Q80 8 90 11" stroke="#9a7a52" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="91" cy="11" r="4" fill="#ffae3a"/><circle cx="91" cy="11" r="2" fill="#fff4c0"/></symbol><symbol id="i-egg" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="26" ry="4.5" fill="#000" opacity=".4"/><path d="M50 8C74 8 84 46 84 62C84 82 68 92 50 92C32 92 16 82 16 62C16 46 26 8 50 8Z" fill="url(#rPearl)"/><path d="M17 60Q50 72 83 60" stroke="url(#gGold)" stroke-width="4" fill="none"/><path d="M18 68Q50 80 82 68" stroke="url(#gGold)" stroke-width="1.5" fill="none" opacity=".8"/><ellipse cx="38" cy="32" rx="7" ry="14" fill="#fff" opacity=".7" transform="rotate(18 38 32)"/></symbol><symbol id="i-orb" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="28" ry="4.5" fill="#000" opacity=".4"/><circle cx="50" cy="50" r="38" fill="url(#rOrb)"/><path d="M16 56Q50 42 84 56" stroke="#9ab8ff" stroke-width="2" fill="none" opacity=".5"/><ellipse cx="36" cy="30" rx="15" ry="8" fill="#fff" opacity=".6" transform="rotate(-32 36 30)"/><ellipse cx="64" cy="76" rx="12" ry="4" fill="#7aa0ff" opacity=".35"/></symbol><symbol id="i-swords" viewBox="0 0 100 100"><ellipse cx="50" cy="93" rx="30" ry="4.5" fill="#000" opacity=".4"/><g transform="rotate(45 50 50)"><rect x="46" y="4" width="8" height="58" rx="2" fill="url(#gSilver)"/><path d="M50 4V62" stroke="#3a4460" stroke-opacity=".5"/><rect x="33" y="60" width="34" height="7" rx="3" fill="url(#gGold)"/><rect x="45" y="67" width="10" height="20" rx="3" fill="url(#gDark)"/><circle cx="50" cy="89" r="4" fill="url(#gGold)"/></g><g transform="rotate(-45 50 50)"><rect x="46" y="4" width="8" height="58" rx="2" fill="url(#gSilver)"/><path d="M50 4V62" stroke="#3a4460" stroke-opacity=".5"/><rect x="33" y="60" width="34" height="7" rx="3" fill="url(#gGold)"/><rect x="45" y="67" width="10" height="20" rx="3" fill="url(#gDark)"/><circle cx="50" cy="89" r="4" fill="url(#gGold)"/></g></symbol><symbol id="i-pad" viewBox="0 0 100 100"><path d="M24 34H76Q94 34 92 62Q90 80 78 78Q68 76 64 66H36Q32 76 22 78Q10 80 8 62Q6 34 24 34Z" fill="none" stroke="#cfdcff" stroke-width="4.5" stroke-linejoin="round"/><path d="M26 54h16M34 46v16" stroke="#cfdcff" stroke-width="5" stroke-linecap="round"/><circle cx="68" cy="50" r="4.5" fill="url(#gGold)"/><circle cx="80" cy="58" r="4.5" fill="url(#gGold)"/></symbol><symbol id="i-task" viewBox="0 0 100 100"><rect x="22" y="16" width="56" height="74" rx="8" fill="none" stroke="#cfdcff" stroke-width="4.5"/><rect x="36" y="8" width="28" height="14" rx="4" fill="url(#gGold)"/><path d="M34 54l10 10 20-22" stroke="#e2b84e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M34 76h32" stroke="#cfdcff" stroke-width="4" stroke-linecap="round" opacity=".6"/></symbol><symbol id="i-up" viewBox="0 0 100 100"><rect x="14" y="14" width="72" height="72" rx="16" fill="none" stroke="#cfdcff" stroke-width="4.5"/><path d="M50 70V32M34 46L50 30L66 46" stroke="#e2b84e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol><symbol id="i-cock" viewBox="0 0 100 100"><ellipse cx="42" cy="94" rx="28" ry="4.5" fill="#000" opacity=".4"/><ellipse cx="42" cy="74" rx="28" ry="22" fill="url(#gNavy)"/><path d="M26 66Q42 54 58 66Q58 90 42 90Q26 90 26 66Z" fill="url(#gBib)"/><circle cx="40" cy="44" r="26" fill="url(#gNavy)"/><path d="M38 44Q56 36 62 52Q58 66 40 62Z" fill="url(#gBib)"/><circle cx="38" cy="38" r="8" fill="#0a1230" stroke="#e2b84e" stroke-width="1.6"/><circle cx="38" cy="38" r="3.6" fill="#05070f"/><circle cx="36.8" cy="36.6" r="1.3" fill="#fff"/><path d="M50 32C70 22 94 30 98 48C94 62 68 62 52 54Z" fill="url(#gBeak)"/><path d="M52 52C70 58 92 58 98 48C92 66 66 68 52 58Z" fill="url(#gRedM)" opacity=".75"/><path d="M90 36C98 40 99 46 98 48C95 50 91 49 89 46Z" fill="#1a0c04"/><path d="M56 34C72 28 88 32 94 40" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/><ellipse cx="32" cy="26" rx="11" ry="4.5" fill="#fff" opacity=".22" transform="rotate(-25 32 26)"/></symbol><symbol id="i-rocketf" viewBox="0 0 100 100"><g transform="translate(50 50) rotate(38) translate(-50 -44)"><path d="M40 74Q50 112 60 74Z" fill="url(#rkFl)"/><path d="M30 52L9 78L30 71Z" fill="url(#rkF)"/><path d="M70 52L91 78L70 71Z" fill="url(#rkF)"/><path d="M9 78L14 72L19 74Z" fill="#c8283a"/><path d="M91 78L86 72L81 74Z" fill="#c8283a"/><path d="M50 2C70 18 74 44 70 68H30C26 44 30 18 50 2Z" fill="url(#rkB)"/><path d="M50 2C61 10 67 20 69 32H31C33 20 39 10 50 2Z" fill="url(#rkR)"/><rect x="30" y="58" width="40" height="4" fill="#c8283a" opacity=".85"/><rect x="38" y="66" width="24" height="9" rx="3" fill="#161a28"/><circle cx="50" cy="46" r="11" fill="#9aa4bc"/><circle cx="50" cy="46" r="8.5" fill="url(#rkG)"/><ellipse cx="46" cy="42" rx="3.2" ry="2" fill="#fff" opacity=".8" transform="rotate(-30 46 42)"/><path d="M36 18Q34 40 36 58" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".5"/></g></symbol></svg>
 <div class="app">
 <header>
   <div class="logo">🦜 Тукан Батл</div>
-  <div class="bal"><span id="bal">—</span><b>🪶</b><em>+</em></div>
+  <div class="bal"><span id="bal">—</span><b><svg class="i3" viewBox="0 0 64 64" aria-hidden="true" style="--c:#ffd04a;--d:#c4780a"><use href="#s-star"/></svg></b><em>+</em></div>
 </header>
 <div class="live"><u>LIVE</u><div class="lt" id="lt"><div class="lt-track" id="ltt"></div></div></div>
 
@@ -451,25 +593,24 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
 <div class="fx" aria-hidden="true"></div>
 
 <section class="panel on" id="home">
-  <button class="ban" data-go="nest"><span class="ico">🎁</span><div><h3>Бесплатное гнездо</h3><p>Открывается раз в день</p></div><span class="btn">Открыть</span></button>
-  <button class="ban gold" data-go="tour"><span class="ico">🏆</span><div><h3>Лидеры</h3><p>Рейтинг реальных игроков</p></div></button>
+  <button class="ban" data-go="nest"><span class="ico"><svg class="e3 art" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-gift"/></svg></span><div><h3>Бесплатное гнездо</h3><p>Открывается раз в день</p></div><span class="btn">Открыть</span></button>
   <div class="peek">
     <svg class="head" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-cock"/></svg>
     <svg class="claws" viewBox="0 0 84 26" aria-hidden="true">
       <rect x="6" y="4" width="26" height="14" rx="7" fill="url(#gBlue)"/><rect x="52" y="4" width="26" height="14" rx="7" fill="url(#gBlue)"/>
       <path d="M10 18 l-2 7 M18 18 l-1 8 M26 18 l1 7 M56 18 l-2 7 M64 18 l-1 8 M72 18 l1 7" stroke="#2b2b2b" stroke-width="3.4" stroke-linecap="round"/>
     </svg>
-    <button class="row c-nest" data-go="nest"><span class="ico">🪹</span><div><h3>Гнёзда</h3><p>от 50 до 50 000 🪶</p></div></button>
+    <button class="row c-nest" data-go="nest"><span class="ico"><svg class="e3 art" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-chest1"/></svg></span><div><h3>Гнёзда</h3><p>от 50 до 50 000 ★</p></div></button>
   </div>
-  <button class="row c-fly" data-go="fly"><span class="ico">🪂</span><div><h3>Ракетка</h3><span class="tag">Новое</span></div></button>
-  <button class="row c-battle" data-go="battle"><span class="ico">⚔️</span><div><h3>Батл</h3><span class="tag d">Симуляция</span></div></button>
-  <button class="row c-nuts" data-go="nuts"><span class="ico">🔮</span><div><h3>Плинко</h3><p>Бросай шарики, лови множители</p></div></button>
-  <button class="row c-egg" data-go="egg"><span class="ico">💣</span><div><h3>Мины</h3><p>Найди яйца и обойди мины</p></div></button>
+  <button class="row c-fly" data-go="fly"><span class="ico"><svg class="e3 art" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-rocketf"/></svg></span><div><h3>Ракетка</h3><span class="tag">Новое</span></div></button>
+  <button class="row c-battle" data-go="battle"><span class="ico"><svg class="e3 art" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-swords"/></svg></span><div><h3>Батл</h3><span class="tag d">Симуляция</span></div></button>
+  <button class="row c-nuts" data-go="nuts"><span class="ico"><svg class="e3 art" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-orb"/></svg></span><div><h3>Плинко</h3><p>Бросай шарики, лови множители</p></div></button>
+  <button class="row c-egg" data-go="egg"><span class="ico"><svg class="e3 art" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-bomb"/></svg></span><div><h3>Мины</h3><p>Найди яйца и обойди мины</p></div></button>
 </section>
 
 <section class="panel" id="nest">
   <button class="back" data-go="home">← Назад</button>
-  <h2>Гнёзда</h2><p class="sub">Открывай гнёзда, находи подарки: продай за перья или оставь</p>
+  <h2>Гнёзда</h2><p class="sub">Открывай гнёзда, выигрывай призы: забирай или оставляй в инвентаре</p>
   <div id="nlist"></div>
   <div id="ndetail" hidden></div>
 </section>
@@ -488,9 +629,9 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
   <button class="back" data-go="home">← Назад</button>
   <h2>Ракетка</h2><p class="sub">Ракета набирает высоту, множитель растёт. Забери выигрыш до взрыва</p>
   <div class="card gbox"><div class="mult" id="fm">1.00x</div><div class="pfield"><canvas id="fc" width="340" height="250"></canvas></div></div>
-  <div class="bet"><button class="bb" data-bm="half" data-for="fbet">½</button><input class="bi" id="fbet" type="text" inputmode="numeric" value="100" data-min="50" data-max="100000" aria-label="Ставка"><button class="bb" data-bm="dbl" data-for="fbet">×2</button><button class="bb" data-bm="max" data-for="fbet">Макс</button></div>
-  <div class="chips" style="margin-top:8px"><button class="chip" data-set="50" data-for="fbet">50</button><button class="chip" data-set="100" data-for="fbet">100</button><button class="chip" data-set="1000" data-for="fbet">1 000</button><button class="chip" data-set="10000" data-for="fbet">10 000</button></div>
-  <div class="hint bh">Ставка от 50 до 100 000 🪶</div>
+  <div class="bet"><button class="bb" data-bm="half" data-for="fbet">½</button><input class="bi" id="fbet" type="text" inputmode="numeric" value="100" data-min="5" data-max="100000" aria-label="Ставка"><button class="bb" data-bm="dbl" data-for="fbet">×2</button><button class="bb" data-bm="max" data-for="fbet">Макс</button></div>
+  <div class="chips" style="margin-top:8px"><button class="chip" data-set="5" data-for="fbet">5</button><button class="chip" data-set="100" data-for="fbet">100</button><button class="chip" data-set="1000" data-for="fbet">1 000</button><button class="chip" data-set="10000" data-for="fbet">10 000</button></div>
+  <div class="hint bh">Ставка от 5 до 100 000 ★</div>
   <button class="main" id="fgo">Старт</button>
   <div class="result" id="fres"><span class="hint">Выбери ставку и нажми «Старт».</span></div>
 </section>
@@ -498,9 +639,9 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
   <button class="back" data-go="home">← Назад</button>
   <h2>Плинко</h2><p class="sub">Чем дальше от центра корзина, тем выше множитель. Тапай или удерживай кнопку, чтобы бросать много шариков сразу</p>
   <div class="card gbox"><div class="pfield"><canvas id="pc" width="340" height="320"></canvas></div></div>
-  <div class="bet"><button class="bb" data-bm="half" data-for="pbet">½</button><input class="bi" id="pbet" type="text" inputmode="numeric" value="100" data-min="25" data-max="100000" aria-label="Ставка"><button class="bb" data-bm="dbl" data-for="pbet">×2</button><button class="bb" data-bm="max" data-for="pbet">Макс</button></div>
-  <div class="chips" style="margin-top:8px"><button class="chip" data-set="25" data-for="pbet">25</button><button class="chip" data-set="100" data-for="pbet">100</button><button class="chip" data-set="1000" data-for="pbet">1 000</button><button class="chip" data-set="10000" data-for="pbet">10 000</button></div>
-  <div class="hint bh">Ставка от 25 до 100 000 🪶</div>
+  <div class="bet"><button class="bb" data-bm="half" data-for="pbet">½</button><input class="bi" id="pbet" type="text" inputmode="numeric" value="100" data-min="5" data-max="100000" aria-label="Ставка"><button class="bb" data-bm="dbl" data-for="pbet">×2</button><button class="bb" data-bm="max" data-for="pbet">Макс</button></div>
+  <div class="chips" style="margin-top:8px"><button class="chip" data-set="5" data-for="pbet">5</button><button class="chip" data-set="100" data-for="pbet">100</button><button class="chip" data-set="1000" data-for="pbet">1 000</button><button class="chip" data-set="10000" data-for="pbet">10 000</button></div>
+  <div class="hint bh">Ставка от 5 до 100 000 ★</div>
   <button class="main" id="pgo">Бросить шарик</button>
   <div class="result" id="pres"><span class="hint">Каждый шарик стоит ставку и падает независимо от других.</span></div>
 </section>
@@ -511,9 +652,9 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
   <div class="mnrow"><span>Количество мин</span><b id="emv">3</b></div>
   <input class="sl" id="emn" type="range" min="2" max="24" value="3" aria-label="Количество мин">
   <div class="chips" style="margin-top:8px"><button class="chip" data-mn="2">2</button><button class="chip" data-mn="3">3</button><button class="chip" data-mn="5">5</button><button class="chip" data-mn="10">10</button><button class="chip" data-mn="24">24</button></div>
-  <div class="bet"><button class="bb" data-bm="half" data-for="ebet">½</button><input class="bi" id="ebet" type="text" inputmode="numeric" value="100" data-min="50" data-max="100000" aria-label="Ставка"><button class="bb" data-bm="dbl" data-for="ebet">×2</button><button class="bb" data-bm="max" data-for="ebet">Макс</button></div>
-  <div class="chips" style="margin-top:8px"><button class="chip" data-set="50" data-for="ebet">50</button><button class="chip" data-set="100" data-for="ebet">100</button><button class="chip" data-set="1000" data-for="ebet">1 000</button><button class="chip" data-set="10000" data-for="ebet">10 000</button></div>
-  <div class="hint bh">Ставка от 50 до 100 000 🪶</div>
+  <div class="bet"><button class="bb" data-bm="half" data-for="ebet">½</button><input class="bi" id="ebet" type="text" inputmode="numeric" value="100" data-min="5" data-max="100000" aria-label="Ставка"><button class="bb" data-bm="dbl" data-for="ebet">×2</button><button class="bb" data-bm="max" data-for="ebet">Макс</button></div>
+  <div class="chips" style="margin-top:8px"><button class="chip" data-set="5" data-for="ebet">5</button><button class="chip" data-set="100" data-for="ebet">100</button><button class="chip" data-set="1000" data-for="ebet">1 000</button><button class="chip" data-set="10000" data-for="ebet">10 000</button></div>
+  <div class="hint bh">Ставка от 5 до 100 000 ★</div>
   <button class="main" id="ego">Начать</button>
   <div class="result" id="eres"><span class="hint">Выбери количество мин и ставку, затем нажми «Начать».</span></div>
 </section>
@@ -522,7 +663,7 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
   <h2>Апгрейд</h2><p class="sub">Шанс до 75%. Выбери ставку и цель</p>
   <div class="seg"><button class="on" data-umode="slow">Медленно</button><button data-umode="fast">Быстро</button></div>
   <div class="uarena2">
-    <div class="ug-card"><span class="ug-l">Ставка</span><div class="uplate" id="ust">🪶</div><b id="ustv">0 🪶</b><i id="usti"></i></div>
+    <div class="ug-card"><span class="ug-l">Ставка</span><div class="uplate" id="ust">★</div><b id="ustv">0 ★</b><i id="usti"></i></div>
     <div class="uwheel"><div class="uring" id="uring"><div class="uptr" id="uptr"></div><div class="uin"><b id="upct">—</b><span>шанс</span></div></div></div>
     <div class="ug-card"><span class="ug-l">Цель</span><div class="uplate" id="utg">?</div><b id="utgv">Выбери цель</b><i id="utgn"></i></div>
   </div>
@@ -541,9 +682,9 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
   <div class="note">Шанс = цена ставки ÷ цена цели × 92%, максимум 75%. Ставка сгорает при неудаче, при успехе получаешь цель.</div>
 </section>
 <section class="panel" id="tasks">
-  <h2>Награды</h2><p class="sub">Выполняй условия и получай перья на баланс.</p>
-  <div class="card task-card" style="margin-bottom:10px"><h3>📢 Подписка на канал</h3><p>Подпишись на @TukanBattle и нажми «Проверить» — награда 1000 🪶</p><a class="main task-link" href="https://t.me/TukanBattle" target="_blank" rel="noopener">Открыть канал</a><button class="main" id="checksub" type="button">Проверить подписку</button><p class="note" id="substatus">Проверка выполняется через Telegram-бота.</p></div>
-  <div class="card task-card"><h3>👥 Приглашай друзей</h3><p>За каждого приглашённого друга, который запустит бота и подпишется на канал, начисляется 1000 🪶.</p><button class="main" id="copyref" type="button">Получить реферальную ссылку</button><p class="note" id="refstatus">Рефералы засчитываются только после проверки подписки.</p></div>
+  <h2>Награды</h2><p class="sub">Выполняй условия и получай ★ на баланс.</p>
+  <div class="card task-card" style="margin-bottom:10px"><h3>📢 Подписка на канал</h3><p>Подпишись на @TukanBattle и нажми «Проверить» — награда 5 ★</p><a class="main task-link" href="https://t.me/TukanBattle" target="_blank" rel="noopener">Открыть канал</a><button class="main" id="checksub" type="button">Проверить подписку</button><p class="note" id="substatus">Проверка выполняется через Telegram-бота.</p></div>
+  <div class="card task-card"><h3>👥 Приглашай друзей</h3><p>За каждого приглашённого друга, который запустит бота и подпишется на канал, начисляется 5 ★.</p><button class="main" id="copyref" type="button">Получить реферальную ссылку</button><p class="note" id="refstatus">Рефералы засчитываются только после проверки подписки.</p></div>
 </section>
 <section class="panel" id="tour">
   <h2>Лидеры</h2><p class="sub">Рейтинг игроков из общей базы данных</p>
@@ -551,21 +692,21 @@ button:focus-visible{outline:2px solid #d6b25e;outline-offset:3px}
 </section>
 <section class="panel" id="prof">
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><div class="avatar">🦜</div><div><h2 style="margin:0">Профиль</h2><p class="sub" style="margin:2px 0 0">Тукан-новичок · уровень 1</p></div></div>
-  <div class="card"><div class="bar"><i style="width:40%"></i></div><p>120 / 300 опыта</p></div>
+  <div class="card"><div class="bar"><i style="width:40%"></i></div><p>120 / 300 опыта</p></div> <div class="card" style="cursor:default;margin-top:10px"><h3>Баланс</h3><div class="pbal"><span id="pbal">0</span> ★</div><button class="main" data-go="shop" type="button">Пополнить</button><p class="note">★ — внутриигровая валюта. Вывод и обмен на Telegram Stars или деньги недоступны.</p></div>
   <h2 style="font-size:24px;margin:18px 0 8px">Инвентарь <span class="cnt" id="invn">0</span></h2>
   <div id="ninv"></div>
   <div class="card" style="margin-top:10px"><h3>Сохранение</h3><p id="savestatus">Синхронизация баланса выполняется сервером бота после подключения.</p></div>
-  <div class="card" style="margin-top:10px"><h3>Косметика</h3><p>В этой версии магазин отключён. Все игровые предметы доступны только за виртуальные перья.</p></div>
+  
 </section>
 </div>
 
-<div class="toast" id="toast"></div>
+<div style="text-align:center;color:#4b5066;font-size:11px;padding:6px 0 0">дизайн v12 · ★</div><div class="toast" id="toast"></div>
 <div class="modal" id="modal" hidden></div>
 <nav id="nav">
   <button class="on" data-go="home"><span>🎮</span>Игры</button>
   <button data-go="up"><span>⬆️</span>Апгрейд</button>
   <button data-go="tasks"><span>🧩</span>Задания<i>2</i></button>
-  <button data-go="tour"><span>🏆</span>Турнир</button>
+  <button data-go="tour"><span>🏆</span>Лидеры</button>
   <button data-go="prof"><span>👤</span>Профиль<i id="navinv" hidden>0</i></button>
 </nav>
 
@@ -600,27 +741,28 @@ document.addEventListener("click",function(e){
 });
 
 var RN={common:"Обычный",rare:"Редкий",epic:"Эпический",gold:"Золотой"};
-var CASES=[{"id": "free", "n": "Бесплатное гнездо", "e": "{gift}", "cost": 0, "bg": "linear-gradient(135deg,rgba(120,140,200,.35),#0a1230)", "items": [{"n": "Серое перо", "e": "🪶", "v": 3, "r": "common", "w": 55}, {"n": "Сухая ветка", "e": "🌿", "v": 6, "r": "common", "w": 30}, {"n": "Блестящая пуговица", "e": "🔘", "v": 12, "r": "rare", "w": 13}, {"n": "Янтарная капля", "e": "🟠", "v": 40, "r": "epic", "w": 2}], "tr": "120,140,200"}, {"id": "gr50", "n": "Гнездо новичка", "e": "{c0}", "cost": 50, "bg": "linear-gradient(135deg,rgba(74,122,192,.35),#0a1230)", "items": [{"n": "Серое перо", "e": "🪶", "v": 13, "r": "common", "w": 7.7744}, {"n": "Малая монета", "e": "🪙", "v": 15, "r": "common", "w": 6.4786}, {"n": "Травинка", "e": "🌾", "v": 18, "r": "common", "w": 5.5531}, {"n": "Старый листок", "e": "🍃", "v": 20, "r": "common", "w": 4.859}, {"n": "Ракушка", "e": "🐚", "v": 23, "r": "common", "w": 4.3191}, {"n": "Серебряный амулет", "e": "📿", "v": 25, "r": "rare", "w": 3.8872}, {"n": "Пуговица", "e": "🔘", "v": 28, "r": "rare", "w": 3.5338}, {"n": "Лунный жезл", "e": "🪄", "v": 30, "r": "rare", "w": 3.2393}, {"n": "Шишка", "e": "🌰", "v": 33, "r": "rare", "w": 2.9901}, {"n": "Янтарный щит", "e": "🛡️", "v": 35, "r": "rare", "w": 2.7765}, {"n": "Ягодка", "e": "🍒", "v": 40, "r": "rare", "w": 2.4295}, {"n": "Красная нить", "e": "🧶", "v": 45, "r": "rare", "w": 2.1595}, {"n": "Лист клёна", "e": "🍁", "v": 60, "r": "epic", "w": 30.0264}, {"n": "Королевский орёл", "e": "🦅", "v": 70, "r": "epic", "w": 12.2754}, {"n": "Шапочка-жёлудь", "e": "🎩", "v": 80, "r": "epic", "w": 5.6563}, {"n": "Легендарная башня", "e": "🗼", "v": 100, "r": "epic", "w": 1.5495}, {"n": "Серебряная монета", "e": "🪙", "v": 125, "r": "epic", "w": 0.4245}, {"n": "Императорский меч", "e": "🗡️", "v": 175, "r": "gold", "w": 0.0602}, {"n": "Золотое яйцо", "e": "🥚", "v": 250, "r": "gold", "w": 0.0076}, {"n": "Корона новичка", "e": "👑", "v": 600, "r": "gold", "w": 0.0}], "tr": "74,122,192"}, {"id": "gr100", "n": "Гнездо в траве", "e": "{c1}", "cost": 100, "bg": "linear-gradient(135deg,rgba(52,170,170,.35),#0a1230)", "items": [{"n": "Росинка", "e": "💧", "v": 25, "r": "common", "w": 7.7744}, {"n": "Малое перо", "e": "🪶", "v": 30, "r": "common", "w": 6.4786}, {"n": "Одуванчик", "e": "🌼", "v": 35, "r": "common", "w": 5.5531}, {"n": "Потёртое перо", "e": "🪶", "v": 40, "r": "common", "w": 4.859}, {"n": "Божья коровка", "e": "🐞", "v": 45, "r": "common", "w": 4.3191}, {"n": "Резной свиток", "e": "📜", "v": 50, "r": "rare", "w": 3.8872}, {"n": "Бабочка", "e": "🦋", "v": 55, "r": "rare", "w": 3.5338}, {"n": "Лунный щит", "e": "🛡️", "v": 60, "r": "rare", "w": 3.2393}, {"n": "Клевер", "e": "☘️", "v": 65, "r": "rare", "w": 2.9901}, {"n": "Бронзовый свиток", "e": "📜", "v": 70, "r": "rare", "w": 2.7765}, {"n": "Мёд", "e": "🍯", "v": 80, "r": "rare", "w": 2.4295}, {"n": "Гриб", "e": "🍄", "v": 90, "r": "rare", "w": 2.1595}, {"n": "Цветочный венок", "e": "💐", "v": 120, "r": "epic", "w": 30.0264}, {"n": "Золотая звезда", "e": "🌟", "v": 140, "r": "epic", "w": 12.2754}, {"n": "Зелёный клюв", "e": "🦜", "v": 160, "r": "epic", "w": 5.6563}, {"n": "Императорский трезубец", "e": "🔱", "v": 200, "r": "epic", "w": 1.5495}, {"n": "Цилиндр", "e": "🎩", "v": 250, "r": "epic", "w": 0.4245}, {"n": "Алмазная корона", "e": "👑", "v": 350, "r": "gold", "w": 0.0602}, {"n": "Радужная капля", "e": "🌈", "v": 500, "r": "gold", "w": 0.0076}, {"n": "Павлин-друг", "e": "🦚", "v": 1200, "r": "gold", "w": 0.0}], "tr": "52,170,170"}, {"id": "gr250", "n": "Гнездо на эвкалипте", "e": "{c2}", "cost": 250, "bg": "linear-gradient(135deg,rgba(70,160,100,.35),#0a1230)", "items": [{"n": "Лист эвкалипта", "e": "🍃", "v": 63, "r": "common", "w": 7.7744}, {"n": "Старый колокольчик", "e": "🔔", "v": 75, "r": "common", "w": 6.4786}, {"n": "Кора", "e": "🪵", "v": 88, "r": "common", "w": 5.5531}, {"n": "Старая нить", "e": "🧵", "v": 100, "r": "common", "w": 4.859}, {"n": "Коала-друг", "e": "🐨", "v": 113, "r": "common", "w": 4.3191}, {"n": "Серебряный кубок", "e": "🏆", "v": 125, "r": "rare", "w": 3.8872}, {"n": "Банан", "e": "🍌", "v": 138, "r": "rare", "w": 3.5338}, {"n": "Резной бокал", "e": "🍷", "v": 150, "r": "rare", "w": 3.2393}, {"n": "Манго", "e": "🥭", "v": 163, "r": "rare", "w": 2.9901}, {"n": "Янтарная гитара", "e": "🎸", "v": 175, "r": "rare", "w": 2.7765}, {"n": "Арбуз", "e": "🍉", "v": 200, "r": "rare", "w": 2.4295}, {"n": "Очки-авиаторы", "e": "🕶️", "v": 225, "r": "rare", "w": 2.1595}, {"n": "Бумеранг", "e": "🪃", "v": 300, "r": "epic", "w": 30.0264}, {"n": "Императорская планета", "e": "🪐", "v": 350, "r": "epic", "w": 12.2754}, {"n": "Гитара", "e": "🎸", "v": 400, "r": "epic", "w": 5.6563}, {"n": "Императорский самоцвет", "e": "💠", "v": 500, "r": "epic", "w": 1.5495}, {"n": "Барабан", "e": "🥁", "v": 625, "r": "epic", "w": 0.4245}, {"n": "Золотой трезубец", "e": "🔱", "v": 875, "r": "gold", "w": 0.0602}, {"n": "Ожерелье из ракушек", "e": "📿", "v": 1250, "r": "gold", "w": 0.0076}, {"n": "Корона эвкалипта", "e": "👑", "v": 3000, "r": "gold", "w": 0.0}], "tr": "70,160,100"}, {"id": "gr500", "n": "Гнездо в скале", "e": "{c3}", "cost": 500, "bg": "linear-gradient(135deg,rgba(130,96,200,.35),#0a1230)", "items": [{"n": "Камешек", "e": "🪨", "v": 125, "r": "common", "w": 7.7744}, {"n": "Малый листок", "e": "🍃", "v": 150, "r": "common", "w": 6.4786}, {"n": "Свеча", "e": "🕯️", "v": 175, "r": "common", "w": 5.5531}, {"n": "Простой камешек", "e": "🪨", "v": 200, "r": "common", "w": 4.859}, {"n": "Компас", "e": "🧭", "v": 225, "r": "common", "w": 4.3191}, {"n": "Лунная маска", "e": "🎭", "v": 250, "r": "rare", "w": 3.8872}, {"n": "Карта", "e": "🗺️", "v": 275, "r": "rare", "w": 3.5338}, {"n": "Серебряный бокал", "e": "🍷", "v": 300, "r": "rare", "w": 3.2393}, {"n": "Подзорная труба", "e": "🔭", "v": 325, "r": "rare", "w": 2.9901}, {"n": "Янтарный медальон", "e": "🏅", "v": 350, "r": "rare", "w": 2.7765}, {"n": "Старый ключ", "e": "🗝️", "v": 400, "r": "rare", "w": 2.4295}, {"n": "Кристалл", "e": "💎", "v": 450, "r": "rare", "w": 2.1595}, {"n": "Фиолетовая шапка", "e": "🎓", "v": 600, "r": "epic", "w": 30.0264}, {"n": "Алмазный трезубец", "e": "🔱", "v": 700, "r": "epic", "w": 12.2754}, {"n": "Щит грозы", "e": "🛡️", "v": 800, "r": "epic", "w": 5.6563}, {"n": "Легендарная планета", "e": "🪐", "v": 1000, "r": "epic", "w": 1.5495}, {"n": "Плащ грозы", "e": "⚡", "v": 1250, "r": "epic", "w": 0.4245}, {"n": "Императорская корона", "e": "👑", "v": 1750, "r": "gold", "w": 0.0602}, {"n": "Свиток древних", "e": "📜", "v": 2500, "r": "gold", "w": 0.0076}, {"n": "Радужный клюв", "e": "🌈", "v": 6000, "r": "gold", "w": 0.0}], "tr": "130,96,200"}, {"id": "gr1000", "n": "Золотое гнездо", "e": "{c4}", "cost": 1000, "bg": "linear-gradient(135deg,rgba(200,80,90,.35),#0a1230)", "items": [{"n": "Золотая нить", "e": "🧵", "v": 250, "r": "common", "w": 7.7744}, {"n": "Малая шишка", "e": "🌰", "v": 300, "r": "common", "w": 6.4786}, {"n": "Свиток", "e": "📜", "v": 350, "r": "common", "w": 5.5531}, {"n": "Потёртая ракушка", "e": "🐚", "v": 400, "r": "common", "w": 4.859}, {"n": "Амулет", "e": "📿", "v": 450, "r": "common", "w": 4.3191}, {"n": "Янтарный барабан", "e": "🥁", "v": 500, "r": "rare", "w": 3.8872}, {"n": "Кольцо", "e": "💍", "v": 550, "r": "rare", "w": 3.5338}, {"n": "Янтарная маска", "e": "🎭", "v": 600, "r": "rare", "w": 3.2393}, {"n": "Часы", "e": "⌚", "v": 650, "r": "rare", "w": 2.9901}, {"n": "Резной амулет", "e": "📿", "v": 700, "r": "rare", "w": 2.7765}, {"n": "Волшебная палочка", "e": "🪄", "v": 800, "r": "rare", "w": 2.4295}, {"n": "Кубок", "e": "🏆", "v": 900, "r": "rare", "w": 2.1595}, {"n": "Сундук", "e": "🧰", "v": 1200, "r": "epic", "w": 30.0264}, {"n": "Древний замок", "e": "🏰", "v": 1400, "r": "epic", "w": 12.2754}, {"n": "Трон", "e": "🪑", "v": 1600, "r": "epic", "w": 5.6563}, {"n": "Легендарная комета", "e": "☄️", "v": 2000, "r": "epic", "w": 1.5495}, {"n": "Золотая корона", "e": "👑", "v": 2500, "r": "epic", "w": 0.4245}, {"n": "Древний дракон", "e": "🐉", "v": 3500, "r": "gold", "w": 0.0602}, {"n": "Алмаз", "e": "💎", "v": 5000, "r": "gold", "w": 0.0076}, {"n": "Дракон-тукан", "e": "🐉", "v": 12000, "r": "gold", "w": 0.0}], "tr": "200,80,90"}, {"id": "gr2000", "n": "Королевское гнездо", "e": "{c5}", "cost": 2000, "bg": "linear-gradient(135deg,rgba(214,168,70,.35),#0a1230)", "items": [{"n": "Бархатная подушка", "e": "🛋️", "v": 500, "r": "common", "w": 7.7744}, {"n": "Простое перо", "e": "🪶", "v": 600, "r": "common", "w": 6.4786}, {"n": "Перо павлина", "e": "🪶", "v": 700, "r": "common", "w": 5.5531}, {"n": "Малая ракушка", "e": "🐚", "v": 800, "r": "common", "w": 4.859}, {"n": "Жемчужина", "e": "🦪", "v": 900, "r": "common", "w": 4.3191}, {"n": "Лунный барабан", "e": "🥁", "v": 1000, "r": "rare", "w": 3.8872}, {"n": "Диадема", "e": "🔱", "v": 1100, "r": "rare", "w": 3.5338}, {"n": "Бронзовый кубок", "e": "🏆", "v": 1200, "r": "rare", "w": 3.2393}, {"n": "Золотой скипетр", "e": "🪄", "v": 1300, "r": "rare", "w": 2.9901}, {"n": "Лунная гитара", "e": "🎸", "v": 1400, "r": "rare", "w": 2.7765}, {"n": "Хрустальный шар", "e": "🔮", "v": 1600, "r": "rare", "w": 2.4295}, {"n": "Звезда", "e": "🌟", "v": 1800, "r": "rare", "w": 2.1595}, {"n": "Комета", "e": "☄️", "v": 2400, "r": "epic", "w": 30.0264}, {"n": "Легендарный кристалл", "e": "💎", "v": 2800, "r": "epic", "w": 12.2754}, {"n": "Трон из перьев", "e": "🪑", "v": 3200, "r": "epic", "w": 5.6563}, {"n": "Золотой меч", "e": "🗡️", "v": 4000, "r": "epic", "w": 1.5495}, {"n": "Корона императора", "e": "👑", "v": 5000, "r": "epic", "w": 0.4245}, {"n": "Алмазный дракон", "e": "🐉", "v": 7000, "r": "gold", "w": 0.0602}, {"n": "Бриллиант", "e": "💎", "v": 10000, "r": "gold", "w": 0.0076}, {"n": "Легендарный тукан", "e": "🦜", "v": 24000, "r": "gold", "w": 0.0}], "tr": "214,168,70"}, {"id": "gr4500", "n": "Обсидиановое гнездо", "e": "{c6}", "cost": 4500, "items": [{"n": "Осколок обсидиана", "e": "🪨", "v": 1125, "r": "common", "w": 7.7744}, {"n": "Малый колокольчик", "e": "🔔", "v": 1350, "r": "common", "w": 6.4786}, {"n": "Чёрная жемчужина", "e": "⚫", "v": 1575, "r": "common", "w": 5.5531}, {"n": "Лёгкий фонарь", "e": "🏮", "v": 1800, "r": "common", "w": 4.859}, {"n": "Серебряный перстень", "e": "💍", "v": 2025, "r": "common", "w": 4.3191}, {"n": "Серебряное кольцо", "e": "💍", "v": 2250, "r": "rare", "w": 3.8872}, {"n": "Тёмный кристалл", "e": "🔷", "v": 2475, "r": "rare", "w": 3.5338}, {"n": "Серебряный свиток", "e": "📜", "v": 2700, "r": "rare", "w": 3.2393}, {"n": "Ониксовая фигурка", "e": "🗿", "v": 2925, "r": "rare", "w": 2.9901}, {"n": "Серебряная гитара", "e": "🎸", "v": 3150, "r": "rare", "w": 2.7765}, {"n": "Золотые часы", "e": "⌚", "v": 3600, "r": "rare", "w": 2.4295}, {"n": "Аметист", "e": "💎", "v": 4050, "r": "rare", "w": 2.1595}, {"n": "Тёмный клинок", "e": "🗡️", "v": 5400, "r": "epic", "w": 30.0264}, {"n": "Золотой орёл", "e": "🦅", "v": 6300, "r": "epic", "w": 12.2754}, {"n": "Теневой плащ", "e": "🧥", "v": 7200, "r": "epic", "w": 5.6563}, {"n": "Древний меч", "e": "🗡️", "v": 9000, "r": "epic", "w": 1.5495}, {"n": "Корона тени", "e": "👑", "v": 11250, "r": "epic", "w": 0.4245}, {"n": "Древний трезубец", "e": "🔱", "v": 15750, "r": "gold", "w": 0.0602}, {"n": "Сердце бездны", "e": "🌑", "v": 22500, "r": "gold", "w": 0.0076}, {"n": "Тукан-призрак", "e": "🦜", "v": 54000, "r": "gold", "w": 0.0}], "tr": "140,160,200", "bg": "linear-gradient(135deg,rgba(140,160,200,.35),#0a1230)"}, {"id": "gr10000", "n": "Императорское гнездо", "e": "{c7}", "cost": 10000, "items": [{"n": "Золотой слиток", "e": "🪙", "v": 2500, "r": "common", "w": 7.7744}, {"n": "Простой колокольчик", "e": "🔔", "v": 3000, "r": "common", "w": 6.4786}, {"n": "Нефритовый дракон", "e": "🐉", "v": 3500, "r": "common", "w": 5.5531}, {"n": "Старая пуговица", "e": "🔘", "v": 4000, "r": "common", "w": 4.859}, {"n": "Платиновое кольцо", "e": "💍", "v": 4500, "r": "common", "w": 4.3191}, {"n": "Резной жезл", "e": "🪄", "v": 5000, "r": "rare", "w": 3.8872}, {"n": "Королевская печать", "e": "🔱", "v": 5500, "r": "rare", "w": 3.5338}, {"n": "Серебряный барабан", "e": "🥁", "v": 6000, "r": "rare", "w": 3.2393}, {"n": "Изумрудный кубок", "e": "🏆", "v": 6500, "r": "rare", "w": 2.9901}, {"n": "Резное кольцо", "e": "💍", "v": 7000, "r": "rare", "w": 2.7765}, {"n": "Сапфировая корона", "e": "👑", "v": 8000, "r": "rare", "w": 2.4295}, {"n": "Царский скипетр", "e": "🪄", "v": 9000, "r": "rare", "w": 2.1595}, {"n": "Бриллиантовое колье", "e": "📿", "v": 12000, "r": "epic", "w": 30.0264}, {"n": "Древняя корона", "e": "👑", "v": 14000, "r": "epic", "w": 12.2754}, {"n": "Трон империи", "e": "🪑", "v": 16000, "r": "epic", "w": 5.6563}, {"n": "Легендарный замок", "e": "🏰", "v": 20000, "r": "epic", "w": 1.5495}, {"n": "Алмаз императора", "e": "💎", "v": 25000, "r": "epic", "w": 0.4245}, {"n": "Древняя комета", "e": "☄️", "v": 35000, "r": "gold", "w": 0.0602}, {"n": "Золотой тукан", "e": "🦜", "v": 50000, "r": "gold", "w": 0.0076}, {"n": "Корона вселенной", "e": "🌌", "v": 120000, "r": "gold", "w": 0.0}], "tr": "230,200,120", "bg": "linear-gradient(135deg,rgba(230,200,120,.35),#0a1230)"}, {"id": "gr15000", "n": "Изумрудное гнездо", "e": "{c8}", "cost": 15000, "items": [{"n": "Лёгкая монета", "e": "🪙", "v": 3750, "r": "common", "w": 7.7744}, {"n": "Потёртая шишка", "e": "🌰", "v": 4500, "r": "common", "w": 6.4786}, {"n": "Малый фонарь", "e": "🏮", "v": 5250, "r": "common", "w": 5.5531}, {"n": "Старое зеркало", "e": "🪞", "v": 6000, "r": "common", "w": 4.859}, {"n": "Лёгкое перо", "e": "🪶", "v": 6750, "r": "common", "w": 4.3191}, {"n": "Серебряный сундук", "e": "🧰", "v": 7500, "r": "rare", "w": 3.8872}, {"n": "Резная гитара", "e": "🎸", "v": 8250, "r": "rare", "w": 3.5338}, {"n": "Серебряная скрипка", "e": "🎻", "v": 9000, "r": "rare", "w": 3.2393}, {"n": "Резной щит", "e": "🛡️", "v": 9750, "r": "rare", "w": 2.9901}, {"n": "Лунная скрипка", "e": "🎻", "v": 10500, "r": "rare", "w": 2.7765}, {"n": "Лунный медальон", "e": "🏅", "v": 12000, "r": "rare", "w": 2.4295}, {"n": "Лунный амулет", "e": "📿", "v": 13500, "r": "rare", "w": 2.1595}, {"n": "Алмазный алмаз", "e": "💎", "v": 18000, "r": "epic", "w": 30.0264}, {"n": "Золотой корабль", "e": "⛵", "v": 21000, "r": "epic", "w": 12.2754}, {"n": "Императорский алмаз", "e": "💎", "v": 24000, "r": "epic", "w": 5.6563}, {"n": "Алмазная звезда", "e": "🌟", "v": 30000, "r": "epic", "w": 1.5495}, {"n": "Алмазный орёл", "e": "🦅", "v": 37500, "r": "epic", "w": 0.4245}, {"n": "Легендарная звезда", "e": "🌟", "v": 52500, "r": "gold", "w": 0.0602}, {"n": "Легендарный самоцвет", "e": "💠", "v": 75000, "r": "gold", "w": 0.0076}, {"n": "Изумрудный тукан", "e": "🦜", "v": 180000, "r": "gold", "w": 0.0}], "tr": "60,200,150", "bg": "linear-gradient(135deg,rgba(60,200,150,.35),#0a1230)"}, {"id": "gr25000", "n": "Рубиновое гнездо", "e": "{c9}", "cost": 25000, "items": [{"n": "Лёгкая карта", "e": "🗺️", "v": 6250, "r": "common", "w": 7.7744}, {"n": "Малая карта", "e": "🗺️", "v": 7500, "r": "common", "w": 6.4786}, {"n": "Простой ключ", "e": "🗝️", "v": 8750, "r": "common", "w": 5.5531}, {"n": "Простая монета", "e": "🪙", "v": 10000, "r": "common", "w": 4.859}, {"n": "Простой компас", "e": "🧭", "v": 11250, "r": "common", "w": 4.3191}, {"n": "Янтарный амулет", "e": "📿", "v": 12500, "r": "rare", "w": 3.8872}, {"n": "Янтарное кольцо", "e": "💍", "v": 13750, "r": "rare", "w": 3.5338}, {"n": "Резной кубок", "e": "🏆", "v": 15000, "r": "rare", "w": 3.2393}, {"n": "Бронзовая скрипка", "e": "🎻", "v": 16250, "r": "rare", "w": 2.9901}, {"n": "Янтарный сундук", "e": "🧰", "v": 17500, "r": "rare", "w": 2.7765}, {"n": "Лунное кольцо", "e": "💍", "v": 20000, "r": "rare", "w": 2.4295}, {"n": "Лунный сундук", "e": "🧰", "v": 22500, "r": "rare", "w": 2.1595}, {"n": "Золотой алмаз", "e": "💎", "v": 30000, "r": "epic", "w": 30.0264}, {"n": "Золотая комета", "e": "☄️", "v": 35000, "r": "epic", "w": 12.2754}, {"n": "Королевская комета", "e": "☄️", "v": 40000, "r": "epic", "w": 5.6563}, {"n": "Легендарный корабль", "e": "⛵", "v": 50000, "r": "epic", "w": 1.5495}, {"n": "Королевский алмаз", "e": "💎", "v": 62500, "r": "epic", "w": 0.4245}, {"n": "Императорский кристалл", "e": "💎", "v": 87500, "r": "gold", "w": 0.0602}, {"n": "Древний самоцвет", "e": "💠", "v": 125000, "r": "gold", "w": 0.0076}, {"n": "Рубиновый тукан", "e": "🦜", "v": 300000, "r": "gold", "w": 0.0}], "tr": "210,70,90", "bg": "linear-gradient(135deg,rgba(210,70,90,.35),#0a1230)"}, {"id": "gr35000", "n": "Сапфировое гнездо", "e": "{c10}", "cost": 35000, "items": [{"n": "Старый камешек", "e": "🪨", "v": 8750, "r": "common", "w": 7.7744}, {"n": "Малая свеча", "e": "🕯️", "v": 10500, "r": "common", "w": 6.4786}, {"n": "Потёртый листок", "e": "🍃", "v": 12250, "r": "common", "w": 5.5531}, {"n": "Старая шишка", "e": "🌰", "v": 14000, "r": "common", "w": 4.859}, {"n": "Малый ключ", "e": "🗝️", "v": 15750, "r": "common", "w": 4.3191}, {"n": "Лунная корона", "e": "👑", "v": 17500, "r": "rare", "w": 3.8872}, {"n": "Бронзовый щит", "e": "🛡️", "v": 19250, "r": "rare", "w": 3.5338}, {"n": "Резной барабан", "e": "🥁", "v": 21000, "r": "rare", "w": 3.2393}, {"n": "Бронзовый жезл", "e": "🪄", "v": 22750, "r": "rare", "w": 2.9901}, {"n": "Резная скрипка", "e": "🎻", "v": 24500, "r": "rare", "w": 2.7765}, {"n": "Бронзовый бокал", "e": "🍷", "v": 28000, "r": "rare", "w": 2.4295}, {"n": "Резной сундук", "e": "🧰", "v": 31500, "r": "rare", "w": 2.1595}, {"n": "Золотой самоцвет", "e": "💠", "v": 42000, "r": "epic", "w": 30.0264}, {"n": "Алмазный корабль", "e": "⛵", "v": 49000, "r": "epic", "w": 12.2754}, {"n": "Золотой дракон", "e": "🐉", "v": 56000, "r": "epic", "w": 5.6563}, {"n": "Императорский корабль", "e": "⛵", "v": 70000, "r": "epic", "w": 1.5495}, {"n": "Императорская башня", "e": "🗼", "v": 87500, "r": "epic", "w": 0.4245}, {"n": "Древняя звезда", "e": "🌟", "v": 122500, "r": "gold", "w": 0.0602}, {"n": "Древняя планета", "e": "🪐", "v": 175000, "r": "gold", "w": 0.0076}, {"n": "Сапфировый тукан", "e": "🦜", "v": 420000, "r": "gold", "w": 0.0}], "tr": "90,120,255", "bg": "linear-gradient(135deg,rgba(90,120,255,.35),#0a1230)"}, {"id": "gr50000", "n": "Легендарное гнездо", "e": "{c11}", "cost": 50000, "items": [{"n": "Потёртая ягода", "e": "🍒", "v": 12500, "r": "common", "w": 7.7744}, {"n": "Лёгкое зеркало", "e": "🪞", "v": 15000, "r": "common", "w": 6.4786}, {"n": "Потёртый камешек", "e": "🪨", "v": 17500, "r": "common", "w": 5.5531}, {"n": "Старый компас", "e": "🧭", "v": 20000, "r": "common", "w": 4.859}, {"n": "Старая монета", "e": "🪙", "v": 22500, "r": "common", "w": 4.3191}, {"n": "Серебряный трон", "e": "🪑", "v": 25000, "r": "rare", "w": 3.8872}, {"n": "Янтарный кубок", "e": "🏆", "v": 27500, "r": "rare", "w": 3.5338}, {"n": "Бронзовое кольцо", "e": "💍", "v": 30000, "r": "rare", "w": 3.2393}, {"n": "Серебряный щит", "e": "🛡️", "v": 32500, "r": "rare", "w": 2.9901}, {"n": "Серебряная маска", "e": "🎭", "v": 35000, "r": "rare", "w": 2.7765}, {"n": "Янтарная скрипка", "e": "🎻", "v": 40000, "r": "rare", "w": 2.4295}, {"n": "Янтарный свиток", "e": "📜", "v": 45000, "r": "rare", "w": 2.1595}, {"n": "Королевская корона", "e": "👑", "v": 60000, "r": "epic", "w": 30.0264}, {"n": "Золотая башня", "e": "🗼", "v": 70000, "r": "epic", "w": 12.2754}, {"n": "Королевская башня", "e": "🗼", "v": 80000, "r": "epic", "w": 5.6563}, {"n": "Древняя башня", "e": "🗼", "v": 100000, "r": "epic", "w": 1.5495}, {"n": "Императорская комета", "e": "☄️", "v": 125000, "r": "epic", "w": 0.4245}, {"n": "Золотая планета", "e": "🪐", "v": 175000, "r": "gold", "w": 0.0602}, {"n": "Королевская звезда", "e": "🌟", "v": 250000, "r": "gold", "w": 0.0076}, {"n": "Тукан-легенда", "e": "🦜", "v": 600000, "r": "gold", "w": 0.0}], "tr": "240,200,110", "bg": "linear-gradient(135deg,rgba(240,200,110,.35),#0a1230)"}];
+var CASES=[{"id": "free", "n": "Бесплатное гнездо", "e": "{gift}", "cost": 0, "bg": "linear-gradient(135deg,rgba(120,140,200,.35),#0a1230)", "items": [{"n": "3★", "e": "★", "v": 3, "r": "common", "w": 55}, {"n": "6★", "e": "★", "v": 6, "r": "common", "w": 30}, {"n": "12★", "e": "★", "v": 12, "r": "rare", "w": 13}, {"n": "40★", "e": "★", "v": 40, "r": "epic", "w": 2}], "tr": "120,140,200"}, {"id": "gr50", "n": "Гнездо новичка", "e": "{c0}", "cost": 50, "bg": "linear-gradient(135deg,rgba(74,122,192,.35),#0a1230)", "items": [{"n": "13★", "e": "★", "v": 13, "r": "common", "w": 3.8815}, {"n": "15★", "e": "★", "v": 15, "r": "common", "w": 3.956}, {"n": "18★", "e": "★", "v": 18, "r": "common", "w": 4.3827}, {"n": "20★", "e": "★", "v": 20, "r": "common", "w": 4.4477}, {"n": "23★", "e": "★", "v": 23, "r": "common", "w": 4.8128}, {"n": "25★", "e": "★", "v": 25, "r": "rare", "w": 4.8708}, {"n": "28★", "e": "★", "v": 28, "r": "rare", "w": 5.1935}, {"n": "30★", "e": "★", "v": 30, "r": "rare", "w": 5.2461}, {"n": "33★", "e": "★", "v": 33, "r": "rare", "w": 5.5375}, {"n": "35★", "e": "★", "v": 35, "r": "rare", "w": 5.5858}, {"n": "40★", "e": "★", "v": 40, "r": "rare", "w": 5.8981}, {"n": "45★", "e": "★", "v": 45, "r": "rare", "w": 6.1877}, {"n": "60★", "e": "★", "v": 60, "r": "epic", "w": 20.5416}, {"n": "70★", "e": "★", "v": 70, "r": "epic", "w": 10.4322}, {"n": "80★", "e": "★", "v": 80, "r": "epic", "w": 5.8006}, {"n": "100★", "e": "★", "v": 100, "r": "epic", "w": 2.1752}, {"n": "125★", "e": "★", "v": 125, "r": "epic", "w": 0.8158}, {"n": "175★", "e": "★", "v": 175, "r": "gold", "w": 0.1857}, {"n": "250★", "e": "★", "v": 250, "r": "gold", "w": 0.0387}, {"n": "600★", "e": "★", "v": 600, "r": "gold", "w": 0.01}], "tr": "74,122,192"}, {"id": "gr100", "n": "Гнездо в траве", "e": "{c1}", "cost": 100, "bg": "linear-gradient(135deg,rgba(52,170,170,.35),#0a1230)", "items": [{"n": "25★", "e": "★", "v": 25, "r": "common", "w": 3.667}, {"n": "30★", "e": "★", "v": 30, "r": "common", "w": 3.9635}, {"n": "35★", "e": "★", "v": 35, "r": "common", "w": 4.2329}, {"n": "40★", "e": "★", "v": 40, "r": "common", "w": 4.481}, {"n": "45★", "e": "★", "v": 45, "r": "common", "w": 4.7118}, {"n": "50★", "e": "★", "v": 50, "r": "rare", "w": 4.9284}, {"n": "55★", "e": "★", "v": 55, "r": "rare", "w": 5.1329}, {"n": "60★", "e": "★", "v": 60, "r": "rare", "w": 5.3269}, {"n": "65★", "e": "★", "v": 65, "r": "rare", "w": 5.5119}, {"n": "70★", "e": "★", "v": 70, "r": "rare", "w": 5.6888}, {"n": "80★", "e": "★", "v": 80, "r": "rare", "w": 6.0224}, {"n": "90★", "e": "★", "v": 90, "r": "rare", "w": 6.3325}, {"n": "120★", "e": "★", "v": 120, "r": "epic", "w": 20.4897}, {"n": "140★", "e": "★", "v": 140, "r": "epic", "w": 10.4368}, {"n": "160★", "e": "★", "v": 160, "r": "epic", "w": 5.8182}, {"n": "200★", "e": "★", "v": 200, "r": "epic", "w": 2.1912}, {"n": "250★", "e": "★", "v": 250, "r": "epic", "w": 0.8253}, {"n": "350★", "e": "★", "v": 350, "r": "gold", "w": 0.1891}, {"n": "500★", "e": "★", "v": 500, "r": "gold", "w": 0.0397}, {"n": "1200★", "e": "★", "v": 1200, "r": "gold", "w": 0.01}], "tr": "52,170,170"}, {"id": "gr250", "n": "Гнездо на эвкалипте", "e": "{c2}", "cost": 250, "bg": "linear-gradient(135deg,rgba(70,160,100,.35),#0a1230)", "items": [{"n": "63★", "e": "★", "v": 63, "r": "common", "w": 3.7095}, {"n": "75★", "e": "★", "v": 75, "r": "common", "w": 3.9615}, {"n": "88★", "e": "★", "v": 88, "r": "common", "w": 4.2628}, {"n": "100★", "e": "★", "v": 100, "r": "common", "w": 4.474}, {"n": "113★", "e": "★", "v": 113, "r": "common", "w": 4.7322}, {"n": "125★", "e": "★", "v": 125, "r": "rare", "w": 4.9167}, {"n": "138★", "e": "★", "v": 138, "r": "rare", "w": 5.1454}, {"n": "150★", "e": "★", "v": 150, "r": "rare", "w": 5.3107}, {"n": "163★", "e": "★", "v": 163, "r": "rare", "w": 5.5175}, {"n": "175★", "e": "★", "v": 175, "r": "rare", "w": 5.6683}, {"n": "200★", "e": "★", "v": 200, "r": "rare", "w": 5.9977}, {"n": "225★", "e": "★", "v": 225, "r": "rare", "w": 6.3038}, {"n": "300★", "e": "★", "v": 300, "r": "epic", "w": 20.4994}, {"n": "350★", "e": "★", "v": 350, "r": "epic", "w": 10.4359}, {"n": "400★", "e": "★", "v": 400, "r": "epic", "w": 5.8149}, {"n": "500★", "e": "★", "v": 500, "r": "epic", "w": 2.1882}, {"n": "625★", "e": "★", "v": 625, "r": "epic", "w": 0.8235}, {"n": "875★", "e": "★", "v": 875, "r": "gold", "w": 0.1885}, {"n": "1250★", "e": "★", "v": 1250, "r": "gold", "w": 0.0395}, {"n": "3000★", "e": "★", "v": 3000, "r": "gold", "w": 0.01}], "tr": "70,160,100"}, {"id": "gr500", "n": "Гнездо в скале", "e": "{c3}", "cost": 500, "bg": "linear-gradient(135deg,rgba(130,96,200,.35),#0a1230)", "items": [{"n": "125★", "e": "★", "v": 125, "r": "common", "w": 3.667}, {"n": "150★", "e": "★", "v": 150, "r": "common", "w": 3.9635}, {"n": "175★", "e": "★", "v": 175, "r": "common", "w": 4.2329}, {"n": "200★", "e": "★", "v": 200, "r": "common", "w": 4.481}, {"n": "225★", "e": "★", "v": 225, "r": "common", "w": 4.7118}, {"n": "250★", "e": "★", "v": 250, "r": "rare", "w": 4.9284}, {"n": "275★", "e": "★", "v": 275, "r": "rare", "w": 5.1329}, {"n": "300★", "e": "★", "v": 300, "r": "rare", "w": 5.3269}, {"n": "325★", "e": "★", "v": 325, "r": "rare", "w": 5.5119}, {"n": "350★", "e": "★", "v": 350, "r": "rare", "w": 5.6888}, {"n": "400★", "e": "★", "v": 400, "r": "rare", "w": 6.0224}, {"n": "450★", "e": "★", "v": 450, "r": "rare", "w": 6.3325}, {"n": "600★", "e": "★", "v": 600, "r": "epic", "w": 20.4897}, {"n": "700★", "e": "★", "v": 700, "r": "epic", "w": 10.4368}, {"n": "800★", "e": "★", "v": 800, "r": "epic", "w": 5.8182}, {"n": "1000★", "e": "★", "v": 1000, "r": "epic", "w": 2.1912}, {"n": "1250★", "e": "★", "v": 1250, "r": "epic", "w": 0.8253}, {"n": "1750★", "e": "★", "v": 1750, "r": "gold", "w": 0.1891}, {"n": "2500★", "e": "★", "v": 2500, "r": "gold", "w": 0.0397}, {"n": "6000★", "e": "★", "v": 6000, "r": "gold", "w": 0.01}], "tr": "130,96,200"}, {"id": "gr1000", "n": "Золотое гнездо", "e": "{c4}", "cost": 1000, "bg": "linear-gradient(135deg,rgba(200,80,90,.35),#0a1230)", "items": [{"n": "250★", "e": "★", "v": 250, "r": "common", "w": 3.667}, {"n": "300★", "e": "★", "v": 300, "r": "common", "w": 3.9635}, {"n": "350★", "e": "★", "v": 350, "r": "common", "w": 4.2329}, {"n": "400★", "e": "★", "v": 400, "r": "common", "w": 4.481}, {"n": "450★", "e": "★", "v": 450, "r": "common", "w": 4.7118}, {"n": "500★", "e": "★", "v": 500, "r": "rare", "w": 4.9284}, {"n": "550★", "e": "★", "v": 550, "r": "rare", "w": 5.1329}, {"n": "600★", "e": "★", "v": 600, "r": "rare", "w": 5.3269}, {"n": "650★", "e": "★", "v": 650, "r": "rare", "w": 5.5119}, {"n": "700★", "e": "★", "v": 700, "r": "rare", "w": 5.6888}, {"n": "800★", "e": "★", "v": 800, "r": "rare", "w": 6.0224}, {"n": "900★", "e": "★", "v": 900, "r": "rare", "w": 6.3325}, {"n": "1200★", "e": "★", "v": 1200, "r": "epic", "w": 20.4897}, {"n": "1400★", "e": "★", "v": 1400, "r": "epic", "w": 10.4368}, {"n": "1600★", "e": "★", "v": 1600, "r": "epic", "w": 5.8182}, {"n": "2000★", "e": "★", "v": 2000, "r": "epic", "w": 2.1912}, {"n": "2500★", "e": "★", "v": 2500, "r": "epic", "w": 0.8253}, {"n": "3500★", "e": "★", "v": 3500, "r": "gold", "w": 0.1891}, {"n": "5000★", "e": "★", "v": 5000, "r": "gold", "w": 0.0397}, {"n": "12000★", "e": "★", "v": 12000, "r": "gold", "w": 0.01}], "tr": "200,80,90"}, {"id": "gr2000", "n": "Королевское гнездо", "e": "{c5}", "cost": 2000, "bg": "linear-gradient(135deg,rgba(214,168,70,.35),#0a1230)", "items": [{"n": "500★", "e": "★", "v": 500, "r": "common", "w": 3.667}, {"n": "600★", "e": "★", "v": 600, "r": "common", "w": 3.9635}, {"n": "700★", "e": "★", "v": 700, "r": "common", "w": 4.2329}, {"n": "800★", "e": "★", "v": 800, "r": "common", "w": 4.481}, {"n": "900★", "e": "★", "v": 900, "r": "common", "w": 4.7118}, {"n": "1000★", "e": "★", "v": 1000, "r": "rare", "w": 4.9284}, {"n": "1100★", "e": "★", "v": 1100, "r": "rare", "w": 5.1329}, {"n": "1200★", "e": "★", "v": 1200, "r": "rare", "w": 5.3269}, {"n": "1300★", "e": "★", "v": 1300, "r": "rare", "w": 5.5119}, {"n": "1400★", "e": "★", "v": 1400, "r": "rare", "w": 5.6888}, {"n": "1600★", "e": "★", "v": 1600, "r": "rare", "w": 6.0224}, {"n": "1800★", "e": "★", "v": 1800, "r": "rare", "w": 6.3325}, {"n": "2400★", "e": "★", "v": 2400, "r": "epic", "w": 20.4897}, {"n": "2800★", "e": "★", "v": 2800, "r": "epic", "w": 10.4368}, {"n": "3200★", "e": "★", "v": 3200, "r": "epic", "w": 5.8182}, {"n": "4000★", "e": "★", "v": 4000, "r": "epic", "w": 2.1912}, {"n": "5000★", "e": "★", "v": 5000, "r": "epic", "w": 0.8253}, {"n": "7000★", "e": "★", "v": 7000, "r": "gold", "w": 0.1891}, {"n": "10000★", "e": "★", "v": 10000, "r": "gold", "w": 0.0397}, {"n": "24000★", "e": "★", "v": 24000, "r": "gold", "w": 0.01}], "tr": "214,168,70"}, {"id": "gr4500", "n": "Обсидиановое гнездо", "e": "{c6}", "cost": 4500, "items": [{"n": "1125★", "e": "★", "v": 1125, "r": "common", "w": 3.667}, {"n": "1350★", "e": "★", "v": 1350, "r": "common", "w": 3.9635}, {"n": "1575★", "e": "★", "v": 1575, "r": "common", "w": 4.2329}, {"n": "1800★", "e": "★", "v": 1800, "r": "common", "w": 4.481}, {"n": "2025★", "e": "★", "v": 2025, "r": "common", "w": 4.7118}, {"n": "2250★", "e": "★", "v": 2250, "r": "rare", "w": 4.9284}, {"n": "2475★", "e": "★", "v": 2475, "r": "rare", "w": 5.1329}, {"n": "2700★", "e": "★", "v": 2700, "r": "rare", "w": 5.3269}, {"n": "2925★", "e": "★", "v": 2925, "r": "rare", "w": 5.5119}, {"n": "3150★", "e": "★", "v": 3150, "r": "rare", "w": 5.6888}, {"n": "3600★", "e": "★", "v": 3600, "r": "rare", "w": 6.0224}, {"n": "4050★", "e": "★", "v": 4050, "r": "rare", "w": 6.3325}, {"n": "5400★", "e": "★", "v": 5400, "r": "epic", "w": 20.4897}, {"n": "6300★", "e": "★", "v": 6300, "r": "epic", "w": 10.4368}, {"n": "7200★", "e": "★", "v": 7200, "r": "epic", "w": 5.8182}, {"n": "9000★", "e": "★", "v": 9000, "r": "epic", "w": 2.1912}, {"n": "11250★", "e": "★", "v": 11250, "r": "epic", "w": 0.8253}, {"n": "15750★", "e": "★", "v": 15750, "r": "gold", "w": 0.1891}, {"n": "22500★", "e": "★", "v": 22500, "r": "gold", "w": 0.0397}, {"n": "54000★", "e": "★", "v": 54000, "r": "gold", "w": 0.01}], "tr": "140,160,200", "bg": "linear-gradient(135deg,rgba(140,160,200,.35),#0a1230)"}, {"id": "gr10000", "n": "Императорское гнездо", "e": "{c7}", "cost": 10000, "items": [{"n": "2500★", "e": "★", "v": 2500, "r": "common", "w": 3.667}, {"n": "3000★", "e": "★", "v": 3000, "r": "common", "w": 3.9635}, {"n": "3500★", "e": "★", "v": 3500, "r": "common", "w": 4.2329}, {"n": "4000★", "e": "★", "v": 4000, "r": "common", "w": 4.481}, {"n": "4500★", "e": "★", "v": 4500, "r": "common", "w": 4.7118}, {"n": "5000★", "e": "★", "v": 5000, "r": "rare", "w": 4.9284}, {"n": "5500★", "e": "★", "v": 5500, "r": "rare", "w": 5.1329}, {"n": "6000★", "e": "★", "v": 6000, "r": "rare", "w": 5.3269}, {"n": "6500★", "e": "★", "v": 6500, "r": "rare", "w": 5.5119}, {"n": "7000★", "e": "★", "v": 7000, "r": "rare", "w": 5.6888}, {"n": "8000★", "e": "★", "v": 8000, "r": "rare", "w": 6.0224}, {"n": "9000★", "e": "★", "v": 9000, "r": "rare", "w": 6.3325}, {"n": "12000★", "e": "★", "v": 12000, "r": "epic", "w": 20.4897}, {"n": "14000★", "e": "★", "v": 14000, "r": "epic", "w": 10.4368}, {"n": "16000★", "e": "★", "v": 16000, "r": "epic", "w": 5.8182}, {"n": "20000★", "e": "★", "v": 20000, "r": "epic", "w": 2.1912}, {"n": "25000★", "e": "★", "v": 25000, "r": "epic", "w": 0.8253}, {"n": "35000★", "e": "★", "v": 35000, "r": "gold", "w": 0.1891}, {"n": "50000★", "e": "★", "v": 50000, "r": "gold", "w": 0.0397}, {"n": "120000★", "e": "★", "v": 120000, "r": "gold", "w": 0.01}], "tr": "230,200,120", "bg": "linear-gradient(135deg,rgba(230,200,120,.35),#0a1230)"}, {"id": "gr15000", "n": "Изумрудное гнездо", "e": "{c8}", "cost": 15000, "items": [{"n": "3750★", "e": "★", "v": 3750, "r": "common", "w": 3.667}, {"n": "4500★", "e": "★", "v": 4500, "r": "common", "w": 3.9635}, {"n": "5250★", "e": "★", "v": 5250, "r": "common", "w": 4.2329}, {"n": "6000★", "e": "★", "v": 6000, "r": "common", "w": 4.481}, {"n": "6750★", "e": "★", "v": 6750, "r": "common", "w": 4.7118}, {"n": "7500★", "e": "★", "v": 7500, "r": "rare", "w": 4.9284}, {"n": "8250★", "e": "★", "v": 8250, "r": "rare", "w": 5.1329}, {"n": "9000★", "e": "★", "v": 9000, "r": "rare", "w": 5.3269}, {"n": "9750★", "e": "★", "v": 9750, "r": "rare", "w": 5.5119}, {"n": "10500★", "e": "★", "v": 10500, "r": "rare", "w": 5.6888}, {"n": "12000★", "e": "★", "v": 12000, "r": "rare", "w": 6.0224}, {"n": "13500★", "e": "★", "v": 13500, "r": "rare", "w": 6.3325}, {"n": "18000★", "e": "★", "v": 18000, "r": "epic", "w": 20.4897}, {"n": "21000★", "e": "★", "v": 21000, "r": "epic", "w": 10.4368}, {"n": "24000★", "e": "★", "v": 24000, "r": "epic", "w": 5.8182}, {"n": "30000★", "e": "★", "v": 30000, "r": "epic", "w": 2.1912}, {"n": "37500★", "e": "★", "v": 37500, "r": "epic", "w": 0.8253}, {"n": "52500★", "e": "★", "v": 52500, "r": "gold", "w": 0.1891}, {"n": "75000★", "e": "★", "v": 75000, "r": "gold", "w": 0.0397}, {"n": "180000★", "e": "★", "v": 180000, "r": "gold", "w": 0.01}], "tr": "60,200,150", "bg": "linear-gradient(135deg,rgba(60,200,150,.35),#0a1230)"}, {"id": "gr25000", "n": "Рубиновое гнездо", "e": "{c9}", "cost": 25000, "items": [{"n": "6250★", "e": "★", "v": 6250, "r": "common", "w": 3.667}, {"n": "7500★", "e": "★", "v": 7500, "r": "common", "w": 3.9635}, {"n": "8750★", "e": "★", "v": 8750, "r": "common", "w": 4.2329}, {"n": "10000★", "e": "★", "v": 10000, "r": "common", "w": 4.481}, {"n": "11250★", "e": "★", "v": 11250, "r": "common", "w": 4.7118}, {"n": "12500★", "e": "★", "v": 12500, "r": "rare", "w": 4.9284}, {"n": "13750★", "e": "★", "v": 13750, "r": "rare", "w": 5.1329}, {"n": "15000★", "e": "★", "v": 15000, "r": "rare", "w": 5.3269}, {"n": "16250★", "e": "★", "v": 16250, "r": "rare", "w": 5.5119}, {"n": "17500★", "e": "★", "v": 17500, "r": "rare", "w": 5.6888}, {"n": "20000★", "e": "★", "v": 20000, "r": "rare", "w": 6.0224}, {"n": "22500★", "e": "★", "v": 22500, "r": "rare", "w": 6.3325}, {"n": "30000★", "e": "★", "v": 30000, "r": "epic", "w": 20.4897}, {"n": "35000★", "e": "★", "v": 35000, "r": "epic", "w": 10.4368}, {"n": "40000★", "e": "★", "v": 40000, "r": "epic", "w": 5.8182}, {"n": "50000★", "e": "★", "v": 50000, "r": "epic", "w": 2.1912}, {"n": "62500★", "e": "★", "v": 62500, "r": "epic", "w": 0.8253}, {"n": "87500★", "e": "★", "v": 87500, "r": "gold", "w": 0.1891}, {"n": "125000★", "e": "★", "v": 125000, "r": "gold", "w": 0.0397}, {"n": "300000★", "e": "★", "v": 300000, "r": "gold", "w": 0.01}], "tr": "210,70,90", "bg": "linear-gradient(135deg,rgba(210,70,90,.35),#0a1230)"}, {"id": "gr35000", "n": "Сапфировое гнездо", "e": "{c10}", "cost": 35000, "items": [{"n": "8750★", "e": "★", "v": 8750, "r": "common", "w": 3.667}, {"n": "10500★", "e": "★", "v": 10500, "r": "common", "w": 3.9635}, {"n": "12250★", "e": "★", "v": 12250, "r": "common", "w": 4.2329}, {"n": "14000★", "e": "★", "v": 14000, "r": "common", "w": 4.481}, {"n": "15750★", "e": "★", "v": 15750, "r": "common", "w": 4.7118}, {"n": "17500★", "e": "★", "v": 17500, "r": "rare", "w": 4.9284}, {"n": "19250★", "e": "★", "v": 19250, "r": "rare", "w": 5.1329}, {"n": "21000★", "e": "★", "v": 21000, "r": "rare", "w": 5.3269}, {"n": "22750★", "e": "★", "v": 22750, "r": "rare", "w": 5.5119}, {"n": "24500★", "e": "★", "v": 24500, "r": "rare", "w": 5.6888}, {"n": "28000★", "e": "★", "v": 28000, "r": "rare", "w": 6.0224}, {"n": "31500★", "e": "★", "v": 31500, "r": "rare", "w": 6.3325}, {"n": "42000★", "e": "★", "v": 42000, "r": "epic", "w": 20.4897}, {"n": "49000★", "e": "★", "v": 49000, "r": "epic", "w": 10.4368}, {"n": "56000★", "e": "★", "v": 56000, "r": "epic", "w": 5.8182}, {"n": "70000★", "e": "★", "v": 70000, "r": "epic", "w": 2.1912}, {"n": "87500★", "e": "★", "v": 87500, "r": "epic", "w": 0.8253}, {"n": "122500★", "e": "★", "v": 122500, "r": "gold", "w": 0.1891}, {"n": "175000★", "e": "★", "v": 175000, "r": "gold", "w": 0.0397}, {"n": "420000★", "e": "★", "v": 420000, "r": "gold", "w": 0.01}], "tr": "90,120,255", "bg": "linear-gradient(135deg,rgba(90,120,255,.35),#0a1230)"}, {"id": "gr50000", "n": "Легендарное гнездо", "e": "{c11}", "cost": 50000, "items": [{"n": "12500★", "e": "★", "v": 12500, "r": "common", "w": 3.667}, {"n": "15000★", "e": "★", "v": 15000, "r": "common", "w": 3.9635}, {"n": "17500★", "e": "★", "v": 17500, "r": "common", "w": 4.2329}, {"n": "20000★", "e": "★", "v": 20000, "r": "common", "w": 4.481}, {"n": "22500★", "e": "★", "v": 22500, "r": "common", "w": 4.7118}, {"n": "25000★", "e": "★", "v": 25000, "r": "rare", "w": 4.9284}, {"n": "27500★", "e": "★", "v": 27500, "r": "rare", "w": 5.1329}, {"n": "30000★", "e": "★", "v": 30000, "r": "rare", "w": 5.3269}, {"n": "32500★", "e": "★", "v": 32500, "r": "rare", "w": 5.5119}, {"n": "35000★", "e": "★", "v": 35000, "r": "rare", "w": 5.6888}, {"n": "40000★", "e": "★", "v": 40000, "r": "rare", "w": 6.0224}, {"n": "45000★", "e": "★", "v": 45000, "r": "rare", "w": 6.3325}, {"n": "60000★", "e": "★", "v": 60000, "r": "epic", "w": 20.4897}, {"n": "70000★", "e": "★", "v": 70000, "r": "epic", "w": 10.4368}, {"n": "80000★", "e": "★", "v": 80000, "r": "epic", "w": 5.8182}, {"n": "100000★", "e": "★", "v": 100000, "r": "epic", "w": 2.1912}, {"n": "125000★", "e": "★", "v": 125000, "r": "epic", "w": 0.8253}, {"n": "175000★", "e": "★", "v": 175000, "r": "gold", "w": 0.1891}, {"n": "250000★", "e": "★", "v": 250000, "r": "gold", "w": 0.0397}, {"n": "600000★", "e": "★", "v": 600000, "r": "gold", "w": 0.01}], "tr": "240,200,110", "bg": "linear-gradient(135deg,rgba(240,200,110,.35),#0a1230)"}];
 var inv=[],uid=0,freeUsed=false;
 function $(i){return document.getElementById(i)}
 function renderList(){
-  $("nlist").innerHTML=CASES.map(function(c){return '<button class="row" style="background:'+c.bg+'" data-case="'+c.id+'"><span class="ico">'+c.e+'</span><div><h3>'+c.n+'</h3><p>'+(c.cost?c.cost+" 🪶 · шанс окупить "+payback(c)+"%":"Бесплатно, раз в день")+'</p></div></button>'}).join("")+'<div class="note">Подарки в игре виртуальные. Перья нельзя купить за звёзды или деньги и нельзя вывести.</div>';
+  $("nlist").innerHTML=CASES.map(function(c){return '<button class="row" style="background:'+c.bg+'" data-case="'+c.id+'"><span class="ico">'+c.e+'</span><div><h3>'+c.n+'</h3><p>'+(c.cost?c.cost+" ★ · шанс окупить "+payback(c)+"%":"Бесплатно, раз в день")+'</p></div></button>'}).join("")+'<div class="note">Призы в игре виртуальные. ★ — внутриигровая валюта: её нельзя вывести или обменять на деньги и Telegram Stars.</div>';
 }
 function pct(x){var v=x*100;return v>=10?v.toFixed(1):v>=1?v.toFixed(2):v.toFixed(3)}
+function rtp(c){var W=0,E=0;c.items.forEach(function(i){W+=i.w;E+=i.w*i.v});return Math.round(E/W/c.cost*100)}
 function payback(c){var t=c.items.reduce(function(a,b){return a+b.w},0),u=c.items.reduce(function(a,b){return a+(b.v>c.cost?b.w:0)},0);return Math.round(u/t*100)}
 function minv(c){return Math.min.apply(null,c.items.map(function(i){return i.v}))}
 function showDetail(id){
   var c=CASES.filter(function(x){return x.id===id})[0],tot=c.items.reduce(function(a,b){return a+b.w},0);
   $("nlist").hidden=true;$("ndetail").hidden=false;
-  $("ndetail").innerHTML='<button class="back" id="dback">← К гнёздам</button><div class="row" style="background:'+c.bg+';cursor:default"><span class="ico">'+c.e+'</span><div><h3>'+c.n+'</h3><p>'+(c.cost?c.cost+" 🪶":"Бесплатно")+'</p></div></div>'
-   +'<button class="main" id="openbtn" data-open="'+c.id+'">Открыть'+(c.cost?" за "+c.cost+" 🪶":"")+'</button>'
-   +'<div class="note" style="margin:10px 0 0">'+(c.cost?'Шанс окупить гнездо: '+payback(c)+'% · минимум: '+minv(c)+' 🪶 · ':'')+'подарков: '+c.items.length+'</div><div class="drops">'+c.items.slice().sort(function(a,b){return b.v-a.v}).map(function(i){return '<div class="drop d-'+i.r+'"><div class="emoji">'+i.e+'</div><b class="rar-'+i.r+'">'+i.n+'</b><span>'+pct(i.w/tot)+'% · '+i.v+' 🪶</span></div>'}).join("")+'</div>';
+  $("ndetail").innerHTML='<button class="back" id="dback">← К гнёздам</button><div class="row" style="background:'+c.bg+';cursor:default"><span class="ico">'+c.e+'</span><div><h3>'+c.n+'</h3><p>'+(c.cost?c.cost+" ★":"Бесплатно")+'</p></div></div>'
+   +'<button class="main" id="openbtn" data-open="'+c.id+'">Открыть'+(c.cost?" за "+c.cost+" ★":"")+'</button>'
+   +'<div class="note" style="margin:10px 0 0">'+(c.cost?'Шанс окупить гнездо: '+payback(c)+'% · средний возврат: '+rtp(c)+'% · минимум: '+minv(c)+' ★ · ':'')+'подарков: '+c.items.length+'</div><div class="drops">'+c.items.slice().sort(function(a,b){return b.v-a.v}).map(function(i){return '<div class="drop d-'+i.r+'"><div class="emoji">'+i.e+'</div><b class="rar-'+i.r+'">'+i.n+'</b><span>'+pct(i.w/tot)+'% · '+i.v+' ★</span></div>'}).join("")+'</div>';
 }
 function pick(c){var tot=c.items.reduce(function(a,b){return a+b.w},0),r=Math.random()*tot,s=0;for(var i=0;i<c.items.length;i++){s+=c.items[i].w;if(r<s)return c.items[i]}return c.items[0]}
 function openCase(id){
   var c=CASES.filter(function(x){return x.id===id})[0];
   if(c.cost===0&&freeUsed){toast("Бесплатное гнездо уже открыто сегодня");return}
-  if(coins<c.cost){toast("Не хватает перьев");return}
+  if(coins<c.cost){toast("Не хватает ★");return}
   coins-=c.cost;upd();if(c.cost===0)freeUsed=true;
   var it=pick(c),g={uid:++uid,n:it.n,e:it.e,v:it.v,r:it.r};
   var m=$("modal");m.hidden=false;m.classList.remove("out");m._g=null;m._rev=0;
@@ -637,18 +779,18 @@ function openCase(id){
 }
 function reveal(m,g){
   if(m._rev===g.uid)return;m._rev=g.uid;m._g=g;feedUser(g);
-  m.innerHTML='<div class="mbox g-'+g.r+'"><div class="big">'+g.e+'</div><h3 class="rar-'+g.r+'">'+g.n+'</h3><p>'+RN[g.r]+' · стоимость '+g.v+' 🪶</p><button class="b-sell" data-sell="'+g.uid+'">Продать за '+g.v+' 🪶</button><button class="b-keep" data-keep="'+g.uid+'">Оставить в инвентаре</button></div>';
-  if(g.r!=="common"&&!RM){var box=m.firstChild,n=g.r==="gold"?22:12;for(var i=0;i<n;i++){var f=document.createElement("span");f.className="conf";f.textContent=i%3?"🪶":"✨";var a=Math.random()*6.28,d=90+Math.random()*110;f.style.setProperty("--x",Math.cos(a)*d+"px");f.style.setProperty("--y",Math.sin(a)*d+"px");f.style.setProperty("--r",(Math.random()*360-180)+"deg");box.appendChild(f)}}
+  m.innerHTML='<div class="mbox g-'+g.r+'"><div class="big">'+g.e+'</div><h3 class="rar-'+g.r+'">'+g.n+'</h3><p>'+RN[g.r]+' · стоимость '+g.v+' ★</p><button class="b-sell" data-sell="'+g.uid+'">Продать за '+g.v+' ★</button><button class="b-keep" data-keep="'+g.uid+'">Оставить в инвентаре</button></div>';
+  if(g.r!=="common"&&!RM){var box=m.firstChild,n=g.r==="gold"?22:12;for(var i=0;i<n;i++){var f=document.createElement("span");f.className="conf";f.textContent=i%3?"★":"✨";var a=Math.random()*6.28,d=90+Math.random()*110;f.style.setProperty("--x",Math.cos(a)*d+"px");f.style.setProperty("--y",Math.sin(a)*d+"px");f.style.setProperty("--r",(Math.random()*360-180)+"deg");box.appendChild(f)}}
   try{navigator.vibrate&&navigator.vibrate(g.r==="gold"?[30,40,60]:15)}catch(_){}
 }
 function closeModal(sell){var m=$("modal"),g=m._g;if(!g)return;
-  if(sell){coins+=g.v;upd();toast("Продано: +"+g.v+" 🪶")}else{inv.push(g);toast("Добавлено в инвентарь (Профиль)")}
+  if(sell){coins+=g.v;upd();toast("Продано: +"+g.v+" ★")}else{inv.push(g);toast("Добавлено в инвентарь (Профиль)")}
   m._g=null;m.classList.add("out");setTimeout(function(){m.hidden=true;m.classList.remove("out")},200);invCount();if(!$("ninv").hidden)renderInv();}
 function invCount(){$("invn").textContent=inv.length;var b=$("navinv");b.textContent=inv.length;b.hidden=!inv.length;renderInv()}
 function renderInv(){
   if(!inv.length){$("ninv").innerHTML='<div class="result"><span class="hint">Пока пусто. Открой гнездо и оставь находку в инвентаре.</span></div>';return}
   var tot=inv.reduce(function(a,b){return a+b.v},0);
-  $("ninv").innerHTML='<button class="sellall" data-sellall="1">Продать всё за '+tot+' 🪶</button>'+inv.map(function(g){return '<div class="inv-item d-'+g.r+'"><span class="emoji">'+g.e+'</span><div><b class="rar-'+g.r+'">'+g.n+'</b><span>'+RN[g.r]+' · '+g.v+' 🪶</span></div><button data-isell="'+g.uid+'">Продать</button></div>'}).join("");
+  $("ninv").innerHTML='<button class="sellall" data-sellall="1">Продать всё за '+tot+' ★</button>'+inv.map(function(g){return '<div class="inv-item d-'+g.r+'"><span class="emoji">'+g.e+'</span><div><b class="rar-'+g.r+'">'+g.n+'</b><span>'+RN[g.r]+' · '+g.v+' ★</span></div><button data-isell="'+g.uid+'">Продать</button></div>'}).join("");
 }
 function ntab(t){
   document.querySelectorAll(".tabs button").forEach(function(b){b.classList.toggle("on",b.dataset.nt===t)});
@@ -666,8 +808,8 @@ document.addEventListener("click",function(e){
   if(e.target.closest("[data-sell]"))return closeModal(true);
   if(e.target.closest("[data-keep]"))return closeModal(false);
   if(e.target.id==="modal")return closeModal(false);
-  if(t=e.target.closest("[data-isell]")){var id=+t.dataset.isell,row=t.closest(".inv-item");row.classList.add("gone");setTimeout(function(){inv=inv.filter(function(g){if(g.uid===id){coins+=g.v;upd();toast("Продано: +"+g.v+" 🪶")}return g.uid!==id});invCount();renderInv()},RM?0:280);return}
-  if(e.target.closest("[data-sellall]")){var tot=inv.reduce(function(a,b){return a+b.v},0);document.querySelectorAll(".inv-item").forEach(function(el,i){el.style.animationDelay=i*50+"ms";el.classList.add("gone")});setTimeout(function(){inv=[];coins+=tot;upd();invCount();renderInv();toast("Продано: +"+tot+" 🪶")},RM?0:300+inv.length*50)}
+  if(t=e.target.closest("[data-isell]")){var id=+t.dataset.isell,row=t.closest(".inv-item");row.classList.add("gone");setTimeout(function(){inv=inv.filter(function(g){if(g.uid===id){coins+=g.v;upd();toast("Продано: +"+g.v+" ★")}return g.uid!==id});invCount();renderInv()},RM?0:280);return}
+  if(e.target.closest("[data-sellall]")){var tot=inv.reduce(function(a,b){return a+b.v},0);document.querySelectorAll(".inv-item").forEach(function(el,i){el.style.animationDelay=i*50+"ms";el.classList.add("gone")});setTimeout(function(){inv=[];coins+=tot;upd();invCount();renderInv();toast("Продано: +"+tot+" ★")},RM?0:300+inv.length*50)}
 });
 /* ===== общие ===== */
 var STAKES=[10,50,100,500],stake={fly:50,nuts:50,egg:50};
@@ -679,7 +821,7 @@ document.addEventListener("click",function(e){
   if(t=e.target.closest("[data-bjoin]")){bjoin(+t.dataset.bjoin);return}
   if(e.target.closest("[data-bwbot]")){clearTimeout(BR.timer);BR.waiting=0;enterBattle(BR.c,"🤖 Бот Кеша",true);return}
   if(e.target.closest("[data-bcancel]")){cancelWait(true);bshow("hub");return}
-  if(e.target.closest("[data-bsell]")){coins+=BR.tot;upd();toast("Продано: +"+BR.tot+" 🪶");endB();return}
+  if(e.target.closest("[data-bsell]")){coins+=BR.tot;upd();toast("Продано: +"+BR.tot+" ★");endB();return}
   if(e.target.closest("[data-bkeep]")){BR.won.forEach(function(g){inv.push(g)});invCount();toast("Добавлено в инвентарь (Профиль)");endB();return}
   if(e.target.closest("[data-bok]")){endB();return}
 });
@@ -729,8 +871,8 @@ function floop(){
     if(F.m>=F.crash){
       F.m=F.crash;F.el=Math.log(F.crash)/0.22;F.state="crash";F.boomT=now;
       $("fm").textContent=F.crash.toFixed(2)+"x";$("fm").classList.add("red");$("fgo").textContent="Старт";
-      $("fres").innerHTML="<h3>Ракета взорвалась на "+F.crash.toFixed(2)+"x</h3><span class='hint'>Ставка "+fmt(F.bet)+" 🪶 потеряна</span>";
-    }else{$("fm").textContent=F.m.toFixed(2)+"x";$("fgo").textContent="Забрать "+fmt(F.bet*F.m)+" 🪶"}
+      $("fres").innerHTML="<h3>Ракета взорвалась на "+F.crash.toFixed(2)+"x</h3><span class='hint'>Ставка "+fmt(F.bet)+" ★ потеряна</span>";
+    }else{$("fm").textContent=F.m.toFixed(2)+"x";$("fgo").textContent="Забрать "+fmt(F.bet*F.m)+" ★"}
   }
   fdraw(now);
   if(F.state==="run"||(F.state==="crash"&&now-F.boomT<1000))requestAnimationFrame(floop);
@@ -738,21 +880,21 @@ function floop(){
 $("fgo").onclick=function(){
   if(F.state!=="run"){
     var bet=getBet("fbet",50,100000);if(!bet)return;
-    if(coins<bet){toast("Не хватает перьев");return}
+    if(coins<bet){toast("Не хватает ★");return}
     coins-=bet;upd();F.bet=bet;F.state="run";F.cash=null;F.m=1;F.el=0;
     F.crash=Math.min(100,Math.max(1,0.9/(1-Math.random())));F.t0=performance.now();
     $("fm").classList.remove("red");$("fres").innerHTML='<span class="hint">Ракета набирает высоту. Нажми «Забрать» вовремя.</span>';floop();
   }else{
     var w=Math.floor(F.bet*F.m);coins+=w;upd();F.state="cash";F.cash={t:F.el,m:F.m,w:w};
     $("fgo").textContent="Старт";
-    $("fres").innerHTML="<h3>Забрал "+fmt(w)+" 🪶 на "+F.m.toFixed(2)+"x</h3><span class='hint'>Ракета могла лететь до "+F.crash.toFixed(2)+"x</span>";
+    $("fres").innerHTML="<h3>Забрал "+fmt(w)+" ★ на "+F.m.toFixed(2)+"x</h3><span class='hint'>Ракета могла лететь до "+F.crash.toFixed(2)+"x</span>";
     fdraw(performance.now());
   }
 };
 fdraw(performance.now());
 /* ===== Ставки ===== */
 function fmt(n){return Math.round(n).toLocaleString("ru-RU")}
-function getBet(id,mn,mx){var v=parseInt(($(id).value||"").replace(/\D/g,""),10);if(!(v>=mn&&v<=mx)){toast("Ставка от "+fmt(mn)+" до "+fmt(mx)+" 🪶");return 0}return v}
+function getBet(id,mn,mx){var v=parseInt(($(id).value||"").replace(/\D/g,""),10);if(!(v>=mn&&v<=mx)){toast("Ставка от "+fmt(mn)+" до "+fmt(mx)+" ★");return 0}return v}
 ["pbet","ebet","fbet"].forEach(function(id){$(id).addEventListener("input",function(){this.value=this.value.replace(/\D/g,"").slice(0,6)})});
 document.addEventListener("click",function(e){
   var t;
@@ -798,7 +940,7 @@ function pland(b,now){
   coins+=win;upd();PL.bk[k]=now;PL.last=now;PL.net+=win-b.bet;PL.count++;
   PL.pops.push({s:"+"+fmt(win),x:x,y:y,t:now,c:PM[k]>=1?"#ffd23f":"#d0d0e0"});
   if(PM[k]>=2)for(var i=0;i<14;i++){var a=-Math.random()*3.1;PL.parts.push({x:x,y:y+6,vx:Math.cos(a)*90,vy:Math.sin(a)*130,t:now,l:700+Math.random()*300,c:i%2?"#ffd23f":"#fff"})}
-  $("pres").innerHTML="<h3>"+PM[k]+"x → "+fmt(win)+" 🪶</h3><span class='hint'>Шариков: "+PL.count+" · итог: "+(PL.net>=0?"+":"")+fmt(PL.net)+" 🪶</span>";
+  $("pres").innerHTML="<h3>"+PM[k]+"x → "+fmt(win)+" ★</h3><span class='hint'>Шариков: "+PL.count+" · итог: "+(PL.net>=0?"+":"")+fmt(PL.net)+" ★</span>";
 }
 function pstep(now){
   var live=[];
@@ -815,7 +957,7 @@ function ploop(){var now=performance.now();pstep(now);
 function pstop(){clearInterval(PL.hold)}
 function plaunch(){
   var bet=getBet("pbet",25,100000);if(!bet){pstop();return}
-  if(coins<bet){toast("Не хватает перьев");pstop();return}
+  if(coins<bet){toast("Не хватает ★");pstop();return}
   if(PL.balls.length>=80)return;
   coins-=bet;upd();
   var cx=$("pc").width/2,k=0,pts=[{x:cx,y:12}],ks=[0];
@@ -837,7 +979,7 @@ function ebuild(on){var h="";for(var i=0;i<25;i++)h+='<button class="eg" data-eg
 function estats(){
   var m=emult(E.safe),b=$("ego"),nx=E.safe+1<=25-E.mines?"x"+emult(E.safe+1).toFixed(2):"-";
   $("em").textContent="x"+m.toFixed(2);$("en").textContent=nx;$("ew").textContent=E.on?fmt(E.bet*m):"0";$("emn").disabled=!!E.on;
-  if(E.on){b.textContent=E.safe?"Забрать "+fmt(E.bet*m)+" 🪶":"Выбери ячейку";b.disabled=!E.safe}else{b.textContent="Начать";b.disabled=false}
+  if(E.on){b.textContent=E.safe?"Забрать "+fmt(E.bet*m)+" ★":"Выбери ячейку";b.disabled=!E.safe}else{b.textContent="Начать";b.disabled=false}
 }
 function emnSet(){E.mines=+$("emn").value;$("emv").textContent=E.mines;if(!E.on)estats()}
 $("emn").addEventListener("input",emnSet);
@@ -850,13 +992,13 @@ function cellSparkle(el,n,txt){
 }
 function ecash(){
   var w=Math.floor(E.bet*emult(E.safe));coins+=w;upd();E.on=0;estats();
-  $("eres").innerHTML="<h3>Забрал "+fmt(w)+" 🪶</h3><span class='hint'>Яиц найдено: "+E.safe+" · x"+emult(E.safe).toFixed(2)+"</span>";
-  document.querySelectorAll(".eg").forEach(function(c){c.disabled=true});cellSparkle($("eg"),18,["🪶","✨"]);
+  $("eres").innerHTML="<h3>Забрал "+fmt(w)+" ★</h3><span class='hint'>Яиц найдено: "+E.safe+" · x"+emult(E.safe).toFixed(2)+"</span>";
+  document.querySelectorAll(".eg").forEach(function(c){c.disabled=true});cellSparkle($("eg"),18,["★","✨"]);
 }
 $("ego").onclick=function(){
   if(E.on){ecash();return}
   var bet=getBet("ebet",50,100000);if(!bet)return;
-  if(coins<bet){toast("Не хватает перьев");return}
+  if(coins<bet){toast("Не хватает ★");return}
   coins-=bet;upd();E.bet=bet;E.on=1;E.safe=0;E.mines=+$("emn").value;E.traps=[];
   while(E.traps.length<E.mines){var r=Math.floor(Math.random()*25);if(E.traps.indexOf(r)<0)E.traps.push(r)}
   ebuild(true);estats();$("eres").innerHTML='<span class="hint">В гнезде мин: '+E.mines+'. Открывай ячейки.</span>';
@@ -869,7 +1011,7 @@ function eclick(i,el){
       if(E.traps.indexOf(k)>=0){c.innerHTML="<span>💣</span>";c.classList.remove("stag");c.classList.add("bomb");c.style.animationDelay=(k===i?0:180+k*30)+"ms"}
       else if(!c.classList.contains("safe")){c.innerHTML="<span>🥚</span>";c.classList.add("dim")}});
     cellSparkle(el,10,["💥","🔥"]);estats();
-    $("eres").innerHTML="<h3>Мина!</h3><span class='hint'>Ставка "+fmt(E.bet)+" 🪶 потеряна</span>";return}
+    $("eres").innerHTML="<h3>Мина!</h3><span class='hint'>Ставка "+fmt(E.bet)+" ★ потеряна</span>";return}
   el.innerHTML="<span>🥚</span>";el.classList.remove("stag");el.classList.add("safe");el.style.animationDelay="0ms";el.disabled=true;
   E.safe++;estats();ebump();cellSparkle(el,6,["✨"]);
   if(E.safe===25-E.mines)ecash();
@@ -880,11 +1022,11 @@ var BR={mode:"",waiting:0,timer:0,c:null,won:null,tot:0},ROOMS=[],NAMES=["Ara_77
 function paidCases(){return CASES.filter(function(c){return c.cost>0})}
 function bshow(v){["bhub","bpick","bwait","barena"].forEach(function(x){$(x).hidden=(x!=="b"+v)})}
 function newRoom(){var ps=paidCases();return{n:NAMES[Math.floor(Math.random()*NAMES.length)],c:ps[Math.floor(Math.random()*ps.length)]}}
-function renderRooms(){$("brooms").innerHTML=ROOMS.map(function(r,i){return '<div class="inv-item room"><span class="emoji">'+r.c.e+'</span><div><b>'+r.n+'</b><span>'+r.c.n+' · вход '+r.c.cost+' 🪶</span></div><button data-bjoin="'+i+'">Войти</button></div>'}).join("");stagger($("brooms"))}
+function renderRooms(){$("brooms").innerHTML=ROOMS.map(function(r,i){return '<div class="inv-item room"><span class="emoji">'+r.c.e+'</span><div><b>'+r.n+'</b><span>'+r.c.n+' · вход '+r.c.cost+' ★</span></div><button data-bjoin="'+i+'">Войти</button></div>'}).join("");stagger($("brooms"))}
 for(var ri=0;ri<4;ri++)ROOMS.push(newRoom());renderRooms();
 function bpickView(mode){
   BR.mode=mode;
-  $("bpick").innerHTML='<button class="back" id="bback">← Назад</button><h3 class="sec">Выбери гнездо '+(mode==="bot"?"для боя с ботом":"для комнаты")+'</h3>'+paidCases().map(function(c){return '<button class="row" style="background:'+c.bg+'" data-bcase="'+c.id+'"><span class="ico">'+c.e+'</span><div><h3>'+c.n+'</h3><p>Вход '+c.cost+' 🪶</p></div></button>'}).join("");
+  $("bpick").innerHTML='<button class="back" id="bback">← Назад</button><h3 class="sec">Выбери гнездо '+(mode==="bot"?"для боя с ботом":"для комнаты")+'</h3>'+paidCases().map(function(c){return '<button class="row" style="background:'+c.bg+'" data-bcase="'+c.id+'"><span class="ico">'+c.e+'</span><div><h3>'+c.n+'</h3><p>Вход '+c.cost+' ★</p></div></button>'}).join("");
   bshow("pick");stagger($("bpick"));
 }
 $("bcreate").onclick=function(){bpickView("room")};
@@ -892,18 +1034,18 @@ $("bbot").onclick=function(){bpickView("bot")};
 document.addEventListener("click",function(e){if(e.target.id==="bback")bshow("hub")});
 function bchoose(id){
   var c=CASES.filter(function(x){return x.id===id})[0];
-  if(coins<c.cost){toast("Не хватает перьев");return}
+  if(coins<c.cost){toast("Не хватает ★");return}
   if(BR.mode==="bot"){enterBattle(c,"🤖 Бот Кеша",false);return}
   coins-=c.cost;upd();bwait(c);
 }
 function bwait(c){
   BR.waiting=1;BR.c=c;bshow("wait");
-  $("bwait").innerHTML='<div class="card" style="text-align:center;cursor:default"><div class="emoji">'+c.e+'</div><h3>'+c.n+'</h3><p>Вход '+c.cost+' 🪶 · комната создана</p><p class="hint">Ждём соперника<span class="dots"></span></p></div><button class="main" data-bwbot="1">Сыграть с ботом</button><button class="main glass" data-bcancel="1">Отменить комнату</button>';
+  $("bwait").innerHTML='<div class="card" style="text-align:center;cursor:default"><div class="emoji">'+c.e+'</div><h3>'+c.n+'</h3><p>Вход '+c.cost+' ★ · комната создана</p><p class="hint">Ждём соперника<span class="dots"></span></p></div><button class="main" data-bwbot="1">Сыграть с ботом</button><button class="main glass" data-bcancel="1">Отменить комнату</button>';
   BR.timer=setTimeout(function(){if(!BR.waiting)return;BR.waiting=0;var n=NAMES[Math.floor(Math.random()*NAMES.length)];toast(n+" зашёл в комнату");enterBattle(c,"👤 "+n,true)},4000+Math.random()*3000);
 }
 function cancelWait(refund){clearTimeout(BR.timer);if(BR.waiting){BR.waiting=0;if(refund){coins+=BR.c.cost;upd();toast("Вход возвращён")}}}
 function bjoin(i){
-  var r=ROOMS[i];if(coins<r.c.cost){toast("Не хватает перьев");return}
+  var r=ROOMS[i];if(coins<r.c.cost){toast("Не хватает ★");return}
   ROOMS.splice(i,1);ROOMS.push(newRoom());enterBattle(r.c,"👤 "+r.n,false);
 }
 function spinStrip(id,c,it){
@@ -914,18 +1056,18 @@ function spinStrip(id,c,it){
   st.style.transition="transform 3.4s cubic-bezier(.1,.6,.1,1)";st.style.transform="translateX("+fin+"px)";
 }
 function enterBattle(c,opp,paid){
-  if(!paid){if(coins<c.cost){toast("Не хватает перьев");return}coins-=c.cost;upd()}
+  if(!paid){if(coins<c.cost){toast("Не хватает ★");return}coins-=c.cost;upd()}
   var A=pick(c),B=pick(c);bshow("arena");
-  $("barena").innerHTML='<div class="card" style="text-align:center;cursor:default"><b>'+c.e+' '+c.n+'</b><div class="hint">Вход '+c.cost+' 🪶 · у кого подарок дороже, тот забирает оба</div></div><div class="name">🦜 Ты</div><div class="view" id="sa"></div><div class="name">'+opp+'</div><div class="view" id="sb"></div>';
+  $("barena").innerHTML='<div class="card" style="text-align:center;cursor:default"><b>'+c.e+' '+c.n+'</b><div class="hint">Вход '+c.cost+' ★ · у кого подарок дороже, тот забирает оба</div></div><div class="name">🦜 Ты</div><div class="view" id="sa"></div><div class="name">'+opp+'</div><div class="view" id="sb"></div>';
   spinStrip("sa",c,A);spinStrip("sb",c,B);
   setTimeout(function(){bresult(A,B,opp)},RM?300:4900);
 }
 function mk(it){return{uid:++uid,n:it.n,e:it.e,v:it.v,r:it.r}}
 function bresult(A,B,opp){
   var a=mk(A),b=mk(B),tot=a.v+b.v,h,m=$("modal");
-  if(a.v>b.v){BR.won=[a,b];BR.tot=tot;h='<div class="mbox g-gold"><div class="big">🏆</div><h3>Победа!</h3><p>'+a.n+' ('+a.v+') против '+b.n+' ('+b.v+'). Забираешь оба подарка</p><div class="duo"><span>'+a.e+'</span><span>'+b.e+'</span></div><button class="b-sell" data-bsell="1">Продать оба за '+tot+' 🪶</button><button class="b-keep" data-bkeep="1">Оставить в инвентаре</button></div>'}
-  else if(a.v<b.v){h='<div class="mbox"><div class="big">😿</div><h3>Поражение</h3><p>У '+opp+' подарок дороже: '+b.n+' ('+b.v+'). Он забрал оба ('+tot+' 🪶)</p><div class="duo"><span>'+a.e+'</span><span>'+b.e+'</span></div><button class="b-keep" data-bok="1">Ок</button></div>'}
-  else{BR.won=[a];BR.tot=a.v;h='<div class="mbox"><div class="big">🤝</div><h3>Ничья</h3><p>Оба подарка по '+a.v+' 🪶. Каждый оставляет свой</p><div class="duo"><span>'+a.e+'</span></div><button class="b-sell" data-bsell="1">Продать за '+a.v+' 🪶</button><button class="b-keep" data-bkeep="1">Оставить в инвентаре</button></div>'}
+  if(a.v>b.v){BR.won=[a,b];BR.tot=tot;h='<div class="mbox g-gold"><div class="big">🏆</div><h3>Победа!</h3><p>'+a.n+' ('+a.v+') против '+b.n+' ('+b.v+'). Забираешь оба подарка</p><div class="duo"><span>'+a.e+'</span><span>'+b.e+'</span></div><button class="b-sell" data-bsell="1">Продать оба за '+tot+' ★</button><button class="b-keep" data-bkeep="1">Оставить в инвентаре</button></div>'}
+  else if(a.v<b.v){h='<div class="mbox"><div class="big">😿</div><h3>Поражение</h3><p>У '+opp+' подарок дороже: '+b.n+' ('+b.v+'). Он забрал оба ('+tot+' ★)</p><div class="duo"><span>'+a.e+'</span><span>'+b.e+'</span></div><button class="b-keep" data-bok="1">Ок</button></div>'}
+  else{BR.won=[a];BR.tot=a.v;h='<div class="mbox"><div class="big">🤝</div><h3>Ничья</h3><p>Оба подарка по '+a.v+' ★. Каждый оставляет свой</p><div class="duo"><span>'+a.e+'</span></div><button class="b-sell" data-bsell="1">Продать за '+a.v+' ★</button><button class="b-keep" data-bkeep="1">Оставить в инвентаре</button></div>'}
   m.hidden=false;m.classList.remove("out");m._g=null;m.innerHTML=h;
 }
 function endB(){var m=$("modal");m.classList.add("out");setTimeout(function(){m.hidden=true;m.classList.remove("out")},200);bshow("hub");renderRooms()}
@@ -944,8 +1086,8 @@ function renderLB(){
     if(!list.length){box.innerHTML='<div class="card mine">Пока нет игроков в рейтинге. Стань первым!</div>';return;}
     var mine=data.me||{};
     var h='';
-    list.forEach(function(p,i){var name=(p.username?'@'+p.username:(p.first_name||'Игрок'));var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';h+='<div class="lbr'+(p.is_me?' me':'')+'"><span class="r">'+medal+'</span><span class="a">'+(p.is_me?'🦜':'👤')+'</span><b>'+escLB(name)+'</b><span class="v">'+fmt(p.balance)+' 🪶</span></div>'});
-    if(mine.rank)h='<div class="card mine"><b>Твоё место: #'+mine.rank+'</b><span class="hint">Баланс '+fmt(mine.balance)+' 🪶</span></div>'+h;
+    list.forEach(function(p,i){var name=(p.username?'@'+p.username:(p.first_name||'Игрок'));var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';h+='<div class="lbr'+(p.is_me?' me':'')+'"><span class="r">'+medal+'</span><span class="a">'+(p.is_me?'🦜':'👤')+'</span><b>'+escLB(name)+'</b><span class="v">'+fmt(p.balance)+' ★</span></div>'});
+    if(mine.rank)h='<div class="card mine"><b>Твоё место: #'+mine.rank+'</b><span class="hint">Баланс '+fmt(mine.balance)+' ★</span></div>'+h;
     box.innerHTML=h;
   }).catch(function(){box.innerHTML='<div class="card mine">Не удалось загрузить рейтинг. Проверь подключение сервера.</div>'});
 }
@@ -955,12 +1097,12 @@ var FEED={q:[],off:0,top:null},ltT=$("lt"),ltK=$("ltt");
 function rdrop(){var ps=paidCases(),w=[30,24,18,12,8,5],r=Math.random()*97,s=0,c=ps[0];for(var i=0;i<ps.length;i++){s+=w[i];if(r<s){c=ps[i];break}}var it=pick(c);return{n:it.n,e:it.e,v:it.v,r:it.r}}
 function setTop(d,flash){
   FEED.top=d;var t=$("topd");t.className="topd d-"+d.r;
-  t.innerHTML='<div class="td-l">Лучший<br>дроп</div><span class="emoji">'+d.e+'</span><span class="nm">'+d.n+'</span><span class="pr">'+fmt(d.v)+' 🪶</span>';
+  t.innerHTML='<div class="td-l">Лучший<br>дроп</div><span class="emoji">'+d.e+'</span><span class="nm">'+d.n+'</span><span class="pr">'+fmt(d.v)+' ★</span>';
   if(flash){void t.offsetWidth;t.classList.add("flash")}
 }
 (function(){var best=rdrop();for(var i=0;i<300;i++){var d=rdrop();if(d.v>best.v)best=d}setTop(best,false)})();
 function nextDrop(){var d=FEED.q.length?FEED.q.shift():rdrop();if(d.v>FEED.top.v)setTop(d,true);return d}
-function fitem(d){return '<div class="lt-i d-'+d.r+'"><span class="emoji">'+d.e+'</span><span class="t"><b>'+d.n+'</b><i>'+fmt(d.v)+' 🪶</i></span></div>'}
+function fitem(d){return '<div class="lt-i d-'+d.r+'"><span class="emoji">'+d.e+'</span><span class="t"><b>'+d.n+'</b><i>'+fmt(d.v)+' ★</i></span></div>'}
 function ffill(){var n=0;while(ltK.offsetWidth<ltT.clientWidth*2+200&&n++<40)ltK.insertAdjacentHTML("beforeend",fitem(nextDrop()))}
 function feedUser(g){FEED.q.unshift({n:g.n,e:g.e,v:g.v,r:g.r})}
 var fLast=performance.now();
@@ -978,16 +1120,16 @@ function invCount(){$("invn").textContent=inv.length;var b=$("navinv");b.textCon
 var QTY=1,CUR=null;
 function renderList(){
   $("nlist").innerHTML='<button class="fban" data-case="free"><span class="fi">{gift}</span><span class="ft"><b>Бесплатное гнездо</b><i>Раз в день</i></span><span class="fb">Открыть</span></button><div class="cgrid">'
-   +paidCases().map(function(c){return '<button class="ctile" style="--tr:'+c.tr+'" data-case="'+c.id+'"><span class="cico">'+c.e+'</span><b>'+c.n+'</b><span class="cp">'+fmt(c.cost)+' 🪶</span></button>'}).join("")+'</div>';
+   +paidCases().map(function(c){return '<button class="ctile" style="--tr:'+c.tr+'" data-case="'+c.id+'"><span class="cico">'+c.e+'</span><b>'+c.n+'</b><span class="cp">'+fmt(c.cost)+' ★</span></button>'}).join("")+'</div>';
 }
-function qtyUpd(){$("qv").textContent=QTY;$("openbtn").innerHTML="Открыть "+QTY+"× за "+fmt(CUR.cost*QTY)+" 🪶"}
+function qtyUpd(){$("qv").textContent=QTY;$("openbtn").innerHTML="Открыть "+QTY+"× за "+fmt(CUR.cost*QTY)+" ★"}
 function showDetail(id){
   var c=CASES.filter(function(x){return x.id===id})[0],tot=c.items.reduce(function(a,b){return a+b.w},0);CUR=c;QTY=1;
   $("nlist").hidden=true;$("ndetail").hidden=false;
-  $("ndetail").innerHTML='<button class="back" id="dback">← К гнёздам</button><div class="dhead"><span class="dchest">'+c.e+'</span><div><h3>'+c.n+'</h3><p>'+(c.cost?"Цена "+fmt(c.cost)+" 🪶 · шанс окупить "+payback(c)+"% · минимум "+fmt(minv(c))+" 🪶":"Бесплатно, раз в день")+'</p></div></div>'
+  $("ndetail").innerHTML='<button class="back" id="dback">← К гнёздам</button><div class="dhead"><span class="dchest">'+c.e+'</span><div><h3>'+c.n+'</h3><p>'+(c.cost?"Цена "+fmt(c.cost)+" ★ · шанс окупить "+payback(c)+"% · минимум "+fmt(minv(c))+" ★":"Бесплатно, раз в день")+'</p></div></div>'
    +(c.cost?'<div class="qty"><button class="bb" data-q="-1">−</button><b id="qv">1</b><button class="bb" data-q="1">+</button>'+[1,3,5,10].map(function(q){return '<button class="chip" data-q="='+q+'">'+q+'×</button>'}).join("")+'</div>':"")
-   +'<button class="main" id="openbtn" data-open="'+c.id+'">'+(c.cost?"Открыть 1× за "+fmt(c.cost)+" 🪶":"Открыть бесплатно")+'</button>'
-   +'<div class="note" style="margin:10px 0 0">Подарков в гнезде: '+c.items.length+'</div><div class="drops">'+c.items.slice().sort(function(a,b){return b.v-a.v}).map(function(i){return '<div class="drop d-'+i.r+'"><div class="emoji">'+i.e+'</div><b class="rar-'+i.r+'">'+i.n+'</b><span>'+pct(i.w/tot)+'% · '+fmt(i.v)+' 🪶</span></div>'}).join("")+'</div>';
+   +'<button class="main" id="openbtn" data-open="'+c.id+'">'+(c.cost?"Открыть 1× за "+fmt(c.cost)+" ★":"Открыть бесплатно")+'</button>'
+   +'<div class="note" style="margin:10px 0 0">Подарков в гнезде: '+c.items.length+'</div><div class="drops">'+c.items.slice().sort(function(a,b){return b.v-a.v}).map(function(i){return '<div class="drop d-'+i.r+'"><div class="emoji">'+i.e+'</div><b class="rar-'+i.r+'">'+i.n+'</b><span>'+pct(i.w/tot)+'% · '+fmt(i.v)+' ★</span></div>'}).join("")+'</div>';
   stagger($("ndetail"));
 }
 function spinStrip(id,c,it,S,D){
@@ -1001,7 +1143,7 @@ function spinStrip(id,c,it,S,D){
 function openCase(id){
   var c=CASES.filter(function(x){return x.id===id})[0],n=c.cost===0?1:QTY,total=c.cost*n;
   if(c.cost===0&&freeUsed){toast("Бесплатное гнездо уже открыто сегодня");return}
-  if(coins<total){toast("Не хватает перьев");return}
+  if(coins<total){toast("Не хватает ★");return}
   coins-=total;upd();if(c.cost===0)freeUsed=true;
   var gs=[];for(var i=0;i<n;i++){var it=pick(c);gs.push({uid:++uid,n:it.n,e:it.e,v:it.v,r:it.r,_it:it})}
   var m=$("modal");m.hidden=false;m.classList.remove("out");m._g=null;m._rev=0;
@@ -1016,18 +1158,18 @@ function openCase(id){
 function revealMany(m,gs){
   var tot=gs.reduce(function(a,g){return a+g.v},0),best=gs.reduce(function(a,g){return g.v>a.v?g:a},gs[0]);
   m._rev=1;m._gs=gs;m._tot=tot;gs.forEach(feedUser);
-  m.innerHTML='<div class="mbox wide"><h3>Выпало подарков: '+gs.length+'</h3><p>На сумму '+fmt(tot)+' 🪶 · лучший: '+best.n+'</p><div class="mres">'+gs.map(function(g){return '<div class="mi d-'+g.r+'"><span class="emoji">'+g.e+'</span><i>'+fmt(g.v)+'</i></div>'}).join("")+'</div><button class="b-sell" data-msell="1">Продать все за '+fmt(tot)+' 🪶</button><button class="b-keep" data-mkeep="1">Оставить в инвентаре</button></div>';
+  m.innerHTML='<div class="mbox wide"><h3>Выпало подарков: '+gs.length+'</h3><p>На сумму '+fmt(tot)+' ★ · лучший: '+best.n+'</p><div class="mres">'+gs.map(function(g){return '<div class="mi d-'+g.r+'"><span class="emoji">'+g.e+'</span><i>'+fmt(g.v)+'</i></div>'}).join("")+'</div><button class="b-sell" data-msell="1">Продать все за '+fmt(tot)+' ★</button><button class="b-keep" data-mkeep="1">Оставить в инвентаре</button></div>';
 }
 function closeM(){var m=$("modal");m._gs=null;m.classList.add("out");setTimeout(function(){m.hidden=true;m.classList.remove("out")},200)}
 function bpickView(mode){
   BR.mode=mode;
-  $("bpick").innerHTML='<button class="back" id="bback">← Назад</button><h3 class="sec">Выбери гнездо '+(mode==="bot"?"для боя с ботом":"для комнаты")+'</h3><div class="cgrid">'+paidCases().map(function(c){return '<button class="ctile" style="--tr:'+c.tr+'" data-bcase="'+c.id+'"><span class="cico">'+c.e+'</span><b>'+c.n+'</b><span class="cp">Вход '+fmt(c.cost)+' 🪶</span></button>'}).join("")+'</div>';
+  $("bpick").innerHTML='<button class="back" id="bback">← Назад</button><h3 class="sec">Выбери гнездо '+(mode==="bot"?"для боя с ботом":"для комнаты")+'</h3><div class="cgrid">'+paidCases().map(function(c){return '<button class="ctile" style="--tr:'+c.tr+'" data-bcase="'+c.id+'"><span class="cico">'+c.e+'</span><b>'+c.n+'</b><span class="cp">Вход '+fmt(c.cost)+' ★</span></button>'}).join("")+'</div>';
   bshow("pick");
 }
 document.addEventListener("click",function(e){
   var t;
   if(t=e.target.closest("[data-q]")){var d=t.dataset.q;QTY=d.charAt(0)==="="?+d.slice(1):QTY+ +d;QTY=Math.max(1,Math.min(10,QTY));qtyUpd();return}
-  if(e.target.closest("[data-msell]")){var m=$("modal"),tt=m._tot;coins+=tt;upd();toast("Продано: +"+fmt(tt)+" 🪶");closeM();return}
+  if(e.target.closest("[data-msell]")){var m=$("modal"),tt=m._tot;coins+=tt;upd();toast("Продано: +"+fmt(tt)+" ★");closeM();return}
   if(e.target.closest("[data-mkeep]")){var gs=$("modal")._gs||[];gs.forEach(function(g){inv.push(g)});invCount();toast("Добавлено в инвентарь (Профиль)");closeM();return}
 });
 /* ===== Апгрейд ===== */
@@ -1041,23 +1183,23 @@ function uch(t,tg){return Math.min(75,t/tg.v*92)}
 function uRender(){
   if(U.busy)return;
   U.sel=U.sel.filter(function(id){return inv.some(function(g){return g.uid===id})});
-  var its=uitems(),f=ufeath(),t=f+usum(its),ok=t>=25,w=UM[U.mult]||UM.all;
+  var its=uitems(),f=ufeath(),t=f+usum(its),ok=t>=5,w=UM[U.mult]||UM.all;
   U.cands=ok?ALLI.filter(function(i){return i.v>=t*w[0]&&i.v<=t*w[1]&&i.v>t*1.05}).slice(0,U.mult==="all"?18:12):[];
   if(U.target&&(!ok||U.target.v<=t*1.05))U.target=null;
   var ch=U.target?uch(t,U.target):0;
   $("uring").style.setProperty("--p",ch+"%");$("upct").textContent=U.target?(ch<10?ch.toFixed(2):ch.toFixed(1))+"%":"—";
   var top=its.slice().sort(function(a,b){return b.v-a.v})[0];
-  $("ust").innerHTML=top?top.e+(its.length>1?'<i class="plus">+'+(its.length-1)+'</i>':""):"🪶";$("ust").className="uplate"+(top?" d-"+top.r:"");
-  $("ustv").innerHTML=fmt(t)+" 🪶";$("usti").textContent=its.length?"Перья "+fmt(f)+" + предметов: "+its.length:"Только перья";
+  $("ust").innerHTML=top?top.e+(its.length>1?'<i class="plus">+'+(its.length-1)+'</i>':""):"★";$("ust").className="uplate"+(top?" d-"+top.r:"");
+  $("ustv").innerHTML=fmt(t)+" ★";$("usti").textContent=its.length?"★ "+fmt(f)+" + предметов: "+its.length:"Только ★";
   $("utg").innerHTML=U.target?U.target.e:"?";$("utg").className="uplate"+(U.target?" d-"+U.target.r:"");
-  $("utgv").textContent=U.target?U.target.n:"Выбери цель";$("utgn").innerHTML=U.target?fmt(U.target.v)+" 🪶":"";
+  $("utgv").textContent=U.target?U.target.n:"Выбери цель";$("utgn").innerHTML=U.target?fmt(U.target.v)+" ★":"";
   $("uinvn").textContent=inv.length;
   $("umine").hidden=U.tab!=="mine";$("utgs").hidden=U.tab!=="tg";
   document.querySelectorAll("[data-utab]").forEach(function(b){b.classList.toggle("on",b.dataset.utab===U.tab)});
-  $("uinv").innerHTML=inv.length?inv.slice().sort(function(a,b){return b.v-a.v}).map(function(g){return '<button class="uit2 d-'+g.r+(U.sel.indexOf(g.uid)>=0?" on":"")+'" data-uitem="'+g.uid+'"><span class="emoji">'+g.e+'</span><b>'+g.n+'</b><i>'+fmt(g.v)+' 🪶</i></button>'}).join(""):'<div class="ug-empty" style="grid-column:1/-1">Предметов нет. <button class="lnk" data-go="nest">Открыть гнёзда</button></div>';
+  $("uinv").innerHTML=inv.length?inv.slice().sort(function(a,b){return b.v-a.v}).map(function(g){return '<button class="uit2 d-'+g.r+(U.sel.indexOf(g.uid)>=0?" on":"")+'" data-uitem="'+g.uid+'"><span class="emoji">'+g.e+'</span><b>'+g.n+'</b><i>'+fmt(g.v)+' ★</i></button>'}).join(""):'<div class="ug-empty" style="grid-column:1/-1">Предметов нет. <button class="lnk" data-go="nest">Открыть гнёзда</button></div>';
   document.querySelectorAll("[data-um]").forEach(function(b){b.classList.toggle("on",b.dataset.um===U.mult)});
-  $("ugrid").innerHTML=!ok?'<div class="hint" style="grid-column:1/-1">Поставь от 25 🪶 перьями или предметами.</div>':U.cands.length?U.cands.map(function(i,k){return '<button class="utg d-'+i.r+(U.target===i?" on":"")+'" data-utg="'+k+'"><span class="emoji">'+i.e+'</span><b>'+i.n+'</b><i>'+fmt(i.v)+' 🪶</i><u>'+uch(t,i).toFixed(1)+'%</u></button>'}).join(""):'<div class="hint" style="grid-column:1/-1">Подходящих предметов нет. Выбери другой множитель.</div>';
-  var b=$("ugo");b.disabled=!ok||!U.target;b.innerHTML=!ok?"Поставь от 25 🪶":!U.target?"Выбери цель":"Апгрейд · шанс "+ch.toFixed(1)+"%";
+  $("ugrid").innerHTML=!ok?'<div class="hint" style="grid-column:1/-1">Поставь от 5 ★ или призами.</div>':U.cands.length?U.cands.map(function(i,k){return '<button class="utg d-'+i.r+(U.target===i?" on":"")+'" data-utg="'+k+'"><span class="emoji">'+i.e+'</span><b>'+i.n+'</b><i>'+fmt(i.v)+' ★</i><u>'+uch(t,i).toFixed(1)+'%</u></button>'}).join(""):'<div class="hint" style="grid-column:1/-1">Подходящих предметов нет. Выбери другой множитель.</div>';
+  var b=$("ugo");b.disabled=!ok||!U.target;b.innerHTML=!ok?"Поставь от 5 ★":!U.target?"Выбери цель":"Апгрейд · шанс "+ch.toFixed(1)+"%";
 }
 $("ubet").addEventListener("input",function(){this.value=this.value.replace(/\D/g,"").slice(0,6);uRender()});
 document.addEventListener("click",function(e){
@@ -1071,14 +1213,14 @@ document.addEventListener("click",function(e){
   if(e.target.closest("[data-uclr]"))U.sel=[];
   if(t=e.target.closest("[data-um]")){U.mult=t.dataset.um;U.target=null}
   if(t=e.target.closest("[data-utg]"))U.target=U.cands[+t.dataset.utg];
-  if(e.target.closest("[data-usell]")){coins+=U.won.v;upd();toast("Продано: +"+fmt(U.won.v)+" 🪶");closeM()}
+  if(e.target.closest("[data-usell]")){coins+=U.won.v;upd();toast("Продано: +"+fmt(U.won.v)+" ★");closeM()}
   if(e.target.closest("[data-ukeep]")){inv.push(U.won);invCount();toast("Добавлено в инвентарь (Профиль)");closeM()}
   if(e.target.closest("[data-uok]"))closeM();
   uRender();
 });
 $("ugo").onclick=function(){
   if(U.busy||!U.target)return;
-  var f=ufeath(),its=uitems(),t=f+usum(its);if(t<25)return;
+  var f=ufeath(),its=uitems(),t=f+usum(its);if(t<5)return;
   var tg=U.target,ch=uch(t,tg),win=Math.random()*100<ch,w=ch*3.6,land=win?w*(.05+.9*Math.random()):w+(360-w)*(.02+.96*Math.random());
   U.busy=1;$("ugo").disabled=true;
   coins-=f;upd();inv=inv.filter(function(g){return U.sel.indexOf(g.uid)<0});U.sel=[];invCount();
@@ -1091,8 +1233,8 @@ $("ugo").onclick=function(){
     U.busy=0;$("uring").classList.remove("spin");
     var m=$("modal");m.hidden=false;m.classList.remove("out");m._g=null;
     if(win){var g={uid:++uid,n:tg.n,e:tg.e,v:tg.v,r:tg.r};U.won=g;feedUser(g);
-      m.innerHTML='<div class="mbox g-'+g.r+'"><div class="big">'+g.e+'</div><h3 class="rar-'+g.r+'">Апгрейд удался!</h3><p>'+g.n+' · '+fmt(g.v)+' 🪶 · шанс был '+ch.toFixed(1)+'%</p><button class="b-sell" data-usell="1">Продать за '+fmt(g.v)+' 🪶</button><button class="b-keep" data-ukeep="1">Оставить в инвентаре</button></div>'}
-    else m.innerHTML='<div class="mbox"><div class="big">'+tg.e+'</div><h3>Не повезло</h3><p>Шанс был '+ch.toFixed(1)+'%. Ставка '+fmt(t)+' 🪶 сгорела</p><button class="b-keep" data-uok="1">Ок</button></div>';
+      m.innerHTML='<div class="mbox g-'+g.r+'"><div class="big">'+g.e+'</div><h3 class="rar-'+g.r+'">Апгрейд удался!</h3><p>'+g.n+' · '+fmt(g.v)+' ★ · шанс был '+ch.toFixed(1)+'%</p><button class="b-sell" data-usell="1">Продать за '+fmt(g.v)+' ★</button><button class="b-keep" data-ukeep="1">Оставить в инвентаре</button></div>'}
+    else m.innerHTML='<div class="mbox"><div class="big">'+tg.e+'</div><h3>Не повезло</h3><p>Шанс был '+ch.toFixed(1)+'%. Ставка '+fmt(t)+' ★ сгорела</p><button class="b-keep" data-uok="1">Ок</button></div>';
   },D*1000+350);
 };
 uRender();
@@ -1106,8 +1248,8 @@ uRender();
     f.appendChild(e)}
 })();
 /* ===== Иконки ===== */
-var EM={"🪶":"i-feather","🦜":"i-cock","🎁":"i-gift","🏆":"i-trophy","🪂":"i-rocketf","🔮":"i-orb","💣":"i-bomb","🥚":"i-egg","⚔️":"i-swords","🎮":"i-pad","🧩":"i-task","👤":"i-cock","⬆️":"i-up"};
-var RTK=/\{(c\d+|gift)\}/g,RMP=/🪶|🦜|🎁|🏆|🪂|🔮|💣|🥚|⚔️|🎮|🧩|👤|⬆️/g,REE=/\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*/gu;
+var EM={"🦜":"i-cock","🎁":"i-gift","🏆":"i-trophy","🪂":"i-rocketf","🔮":"i-orb","💣":"i-bomb","🥚":"i-egg","⚔️":"i-swords","🎮":"i-pad","🧩":"i-task","👤":"i-cock","⬆️":"i-up"};
+var RTK=/\{(c\d+|gift)\}/g,RMP=/🦜|🎁|🏆|🪂|🔮|💣|🥚|⚔️|🎮|🧩|👤|⬆️/g,REE=/\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*/gu;
 var ITEMSEL=".emoji,.cell,.big,.duo span,.uplate";
 var PAL={common:[[22,30,60],[118,136,178],[238,242,252]],rare:[[8,28,80],[62,130,212],[214,234,255]],epic:[[34,18,82],[130,94,220],[236,226,255]],gold:[[84,52,8],[214,170,60],[255,244,196]]},MC={};
 function mix(a,b,t){return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]}
@@ -1135,7 +1277,7 @@ function svg3(id){return '<svg class="e3" viewBox="0 0 100 100" aria-hidden="tru
 function convNode(n){
   var t=n.nodeValue,p=n.parentNode;
   if(!t||!p||/^(SCRIPT|STYLE|TEXTAREA|TITLE)$/.test(p.nodeName))return;
-  var item=p.closest&&p.closest(ITEMSEL),stake=p.closest&&p.closest("#ust")&&t.trim()==="🪶";
+  var item=p.closest&&p.closest(ITEMSEL),stake=p.closest&&p.closest("#ust")&&t.trim()==="★";
   var h=t.replace(/&/g,"&amp;").replace(/</g,"&lt;"),ch=false;
   h=h.replace(RTK,function(m,c){ch=true;return svg3(c==="gift"?"i-gift":"i-chest"+c.slice(1))});
   if(item&&!stake){var r=rarOf(p);h=h.replace(new RegExp(REE.source,"gu"),function(m){var u=metal(m,r);if(!u)return m;ch=true;return '<img class="mi3" alt="" src="'+u+'">'})}
@@ -1168,12 +1310,12 @@ convTree(document.body);MO.observe(document.body,MOC);
     setStatus("savestatus",apiReady?"Баланс синхронизирован с сервером бота.":"Ожидание подключения сервера.");
   }
   function loadAccount(){
-    if(!API_BASE){setStatus("savestatus","Для общего баланса нужен подключённый сервер бота. Сейчас показан стартовый баланс 2000 🪶.");return;}
+    if(!API_BASE){setStatus("savestatus","Для общего баланса нужен подключённый сервер бота. Сейчас показан стартовый баланс 0 ★.");return;}
     api("/api/me").then(applyAccount).catch(function(){setStatus("savestatus","Не удалось связаться с сервером. Баланс пока не синхронизирован.")});
   }
   var check=$("checksub");if(check)check.addEventListener("click",function(){
     if(!API_BASE){setStatus("substatus","Проверка пока недоступна: подключи backend Telegram-бота.");return;}
-    check.disabled=true;api("/api/claim-subscription",{}).then(function(d){if(d.balance!==undefined){applyAccount(d);setStatus("substatus",d.claimed?"Подписка подтверждена! Начислено 1000 🪶":"Награда уже получена или подписка не найдена.")}}).catch(function(){setStatus("substatus","Не удалось проверить подписку. Попробуй позже.")}).finally(function(){check.disabled=false});
+    check.disabled=true;api("/api/claim-subscription",{}).then(function(d){if(d.balance!==undefined){applyAccount(d);setStatus("substatus",d.claimed?"Подписка подтверждена! Начислено 5 ★":"Награда уже получена или подписка не найдена.")}}).catch(function(){setStatus("substatus","Не удалось проверить подписку. Попробуй позже.")}).finally(function(){check.disabled=false});
   });
   var ref=$("copyref");if(ref)ref.addEventListener("click",function(){
     if(!API_BASE){setStatus("refstatus","Реферальная ссылка появится после подключения backend бота.");return;}
@@ -1191,7 +1333,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
   function api(p,b){return fetch(base+p,{method:b?"POST":"GET",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:b?JSON.stringify(b):undefined}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
   function toInv(x){var c=CASES.filter(function(k){return k.id===x.case})[0],it=c.items[x.i];return{uid:x.uid,n:it.n,e:it.e,v:it.v,r:it.r}}
-  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает перьев":k==="daily_used"?"Бесплатное гнездо уже открыто сегодня":"Ошибка связи с сервером. Попробуй ещё раз")}
+  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает ★":k==="daily_used"?"Бесплатное гнездо уже открыто сегодня":"Ошибка связи с сервером. Попробуй ещё раз")}
   function stop(e){e.stopImmediatePropagation();e.preventDefault()}
   function sell(all,uids,msg){
     api("/api/inventory/sell",all?{request_id:rid(),all:true}:{request_id:rid(),uids:uids}).then(function(r){
@@ -1220,12 +1362,12 @@ convTree(document.body);MO.observe(document.body,MOC);
   };
   document.addEventListener("click",function(e){
     if(!SRV)return;var m=$("modal"),t;
-    if(e.target.closest("[data-sell]")){stop(e);var g=m._g;if(!g)return;m._g=null;closeM();sell(false,[g.uid],function(){return"Продано: +"+g.v+" 🪶"});return}
+    if(e.target.closest("[data-sell]")){stop(e);var g=m._g;if(!g)return;m._g=null;closeM();sell(false,[g.uid],function(){return"Продано: +"+g.v+" ★"});return}
     if(e.target.closest("[data-keep]")){stop(e);m._g=null;closeM();toast("Добавлено в инвентарь (Профиль)");return}
-    if(e.target.closest("[data-msell]")){stop(e);var gs=m._gs||[];closeM();sell(false,gs.map(function(g){return g.uid}),function(){return"Продано: +"+fmt(gs.reduce(function(a,g){return a+g.v},0))+" 🪶"});return}
+    if(e.target.closest("[data-msell]")){stop(e);var gs=m._gs||[];closeM();sell(false,gs.map(function(g){return g.uid}),function(){return"Продано: +"+fmt(gs.reduce(function(a,g){return a+g.v},0))+" ★"});return}
     if(e.target.closest("[data-mkeep]")){stop(e);closeM();toast("Добавлено в инвентарь (Профиль)");return}
-    if(t=e.target.closest("[data-isell]")){stop(e);var id=+t.dataset.isell;sell(false,[id],function(s){return"Продано: +"+s+" 🪶"});return}
-    if(e.target.closest("[data-sellall]")){stop(e);sell(true,[],function(s){return"Продано: +"+s+" 🪶"});return}
+    if(t=e.target.closest("[data-isell]")){stop(e);var id=+t.dataset.isell;sell(false,[id],function(s){return"Продано: +"+s+" ★"});return}
+    if(e.target.closest("[data-sellall]")){stop(e);sell(true,[],function(s){return"Продано: +"+s+" ★"});return}
   },true);
 })();
 
@@ -1236,14 +1378,14 @@ convTree(document.body);MO.observe(document.body,MOC);
   var base=window.TOUCAN_API_BASE||location.origin,pend=0,infl=0,eb=0;
   function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
   function api(p,b){return fetch(base+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
-  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает перьев":k==="no_round"?"Раунд уже закрыт":"Ошибка связи с сервером. Попробуй ещё раз")}
+  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает ★":k==="no_round"?"Раунд уже закрыт":"Ошибка связи с сервером. Попробуй ещё раз")}
   var on=function(){return window.SRVMODE};
   /* шарики */
   var opl=window.plaunch,opn=window.pland;
   window.plaunch=function(){
     if(!on())return opl();
     var bet=getBet("pbet",25,100000);if(!bet){pstop();return}
-    if(coins<bet){toast("Не хватает перьев");pstop();return}
+    if(coins<bet){toast("Не хватает ★");pstop();return}
     if(PL.balls.length+infl>=80)return;
     infl++;
     api("/api/plinko/drop",{request_id:rid(),bet:bet}).then(function(r){
@@ -1260,8 +1402,8 @@ convTree(document.body);MO.observe(document.body,MOC);
   window.ecash=function(){
     if(!on())return oec();
     var w=E.win;coins=E.bal;upd();E.on=0;estats();
-    $("eres").innerHTML="<h3>Забрал "+fmt(w)+" 🪶</h3><span class='hint'>Яиц найдено: "+E.safe+" · x"+emult(E.safe).toFixed(2)+"</span>";
-    document.querySelectorAll(".eg").forEach(function(c){c.disabled=true});cellSparkle($("eg"),18,["🪶","✨"]);
+    $("eres").innerHTML="<h3>Забрал "+fmt(w)+" ★</h3><span class='hint'>Яиц найдено: "+E.safe+" · x"+emult(E.safe).toFixed(2)+"</span>";
+    document.querySelectorAll(".eg").forEach(function(c){c.disabled=true});cellSparkle($("eg"),18,["★","✨"]);
   };
   $("ego").onclick=function(){
     if(!on())return oego.call(this);
@@ -1269,7 +1411,7 @@ convTree(document.body);MO.observe(document.body,MOC);
     if(E.on){
       eb=1;api("/api/mines/cashout",{request_id:rid()}).then(function(r){E.win=r.win;E.bal=r.balance;window.ecash()}).catch(fail).then(function(){eb=0});return}
     var bet=getBet("ebet",50,100000);if(!bet)return;
-    if(coins<bet){toast("Не хватает перьев");return}
+    if(coins<bet){toast("Не хватает ★");return}
     var n=+$("emn").value;eb=1;
     api("/api/mines/start",{request_id:rid(),bet:bet,mines:n}).then(function(r){
       coins=r.balance;upd();E.bet=bet;E.on=1;E.safe=0;E.mines=n;E.traps=[];
@@ -1294,7 +1436,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   var base=window.TOUCAN_API_BASE||location.origin,fb=0,poll=0;
   function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
   function api(p,b){return fetch(base+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
-  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает перьев":k==="no_round"?"Раунд уже закрыт":"Ошибка связи с сервером. Попробуй ещё раз")}
+  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает ★":k==="no_round"?"Раунд уже закрыт":"Ошибка связи с сервером. Попробуй ещё раз")}
   var oF=$("fgo").onclick;
   function stopPoll(){clearInterval(poll);poll=0}
   function startPoll(){stopPoll();poll=setInterval(function(){
@@ -1305,7 +1447,7 @@ convTree(document.body);MO.observe(document.body,MOC);
     if(fb)return;
     if(F.state!=="run"){
       var bet=getBet("fbet",50,100000);if(!bet)return;
-      if(coins<bet){toast("Не хватает перьев");return}
+      if(coins<bet){toast("Не хватает ★");return}
       fb=1;
       api("/api/crash/start",{request_id:rid(),bet:bet}).then(function(r){
         coins=r.balance;upd();F.bet=bet;F.state="run";F.cash=null;F.m=1;F.el=0;F.crash=1e9;F.t0=performance.now();
@@ -1317,7 +1459,7 @@ convTree(document.body);MO.observe(document.body,MOC);
         if(r.crashed){F.crash=r.cp;stopPoll();return}
         stopPoll();coins=r.balance;upd();F.crash=r.cp;F.state="cash";F.cash={t:F.el,m:r.m,w:r.win};
         $("fgo").textContent="Старт";
-        $("fres").innerHTML="<h3>Забрал "+fmt(r.win)+" 🪶 на "+r.m.toFixed(2)+"x</h3><span class='hint'>Ракета могла лететь до "+r.cp.toFixed(2)+"x</span>";
+        $("fres").innerHTML="<h3>Забрал "+fmt(r.win)+" ★ на "+r.m.toFixed(2)+"x</h3><span class='hint'>Ракета могла лететь до "+r.cp.toFixed(2)+"x</span>";
         fdraw(performance.now());
       }).catch(fail).then(function(){fb=0});
     }
@@ -1331,7 +1473,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   var base=window.TOUCAN_API_BASE||location.origin,bb=0,Q=[];
   function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
   function api(p,b){return fetch(base+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
-  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает перьев":k==="no_item"?"Предмета уже нет в инвентаре":"Ошибка связи с сервером. Попробуй ещё раз")}
+  function fail(e){var k=e&&e.error;toast(k==="insufficient_funds"?"Не хватает ★":k==="no_item"?"Предмета уже нет в инвентаре":"Ошибка связи с сервером. Попробуй ещё раз")}
   function stop(e){e.stopImmediatePropagation();e.preventDefault()}
   var on=function(){return window.SRVMODE};
   function sell(uids,msg){api("/api/inventory/sell",{request_id:rid(),uids:uids}).then(function(r){
@@ -1341,7 +1483,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   window.bchoose=function(id){
     if(!on())return obc(id);
     var c=CASES.filter(function(x){return x.id===id})[0];
-    if(coins<c.cost){toast("Не хватает перьев");return}
+    if(coins<c.cost){toast("Не хватает ★");return}
     if(BR.mode==="bot"){enterBattle(c,"🤖 Бот Кеша",false);return}
     bwait(c);
   };
@@ -1353,7 +1495,7 @@ convTree(document.body);MO.observe(document.body,MOC);
     api("/api/battle/play",{request_id:rid(),case_id:c.id}).then(function(r){
       coins=r.balance;upd();
       var A=c.items[r.a],B=c.items[r.b];bshow("arena");
-      $("barena").innerHTML='<div class="card" style="text-align:center;cursor:default"><b>'+c.e+' '+c.n+'</b><div class="hint">Вход '+c.cost+' 🪶 · у кого подарок дороже, тот забирает оба</div></div><div class="name">🦜 Ты</div><div class="view" id="sa"></div><div class="name">'+opp+'</div><div class="view" id="sb"></div>';
+      $("barena").innerHTML='<div class="card" style="text-align:center;cursor:default"><b>'+c.e+' '+c.n+'</b><div class="hint">Вход '+c.cost+' ★ · у кого подарок дороже, тот забирает оба</div></div><div class="name">🦜 Ты</div><div class="view" id="sa"></div><div class="name">'+opp+'</div><div class="view" id="sb"></div>';
       spinStrip("sa",c,A);spinStrip("sb",c,B);
       setTimeout(function(){Q=[r.uids[0],r.uids[1]];bresult(A,B,opp);Q=[]},RM?300:4900);
     }).catch(function(e){fail(e);bshow("hub")}).then(function(){bb=0});
@@ -1363,7 +1505,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   $("ugo").onclick=function(){
     if(!on())return oug.call(this);
     if(U.busy||!U.target)return;
-    var f=ufeath(),its=uitems(),t=f+usum(its);if(t<25)return;
+    var f=ufeath(),its=uitems(),t=f+usum(its);if(t<5)return;
     var tg=U.target,ch=uch(t,tg),sel=U.sel.slice();U.busy=1;$("ugo").disabled=true;
     api("/api/upgrade",{request_id:rid(),feathers:f,uids:sel,target:tg.n}).then(function(r){
       var win=r.win,w=ch*3.6,land=win?w*(.05+.9*Math.random()):w+(360-w)*(.02+.96*Math.random());
@@ -1377,16 +1519,16 @@ convTree(document.body);MO.observe(document.body,MOC);
         U.busy=0;$("uring").classList.remove("spin");
         var m=$("modal");m.hidden=false;m.classList.remove("out");m._g=null;
         if(win){var g={uid:r.uid,n:tg.n,e:tg.e,v:tg.v,r:tg.r};U.won=g;feedUser(g);
-          m.innerHTML='<div class="mbox g-'+g.r+'"><div class="big">'+g.e+'</div><h3 class="rar-'+g.r+'">Апгрейд удался!</h3><p>'+g.n+' · '+fmt(g.v)+' 🪶 · шанс был '+ch.toFixed(1)+'%</p><button class="b-sell" data-usell="1">Продать за '+fmt(g.v)+' 🪶</button><button class="b-keep" data-ukeep="1">Оставить в инвентаре</button></div>'}
-        else m.innerHTML='<div class="mbox"><div class="big">'+tg.e+'</div><h3>Не повезло</h3><p>Шанс был '+ch.toFixed(1)+'%. Ставка '+fmt(t)+' 🪶 сгорела</p><button class="b-keep" data-uok="1">Ок</button></div>';
+          m.innerHTML='<div class="mbox g-'+g.r+'"><div class="big">'+g.e+'</div><h3 class="rar-'+g.r+'">Апгрейд удался!</h3><p>'+g.n+' · '+fmt(g.v)+' ★ · шанс был '+ch.toFixed(1)+'%</p><button class="b-sell" data-usell="1">Продать за '+fmt(g.v)+' ★</button><button class="b-keep" data-ukeep="1">Оставить в инвентаре</button></div>'}
+        else m.innerHTML='<div class="mbox"><div class="big">'+tg.e+'</div><h3>Не повезло</h3><p>Шанс был '+ch.toFixed(1)+'%. Ставка '+fmt(t)+' ★ сгорела</p><button class="b-keep" data-uok="1">Ок</button></div>';
         uRender();
       },D*1000+350);
     }).catch(function(e){U.busy=0;$("ugo").disabled=false;fail(e);uRender()});
   };
   document.addEventListener("click",function(e){
     if(!on())return;
-    if(e.target.closest("[data-bsell]")){stop(e);var ids=(BR.won||[]).map(function(g){return g.uid});sell(ids,function(s){return"Продано: +"+s+" 🪶"});endB();return}
-    if(e.target.closest("[data-usell]")){stop(e);var g=U.won;closeM();sell([g.uid],function(s){return"Продано: +"+s+" 🪶"});uRender();return}
+    if(e.target.closest("[data-bsell]")){stop(e);var ids=(BR.won||[]).map(function(g){return g.uid});sell(ids,function(s){return"Продано: +"+s+" ★"});endB();return}
+    if(e.target.closest("[data-usell]")){stop(e);var g=U.won;closeM();sell([g.uid],function(s){return"Продано: +"+s+" ★"});uRender();return}
   },true);
 })();
 
@@ -1412,8 +1554,8 @@ convTree(document.body);MO.observe(document.body,MOC);
   var st=document.createElement("style");
   st.textContent="#ckbtn{width:210px;height:210px;margin:16px auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:104px;background:radial-gradient(circle at 30% 28%,#fff0a8,#ffb23a 60%,#e2791d);box-shadow:0 10px 0 #a85510,0 18px 30px rgba(0,0,0,.35);user-select:none;-webkit-user-select:none;touch-action:manipulation;cursor:pointer;transition:transform .05s,box-shadow .05s}#ckbtn:active,#ckbtn.p{transform:translateY(6px);box-shadow:0 4px 0 #a85510,0 8px 16px rgba(0,0,0,.35)}#ckn{font-size:44px;font-weight:900}.ckf{position:fixed;pointer-events:none;font-weight:900;font-size:22px;color:#ffe27a;text-shadow:0 2px 4px #000;animation:ckup .7s ease-out forwards;z-index:50}@keyframes ckup{to{transform:translateY(-60px);opacity:0}}";
   document.head.appendChild(st);
-  $("home").insertAdjacentHTML("beforeend",'<button class="row c-nuts" data-go="click"><span class="ico">👆</span><div><h3>Кликер</h3><p>1000 кликов = 500 🪶</p></div></button>');
-  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="click"><button class="back" data-go="home">← Назад</button><h2>Кликер</h2><p class="sub">Тапай по тукану и копи клики. Не больше 20 кликов в секунду.</p><div class="card" style="text-align:center;cursor:default"><div id="ckn">0</div><div class="hint" id="ckh">кликов в запасе</div></div><div id="ckbtn" role="button" aria-label="Клик">🦜</div><div class="card" style="cursor:default"><h3>🛒 Магазин</h3><p>За каждые 1000 кликов — 500 🪶</p><button class="main" id="ckbuy" type="button">Купить 500 🪶 за 1000 кликов</button><button class="main glass" id="ckall" type="button">Обменять все клики</button><p class="note" id="ckmsg"></p></div></section>');
+  $("home").insertAdjacentHTML("beforeend",'<button class="row c-nuts" data-go="click"><span class="ico">👆</span><div><h3>Кликер</h3><p>1000 кликов = 500 ★</p></div></button>');
+  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="click"><button class="back" data-go="home">← Назад</button><h2>Кликер</h2><p class="sub">Тапай по тукану и копи клики. Не больше 20 кликов в секунду.</p><div class="card" style="text-align:center;cursor:default"><div id="ckn">0</div><div class="hint" id="ckh">кликов в запасе</div></div><div id="ckbtn" role="button" aria-label="Клик">🦜</div><div class="card" style="cursor:default"><h3>🛒 Магазин</h3><p>За каждые 1000 кликов — 500 ★</p><button class="main" id="ckbuy" type="button">Купить 500 ★ за 1000 кликов</button><button class="main glass" id="ckall" type="button">Обменять все клики</button><p class="note" id="ckmsg"></p></div></section>');
   function api(p,b){return fetch((window.TOUCAN_API_BASE||location.origin)+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
   function rid(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random()}
   function show(){var t=srv+pend*mult;$("ckn").textContent=fmt(t);$("ckbuy").disabled=t<PACK;$("ckall").disabled=t<PACK;$("ckh").textContent=mult>1?"кликов в запасе · бустер x"+mult:"кликов в запасе";$("ckmsg").textContent=t<PACK?"Нужно ещё "+fmt(PACK-t)+" кликов до обмена.":""}
@@ -1437,7 +1579,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   function buy(all){
     flush().then(function(){
       var packs=all?Math.floor(srv/PACK):1;if(packs<1||srv<packs*PACK){toast("Не хватает кликов");return}
-      return api("/api/clicker/buy",{request_id:rid(),packs:packs}).then(function(r){srv=r.clicks;coins=r.balance;upd();show();toast("+"+fmt(packs*REWARD)+" 🪶 за "+fmt(packs*PACK)+" кликов")})
+      return api("/api/clicker/buy",{request_id:rid(),packs:packs}).then(function(r){srv=r.clicks;coins=r.balance;upd();show();toast("+"+fmt(packs*REWARD)+" ★ за "+fmt(packs*PACK)+" кликов")})
     }).catch(function(e){toast(e&&e.error==="not_enough_clicks"?"Не хватает кликов":"Ошибка связи с сервером")})
   }
   $("ckbuy").onclick=function(){buy(false)};$("ckall").onclick=function(){buy(true)};
@@ -1458,7 +1600,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   function map(x){var cs=CASES.filter(function(k){return k.id===x.case})[0];if(!cs||!cs.items[x.i])return null;var it=cs.items[x.i];return{n:escLB(x.who)+" · "+it.n,e:it.e,v:x.v,r:it.r}}
   var PH={n:"Дропов пока нет. Открой гнездо первым!",e:"🪹",v:0,r:"common",nov:1};
   window.feedUser=function(){};
-  window.fitem=function(d){return '<div class="lt-i d-'+d.r+'"><span class="emoji">'+d.e+'</span><span class="t"><b>'+d.n+'</b>'+(d.nov?'':'<i>'+fmt(d.v)+' 🪶</i>')+'</span></div>'};
+  window.fitem=function(d){return '<div class="lt-i d-'+d.r+'"><span class="emoji">'+d.e+'</span><span class="t"><b>'+d.n+'</b>'+(d.nov?'':'<i>'+fmt(d.v)+' ★</i>')+'</span></div>'};
   window.nextDrop=function(){
     var d=FEED.q.length?FEED.q.shift():(REAL.list.length?REAL.list[REAL.idx++%REAL.list.length]:PH);
     if(!d.nov&&d.v>FEED.top.v)setTop(d,true);return d};
@@ -1479,21 +1621,21 @@ convTree(document.body);MO.observe(document.body,MOC);
 /* ===== Магазин: перья и бустеры кликера за звёзды ===== */
 (function(){
   var tg=window.Telegram&&window.Telegram.WebApp,init=tg&&tg.initData||"";
-  var RATE=200,MIN=10,MAX=10000,mult=1,busy=0,PRE=[10,50,100,500,1000,5000,10000];
+  var RATE=1,MIN=25,MAX=10000,mult=1,busy=0,PRE=[25,50,100,500,1000,5000,10000];
   var st=document.createElement("style");
   st.textContent=".schips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.schip{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:inherit;border-radius:12px;padding:10px 4px;font:inherit;font-weight:800;font-size:13px}.schip.on{background:rgba(255,210,63,.25);border-color:#ffd23f}#shopn{width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:inherit;font:inherit;font-size:18px;font-weight:800;text-align:center}.sbadge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:99px;background:#2e9e5b;color:#fff;font-size:11px;font-weight:800}";
   document.head.appendChild(st);
   document.querySelector('nav button[data-go="prof"]').insertAdjacentHTML("beforebegin",'<button data-go="shop"><span>🛒</span>Магазин</button>');
-  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="shop"><h2>Магазин</h2><p class="sub">Оплата звёздами Telegram ⭐</p><div class="card" style="cursor:default"><h3>🪶 Перья за звёзды</h3><p id="srate">Курс: 10 ⭐ = 2 000 🪶</p><div class="schips" id="schips"></div><input id="shopn" type="number" inputmode="numeric" min="10" max="10000" step="1" value="10" aria-label="Количество звёзд"><p class="note" id="sprev"></p><button class="main" id="sbuy" type="button">Купить перья</button></div><div class="card" style="cursor:default;margin-top:10px"><h3>👆 Клики x2 <span class="sbadge" id="sb2" hidden>Куплено</span></h3><p>Каждый клик в кликере считается за 2. Навсегда.</p><button class="main" id="sx2" type="button">Купить за 50 ⭐</button></div><div class="card" style="cursor:default;margin-top:10px"><h3>👆 Клики x3 <span class="sbadge" id="sb3" hidden>Куплено</span></h3><p>Каждый клик в кликере считается за 3. Навсегда.</p><button class="main" id="sx3" type="button">Купить за 150 ⭐</button></div><p class="note">Перья — виртуальная валюта игры: они не имеют денежной стоимости, не выводятся и не обмениваются на деньги или звёзды. Условия: /terms, проблемы с оплатой: /paysupport в чате с ботом.</p></section>');
+  document.querySelector(".app").insertAdjacentHTML("beforeend",'<section class="panel" id="shop"><h2>Магазин</h2><p class="sub">Оплата звёздами Telegram ⭐</p><div class="card" style="cursor:default"><h3>★ Пополнение баланса</h3><p id="srate">Курс: 1 ⭐ = 1 ★. Минимум 25 ⭐</p><div class="schips" id="schips"></div><input id="shopn" type="number" inputmode="numeric" min="25" max="10000" step="1" value="25" aria-label="Количество звёзд"><p class="note" id="sprev"></p><button class="main" id="sbuy" type="button">Пополнить</button></div><div class="card" style="cursor:default;margin-top:10px"><h3>👆 Клики x2 <span class="sbadge" id="sb2" hidden>Куплено</span></h3><p>Каждый клик в кликере считается за 2. Навсегда.</p><button class="main" id="sx2" type="button">Купить за 50 ⭐</button></div><div class="card" style="cursor:default;margin-top:10px"><h3>👆 Клики x3 <span class="sbadge" id="sb3" hidden>Куплено</span></h3><p>Каждый клик в кликере считается за 3. Навсегда.</p><button class="main" id="sx3" type="button">Купить за 150 ⭐</button></div><p class="note">★ — внутриигровая валюта, а не Telegram Stars: её нельзя вывести или обменять на деньги и звёзды. Условия: /terms, проблемы с оплатой: /paysupport в чате с ботом.</p></section>');
   function n(){var v=parseInt($("shopn").value,10);return isNaN(v)?0:v}
-  function prev(){var v=n(),ok=v>=MIN&&v<=MAX;$("sprev").textContent=ok?"Вы получите "+fmt(v*RATE)+" 🪶":"Введите от "+MIN+" до "+fmt(MAX)+" звёзд";$("sbuy").disabled=!ok||busy;
+  function prev(){var v=n(),ok=v>=MIN&&v<=MAX;$("sprev").textContent=ok?"Вы получите "+fmt(v*RATE)+" ★":"Введите от "+MIN+" до "+fmt(MAX)+" звёзд";$("sbuy").disabled=!ok||busy;
     document.querySelectorAll(".schip").forEach(function(b){b.classList.toggle("on",+b.dataset.s===v)})}
   $("schips").innerHTML=PRE.map(function(s){return '<button class="schip" type="button" data-s="'+s+'">'+fmt(s)+' ⭐</button>'}).join("");
   $("schips").addEventListener("click",function(e){var b=e.target.closest("[data-s]");if(b){$("shopn").value=b.dataset.s;prev()}});
   $("shopn").addEventListener("input",prev);
   function boosts(){[2,3].forEach(function(m){var o=mult>=m;$("sb"+m).hidden=!o;$("sx"+m).disabled=o||busy;$("sx"+m).textContent=o?"Уже куплено":"Купить за "+(m===2?50:150)+" ⭐"})}
   function api(p,b){return fetch((window.TOUCAN_API_BASE||location.origin)+p,{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:JSON.stringify(b||{})}).then(function(r){return r.json().then(function(d){if(!r.ok)throw d;return d})})}
-  function load(){api("/api/me").then(function(d){mult=d.mult||1;RATE=d.rate||RATE;$("srate").textContent="Курс: 10 ⭐ = "+fmt(10*RATE)+" 🪶";prev();boosts()}).catch(function(){})}
+  function load(){api("/api/me").then(function(d){mult=d.mult||1;RATE=d.rate||RATE;$("srate").textContent="Курс: 10 ⭐ = "+fmt(10*RATE)+" ★";prev();boosts()}).catch(function(){})}
   function waitGrant(b0,m0,k){
     api("/api/me").then(function(d){
       if(d.balance!==b0||(d.mult||1)!==m0){coins=d.balance;upd();mult=d.mult||1;window.dispatchEvent(new CustomEvent("mult",{detail:mult}));boosts();toast("Покупка зачислена ✅");return}
@@ -1520,6 +1662,59 @@ convTree(document.body);MO.observe(document.body,MOC);
     if(id==="shop"){document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.go==="shop")});load()}
   };
 })();
+</script>
+<script>
+(function(){
+var M={"★":["star","#ffd04a","#c4780a"],"🦜":["bird","#232638","#0b0c14"],"🏆":["trophy","#ffd04a","#b8700a"],"👑":["crown","#ffd04a","#b8700a"],"💎":["gem","#4fc3ff","#1b4fa8"],"⭐":["star","#ffd04a","#c4780a"],"🌟":["star","#ffd04a","#c4780a"],"🪙":["coin","#ffd04a","#b8700a"],"🎁":["gift","#ff4d6d","#a3123a"],"🧩":["gift","#6a7bff","#2a2fa0"],"💣":["bomb","#2b3046","#07080d"],"🥚":["egg","#fff0cf","#d5a24e"],"🪹":["egg","#d9a15a","#7a4a1a"],"🔮":["orb","#b06bff","#4a1a9c"],"🪂":["rocket","#ff6b57","#9c2a1c"],"☄":["rocket","#ff6b57","#9c2a1c"],"⬆":["arrow","#5b8cff","#1d3fa8"],"🎮":["cube","#8b6cff","#3a22a8"],"👤":["user","#9aa4c4","#3d4668"],"👥":["user","#9aa4c4","#3d4668"],"🥇":["coin","#ffd04a","#b8700a"],"🥈":["coin","#cfd6e6","#6a7690"],"🥉":["coin","#e0955a","#8a4a1e"],"⚔":["gem","#ff6b8a","#a31845"],"📢":["star","#58c4ff","#1b5aa8"],"✅":["coin","#3ddc97","#127a52"],"💥":["star","#ff8a3d","#b02e0a"],"🔥":["star","#ff8a3d","#b02e0a"],"⚡":["star","#ffe24a","#c28a00"]};
+var RP={common:["#aab3cc","#4a5270"],rare:["#4aa8ff","#1b3f9e"],epic:["#b86bff","#5a1fa8"],gold:["#ffd04a","#b8700a"]};
+var POOL=["gem","orb","cube","star","egg","heart","coin","crown"];
+var RE;try{RE=new RegExp("★|\\p{Extended_Pictographic}\\uFE0F?(?:\\u200D\\p{Extended_Pictographic}\\uFE0F?)*","gu")}catch(x){RE=/★|[\u2600-\u27BF\u2B00-\u2BFF](?:\uFE0F)?|\uD83C[\uDC00-\uDFFF](?:\uFE0F)?|\uD83D[\uDC00-\uDFFF](?:\uFE0F)?|\uD83E[\uDC00-\uDFFF](?:\uFE0F)?/g}
+function ico(e,p){var k=e.replace(/\uFE0F/g,""),m=M[k],h=0,i;for(i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;
+var sh=m?m[0]:POOL[(h>>3)%POOL.length],c=m?m[1]:"hsl("+(h%360)+" 82% 60%)",d=m?m[2]:"hsl("+(h%360)+" 70% 30%)";
+if(p&&p.matches&&p.matches(".emoji,.cell,.big,.duo span")){var r=p.closest(".d-gold,.g-gold,.cell.gold")?"gold":p.closest(".d-epic,.g-epic,.cell.epic")?"epic":p.closest(".d-rare,.g-rare,.cell.rare")?"rare":"common";c=RP[r][0];d=RP[r][1]}
+return '<svg class="i3" viewBox="0 0 64 64" aria-hidden="true" style="--c:'+c+';--d:'+d+'"><use href="#s-'+sh+'"/></svg>'}
+function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function walk(n){if(n.nodeType===3){var v=n.nodeValue;RE.lastIndex=0;if(!RE.test(v))return;RE.lastIndex=0;var p=n.parentElement,sp=document.createElement("span");sp.style.display="contents";sp.innerHTML=esc(v).replace(RE,function(e){return ico(e,p)});n.replaceWith(sp)}
+else if(n.nodeType===1&&!/^(SCRIPT|STYLE|TEXTAREA|CANVAS|SVG|INPUT)$/i.test(n.tagName)){var a=Array.prototype.slice.call(n.childNodes);for(var i=0;i<a.length;i++)walk(a[i])}}
+function start(){walk(document.body);new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==="characterData")walk(m.target);else m.addedNodes.forEach(walk)})}).observe(document.body,{childList:true,subtree:true,characterData:true})}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+})();
+</script>
+<script>
+(function(){var b=document.getElementById("bal"),p=document.getElementById("pbal");
+if(b&&p){p.textContent=b.textContent;new MutationObserver(function(){p.textContent=b.textContent}).observe(b,{childList:true,characterData:true,subtree:true})}
+var bl=document.querySelector(".bal");if(bl)bl.addEventListener("click",function(){var n=document.querySelector('nav button[data-go="shop"]');if(n)n.click()})})();
+</script>
+<script>
+(function(){var of=window.fetch;if(!of)return;
+function block(link){if(document.getElementById("nsov"))return;var o=document.createElement("div");o.id="nsov";
+o.style.cssText="position:fixed;inset:0;z-index:99999;background:#0b0716;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:28px;text-align:center;font-family:inherit";
+o.innerHTML='<div style="font-size:24px;font-weight:800">Нужна подписка на канал</div><div style="color:#9aa0b8;max-width:300px;line-height:1.45">Вы отписались от канала. Подпишитесь снова, чтобы продолжить пользоваться ботом.</div>'+(link?'<button id="nsgo" type="button" style="border:0;border-radius:16px;padding:14px 28px;font:inherit;font-weight:800;color:#fff;background:linear-gradient(135deg,#ff4fa3,#7b4dff)">Подписаться</button>':'')+'<button id="nschk" type="button" style="border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:12px 24px;font:inherit;font-weight:700;color:#fff;background:transparent">Проверить</button>';
+document.body.appendChild(o);var g=document.getElementById("nsgo");
+if(g)g.onclick=function(){try{if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.openTelegramLink)return Telegram.WebApp.openTelegramLink(link)}catch(e){}window.open(link,"_blank")};
+document.getElementById("nschk").onclick=function(){location.reload()}}
+function mark(){var c=document.getElementById("checksub");if(!c)return;var card=c.closest(".task-card");if(!card||card.classList.contains("done"))return;card.classList.add("done");
+var h=card.querySelector("h3"),p=card.querySelector("p"),l=card.querySelector(".task-link"),n=card.querySelector(".note");
+if(h)h.textContent="Подписка на канал";if(p)p.textContent="Задание выполнено — переходи к заданию ниже.";if(l)l.style.display="none";c.style.display="none";if(n)n.style.display="none"}
+window.fetch=function(){var a=arguments,url=String(a[0]&&a[0].url||a[0]);return of.apply(this,a).then(function(r){
+if(r.status===403){r.clone().json().then(function(d){if(d&&d.error==="not_subscribed")block(d.channel)}).catch(function(){})}
+else if(r.ok&&/\/api\/(me|claim-subscription)/.test(url)){r.clone().json().then(function(d){if(d&&d.sub)mark()}).catch(function(){})}
+return r})}})();
+</script>
+<script>
+(function(){var b0=document.getElementById("copyref");if(!b0)return;var b=b0.cloneNode(true);b.textContent="Пригласить друзей";b0.parentNode.replaceChild(b,b0);
+var tg=window.Telegram&&Telegram.WebApp,init=tg&&tg.initData||"",st=document.getElementById("refstatus");
+if(st)st.textContent="Друг должен нажать «Играть» и подписаться на канал — тогда тебе придёт 5 ★.";
+function say(t){if(st)st.textContent=t}
+b.addEventListener("click",function(){
+if(!init){say("Приглашения доступны внутри Telegram.");return}
+b.disabled=true;
+fetch((window.TOUCAN_API_BASE||location.origin)+"/api/invite-message",{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":init},body:"{}"}).then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})}).then(function(x){
+if(!x.ok)throw 0;var d=x.d;
+if(d.message_id&&tg.shareMessage){try{tg.shareMessage(d.message_id,function(sent){if(sent)say("Приглашение отправлено!")});return}catch(e){}}
+var url="https://t.me/share/url?url="+encodeURIComponent(d.referral_link)+"&text="+encodeURIComponent(d.text);
+if(tg.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank")
+}).catch(function(){say("Не удалось открыть приглашение. Попробуй позже.")}).finally(function(){b.disabled=false})})})();
 </script>
 </body>
 </html>
