@@ -341,7 +341,7 @@ def admin(t,chat):
 def handle_cmd(f,chat,t):
     try:
         touch(f);cmd=t.split()[0].split("@")[0].lower()
-        if cmd=="/terms":return say(chat,"📄 Условия\n• Средний возврат в гнёздах — около 90% от цены гнезда; шансы призов указаны в игре.\n• ★ — внутриигровая валюта (при пополнении 1 Telegram Star = 1 ★). Она не является Telegram Stars, не имеет денежной стоимости, не выводится и не обменивается на деньги или Stars.\n• Звёзды, потраченные на пополнение, не возвращаются, если покупка выдана верно.\n• Выпадение предметов случайно, шансы зависят от гнезда.\n• Если оплата прошла, а покупки нет, напишите /paysupport.")
+        if cmd=="/terms":return say(chat,"📄 Условия\n• Средний возврат в гнёздах — около 65% от цены гнезда; шансы призов указаны в игре.\n• ★ — внутриигровая валюта (при пополнении 1 Telegram Star = 1 ★). Она не является Telegram Stars, не имеет денежной стоимости, не выводится и не обменивается на деньги или Stars.\n• Звёзды, потраченные на пополнение, не возвращаются, если покупка выдана верно.\n• Выпадение предметов случайно, шансы зависят от гнезда.\n• Если оплата прошла, а покупки нет, напишите /paysupport.")
         if cmd=="/support":return say(chat,"Вопросы по игре: "+SUPPORT)
         if cmd=="/paysupport":return say(chat,"💳 Проблема с оплатой? Напишите "+SUPPORT+": укажите ваш Telegram ID и время оплаты. Если покупка не выдана по нашей вине, мы вернём звёзды.")
         if tx(lambda:banned(f["id"])):return say(chat,"⛔ Доступ ограничен.")
@@ -387,9 +387,9 @@ def claim_nick(u):
     if NICKTAG not in name:return {"claimed":False,"nick":False,"balance":bal(u)}
     db.execute("update u set nick=1 where id=?",(u,));add(u,5,"nick")
     return {"claimed":True,"nick":True,"balance":bal(u)}
-PM=[15,6,2.2,1.1,.5,.3,.5,1.1,2.2,6,15]
+PM=[11,4,1.4,1,0.35,0.2,0.35,1,1.4,4,11]
 def emult(k,m):
-    x=0.92
+    x=0.65
     for i in range(k):x*=(25-i)/(25-m-i)
     return x
 ITEMS={}
@@ -487,7 +487,7 @@ def act(u,path,b):
         bet=int(b.get("bet",0))
         if not 10<=bet<=100000:raise Err(400,"bad_request")
         if bal(u)<bet:raise Err(402,"insufficient_funds")
-        cp=min(100,max(1,0.9/(1-secrets.randbelow(10**9)/10**9)));cp=math.floor(cp*100)/100
+        cp=min(100,max(1,0.65/(1-secrets.randbelow(10**9)/10**9)));cp=math.floor(cp*100)/100
         add(u,-bet,"crash");db.execute("insert or replace into crash values(?,?,?,?)",(u,bet,cp,time.time()));out={}
     elif path=="/api/crash/cashout":
         r=db.execute("select bet,cp,t0 from crash where user=?",(u,)).fetchone()
@@ -505,7 +505,7 @@ def act(u,path,b):
         t=f+sum(i[0] for i in its);tv=ITEMS[tn][2]
         if t<10 or not tv>t*1.05 or tv>t*80:raise Err(400,"bad_request")
         if bal(u)<f:raise Err(402,"insufficient_funds")
-        ch=min(75,t/tv*92);win=secrets.randbelow(10**6)/10**4<ch
+        ch=min(75,t/tv*65);win=secrets.randbelow(10**6)/10**4<ch
         add(u,-f,"upgrade")
         for x in uids:db.execute("delete from inv where uid=?",(x,))
         nid=None
