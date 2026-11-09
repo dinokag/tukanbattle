@@ -707,7 +707,7 @@ nav i{background:#ff4fa3!important}
 </section>
 </div>
 
-<div style="text-align:center;color:#4b5066;font-size:11px;padding:6px 0 0">дизайн v14 · ★</div><div class="toast" id="toast"></div>
+<div style="text-align:center;color:#4b5066;font-size:11px;padding:6px 0 0">дизайн v15 · ★</div><div class="toast" id="toast"></div>
 <div class="modal" id="modal" hidden></div>
 <nav id="nav">
   <button class="on" data-go="home"><span>🎮</span>Игры</button>
@@ -886,7 +886,7 @@ function floop(){
 }
 $("fgo").onclick=function(){
   if(F.state!=="run"){
-    var bet=getBet("fbet",50,100000);if(!bet)return;
+    var bet=getBet("fbet",10,100000);if(!bet)return;
     if(coins<bet){toast("Не хватает ★");return}
     coins-=bet;upd();F.bet=bet;F.state="run";F.cash=null;F.m=1;F.el=0;
     F.crash=Math.min(100,Math.max(1,0.9/(1-Math.random())));F.t0=performance.now();
@@ -963,7 +963,7 @@ function ploop(){var now=performance.now();pstep(now);
   if(PL.balls.length||PL.parts.length||PL.pops.length||now-PL.last<400)requestAnimationFrame(ploop);else PL.run=0}
 function pstop(){clearInterval(PL.hold)}
 function plaunch(){
-  var bet=getBet("pbet",25,100000);if(!bet){pstop();return}
+  var bet=getBet("pbet",10,100000);if(!bet){pstop();return}
   if(coins<bet){toast("Не хватает ★");pstop();return}
   if(PL.balls.length>=80)return;
   coins-=bet;upd();
@@ -1004,7 +1004,7 @@ function ecash(){
 }
 $("ego").onclick=function(){
   if(E.on){ecash();return}
-  var bet=getBet("ebet",50,100000);if(!bet)return;
+  var bet=getBet("ebet",10,100000);if(!bet)return;
   if(coins<bet){toast("Не хватает ★");return}
   coins-=bet;upd();E.bet=bet;E.on=1;E.safe=0;E.mines=+$("emn").value;E.traps=[];
   while(E.traps.length<E.mines){var r=Math.floor(Math.random()*25);if(E.traps.indexOf(r)<0)E.traps.push(r)}
@@ -1391,7 +1391,7 @@ convTree(document.body);MO.observe(document.body,MOC);
   var opl=window.plaunch,opn=window.pland;
   window.plaunch=function(){
     if(!on())return opl();
-    var bet=getBet("pbet",25,100000);if(!bet){pstop();return}
+    var bet=getBet("pbet",10,100000);if(!bet){pstop();return}
     if(coins<bet){toast("Не хватает ★");pstop();return}
     if(PL.balls.length+infl>=80)return;
     infl++;
@@ -1417,7 +1417,7 @@ convTree(document.body);MO.observe(document.body,MOC);
     if(eb)return;
     if(E.on){
       eb=1;api("/api/mines/cashout",{request_id:rid()}).then(function(r){E.win=r.win;E.bal=r.balance;window.ecash()}).catch(fail).then(function(){eb=0});return}
-    var bet=getBet("ebet",50,100000);if(!bet)return;
+    var bet=getBet("ebet",10,100000);if(!bet)return;
     if(coins<bet){toast("Не хватает ★");return}
     var n=+$("emn").value;eb=1;
     api("/api/mines/start",{request_id:rid(),bet:bet,mines:n}).then(function(r){
@@ -1453,7 +1453,7 @@ convTree(document.body);MO.observe(document.body,MOC);
     if(!window.SRVMODE)return oF.call(this);
     if(fb)return;
     if(F.state!=="run"){
-      var bet=getBet("fbet",50,100000);if(!bet)return;
+      var bet=getBet("fbet",10,100000);if(!bet)return;
       if(coins<bet){toast("Не хватает ★");return}
       fb=1;
       api("/api/crash/start",{request_id:rid(),bet:bet}).then(function(r){
