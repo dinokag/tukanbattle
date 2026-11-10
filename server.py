@@ -505,7 +505,7 @@ def act(u,path,b):
         t=f+sum(i[0] for i in its);tv=ITEMS[tn][2]
         if t<10 or not tv>t*1.05 or tv>t*80:raise Err(400,"bad_request")
         if bal(u)<f:raise Err(402,"insufficient_funds")
-        ch=min(75,t/tv*65);win=secrets.randbelow(10**6)/10**4<ch
+        ch=min(75,t/tv*80);win=secrets.randbelow(10**6)/10**4<ch
         add(u,-f,"upgrade")
         for x in uids:db.execute("delete from inv where uid=?",(x,))
         nid=None
