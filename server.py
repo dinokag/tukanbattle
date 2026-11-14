@@ -33,17 +33,21 @@ db.executescript("""create table if not exists u(id integer primary key,balance 
 create table if not exists promo(code text primary key,feathers integer,max_uses integer,used integer default 0,expires integer default 0);
 create table if not exists promo_used(code text,user integer,primary key(code,user));
 create table if not exists drops(id integer primary key autoincrement,ts integer,who text,case_id text,idx integer,v integer);
+create table if not exists tops(id integer primary key autoincrement,ts integer,who text,case_id text,idx integer,v integer);
 create table if not exists pay(charge text primary key,user integer,kind text,stars integer,ts integer,refunded integer default 0);
 create table if not exists mines(user integer primary key,bet integer,n integer,traps text,safe text);
 create table if not exists crash(user integer primary key,bet integer,cp real,t0 real);
 create table if not exists inv(uid integer primary key autoincrement,user integer,case_id text,idx integer,v integer);
 create table if not exists req(user integer,rid text,resp text,primary key(user,rid));
-create table if not exists ledger(user integer,delta integer,reason text,ts integer);""")
+create table if not exists ledger(user integer,delta integer,reason text,ts integer);
+create table if not exists wd(id integer primary key autoincrement,user integer,amount integer,ts integer,status text default 'pending');""")
 def mig():
     cols={r[1] for r in db.execute("pragma table_info(u)")}
     for c,d in (("banned","integer default 0"),("clicks","integer default 0"),("ckday","text"),("ckcnt","integer default 0"),("mult","integer default 1"),("nick","integer default 0")):
         if c not in cols:db.execute("alter table u add column %s %s"%(c,d))
 mig()
+db.execute("insert into tops(ts,who,case_id,idx,v) select ts,who,case_id,idx,v from drops where ts>? and not exists(select 1 from tops)",(int(time.time())-86400,))
+EP={"live":int(time.time()*1000),"top":int(time.time()*1000)}
 L=threading.Lock()
 def auth(init):
     if not TOKEN or not init:return None
@@ -169,10 +173,13 @@ def drop(u,cid,k,v):
     r=db.execute("select first_name,username from u where id=?",(u,)).fetchone();nm=((r[0] or r[1] or "Игрок") if r else "Игрок").strip()
     db.execute("insert into drops(ts,who,case_id,idx,v) values(?,?,?,?,?)",(int(time.time()),nm[:2]+"***",cid,k,v))
     db.execute("delete from drops where id<=(select max(id) from drops)-500")
+    db.execute("insert into tops(ts,who,case_id,idx,v) values(?,?,?,?,?)",(int(time.time()),nm[:2]+"***",cid,k,v))
+    db.execute("delete from tops where ts<?",(int(time.time())-86400,))
 TB={}
 def tokens(u,n):
     now=time.time();t,l=TB.get(u,(float(CPS),now));t=min(float(CPS),t+(now-l)*CPS);k=min(n,int(t+1e-9));TB[u]=(t-k,now);return k
 ADMINS={int(x) for x in os.environ.get("ADMIN_IDS","").replace(" ","").split(",") if x.lstrip("-").isdigit()}
+WD_NOTIFY=[]
 if not ADMINS and BACKUP.lstrip("-").isdigit():ADMINS={int(BACKUP)}
 def tx(fn):
     with L:
@@ -229,10 +236,12 @@ HELP="""🛠 Админ-панель
 🎟 /promolist — список, /promodel КОД — удалить
 ✉️ /msg ID|@ник текст — сообщение игроку
 📣 /broadcast текст — рассылка всем, /broadcastplay текст — с кнопкой «Играть»
+🧹 /clearlive — очистить ленту Live (старые дропы)
+🏆 /cleartop — сбросить «Лучший дроп»
 💳 /payments — оплаты звёздами, /refund CHARGE_ID — вернуть звёзды
 💾 /backup — сохранить копию базы сейчас
-Игрокам: /promo КОД — активировать промокод.
-Баланс ★ — внутриигровая валюта (1 ⭐ при пополнении = 1 ★), вывода нет."""
+💸 /wd — заявки на вывод, /wdok ID — выплачено, /wdno ID — отклонить\nИгрокам: /promo КОД — активировать промокод.
+Баланс ★ — внутриигровая валюта (1 ⭐ при пополнении = 1 ★), вывод — заявка владельцу от 500 ★."""
 def admin_tx(cmd,rest,a):
     def N(x):
         try:return int(x)
@@ -288,13 +297,40 @@ def admin_tx(cmd,rest,a):
         return "\n".join("%s: +%d ★, использовано %d/%s%s"%(r[0],r[1],r[3],r[2] or "∞"," (истёк)" if r[4] and r[4]<time.time() else "") for r in db.execute("select code,feathers,max_uses,used,expires from promo")) or "Промокодов нет."
     if cmd=="/promodel":
         need(1);db.execute("delete from promo where code=?",(a[0].upper(),));return "Удалено."
+    if cmd=="/clearlive":
+        n=db.execute("select count(*) from drops").fetchone()[0];db.execute("delete from drops");EP["live"]=int(time.time()*1000)
+        return "🧹 Live очищен: удалено дропов — %d. Новые появятся после следующих выигрышей."%n
+    if cmd=="/cleartop":
+        n=db.execute("select count(*) from tops").fetchone()[0];db.execute("delete from tops");EP["top"]=int(time.time()*1000)
+        return "🏆 «Лучший дроп» сброшен (записей: %d). Новый появится после следующего выигрыша."%n
     if cmd=="/refs":
         need(1);i=who(a[0])
         tt=db.execute("select count(*),coalesce(sum(refpaid),0) from u where ref=?",(i,)).fetchone()
         rows=db.execute("select id,coalesce(username,'-'),coalesce(first_name,'-'),sub,refpaid from u where ref=? order by rowid desc limit 15",(i,)).fetchall()
         return "👥 Приглашено: %d, засчитано: %d (выдано %d ★)\n"%(tt[0],tt[1],tt[1]*5)+"\n".join("%d @%s %s — %s"%(r[0],r[1],r[2],"засчитан" if r[4] else ("подписан" if r[3] else "не подписан")) for r in rows)
+    if cmd=="/wd":
+        rows=db.execute("select id,user,amount,ts from wd where status='pending' order by id asc limit 30").fetchall()
+        if not rows:return "💸 Активных заявок на вывод нет."
+        lines=[]
+        for wid,uid,amt,ts in rows:
+            r=db.execute("select coalesce(username,'-'),coalesce(first_name,'-') from u where id=?",(uid,)).fetchone() or ("-","-")
+            lines.append("#%d · %d ★ · id %d @%s %s"%(wid,amt,uid,r[0],r[1]))
+        return "💸 Заявки на вывод (%d):\n"%len(rows)+"\n".join(lines)+"\n\n/wdok ID — выплачено\n/wdno ID — отклонить и вернуть ★"
+    if cmd=="/wdok":
+        need(1);wid=N(a[0]);r=db.execute("select user,amount,status from wd where id=?",(wid,)).fetchone()
+        if not r:raise Err(404,"Заявка не найдена")
+        if r[2]!="pending":return "Заявка #%d уже обработана (%s)."%(wid,r[2])
+        db.execute("update wd set status='done' where id=?",(wid,));return "✅ Заявка #%d (%d ★, user %d) отмечена как выплаченная."%(wid,r[1],r[0])
+    if cmd=="/wdno":
+        need(1);wid=N(a[0]);r=db.execute("select user,amount,status from wd where id=?",(wid,)).fetchone()
+        if not r:raise Err(404,"Заявка не найдена")
+        if r[2]!="pending":return "Заявка #%d уже обработана (%s)."%(wid,r[2])
+        db.execute("update wd set status='rejected' where id=?",(wid,));bal(r[0]);add(r[0],r[1],"withdraw_refund")
+        try:say(r[0],"❌ Заявка на вывод %d ★ отклонена. ★ возвращены на баланс."%r[1])
+        except Exception:pass
+        return "↩️ Заявка #%d отклонена, %d ★ возвращены игроку %d."%(wid,r[1],r[0])
     raise Err(404,"Неизвестная команда. Список: /admin")
-ADMIN_CMDS={"/admin","/help","/stats","/user","/find","/top","/give","/take","/setbal","/giveall","/items","/giveitem","/clearinv","/resetdaily","/addclicks","/ban","/unban","/banned","/promoadd","/promolist","/promodel","/msg","/broadcast","/broadcastplay","/backup","/payments","/refund","/refs","/givex2","/givex3","/resetmult"}
+ADMIN_CMDS={"/admin","/help","/stats","/user","/find","/top","/give","/take","/setbal","/giveall","/items","/giveitem","/clearinv","/resetdaily","/addclicks","/ban","/unban","/banned","/promoadd","/promolist","/promodel","/msg","/broadcast","/broadcastplay","/backup","/payments","/refund","/refs","/clearlive","/cleartop","/givex2","/givex3","/resetmult","/wd","/wdok","/wdno"}
 def broadcast(ids,text,kb,admin_chat):
     ok=bad=0
     for i in ids:
@@ -341,7 +377,7 @@ def admin(t,chat):
 def handle_cmd(f,chat,t):
     try:
         touch(f);cmd=t.split()[0].split("@")[0].lower()
-        if cmd=="/terms":return say(chat,"📄 Условия\n• Средний возврат в гнёздах — около 65% от цены гнезда; шансы призов указаны в игре.\n• ★ — внутриигровая валюта (при пополнении 1 Telegram Star = 1 ★). Она не является Telegram Stars, не имеет денежной стоимости, не выводится и не обменивается на деньги или Stars.\n• Звёзды, потраченные на пополнение, не возвращаются, если покупка выдана верно.\n• Выпадение предметов случайно, шансы зависят от гнезда.\n• Если оплата прошла, а покупки нет, напишите /paysupport.")
+        if cmd=="/terms":return say(chat,"📄 Условия\n• Средний возврат в гнёздах — около 65% от цены гнезда; шансы призов указаны в игре.\n• ★ — внутриигровая валюта (при пополнении 1 Telegram Star = 1 ★). Она не является Telegram Stars, не имеет денежной стоимости, вывод ★ оформляется заявкой владельцу (от 500 ★).\n• Звёзды, потраченные на пополнение, не возвращаются, если покупка выдана верно.\n• Выпадение предметов случайно, шансы зависят от гнезда.\n• Если оплата прошла, а покупки нет, напишите /paysupport.")
         if cmd=="/support":return say(chat,"Вопросы по игре: "+SUPPORT)
         if cmd=="/paysupport":return say(chat,"💳 Проблема с оплатой? Напишите "+SUPPORT+": укажите ваш Telegram ID и время оплаты. Если покупка не выдана по нашей вине, мы вернём звёзды.")
         if tx(lambda:banned(f["id"])):return say(chat,"⛔ Доступ ограничен.")
@@ -412,7 +448,9 @@ def invite(u):
 def act(u,path,b):
     if path.startswith("/api/clicker/") or path.startswith("/api/battle/"):raise Err(403,"closed")
     rid=str(b.get("request_id",""))[:64]
-    if path=="/api/me":return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"mult":(db.execute("select mult from u where id=?",(u,)).fetchone() or [1])[0] or 1,"rate":RATE,"sub":bool((db.execute("select sub from u where id=?",(u,)).fetchone() or [0])[0]),"nick":bool((db.execute("select nick from u where id=?",(u,)).fetchone() or [0])[0]),"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None}
+    if path=="/api/me":
+        wds=[{"id":r[0],"amount":r[1],"ts":r[2],"status":r[3]} for r in db.execute("select id,amount,ts,status from wd where user=? order by id desc limit 30",(u,))]
+        return {"balance":bal(u),"inventory":invlist(u),"clicks":(db.execute("select clicks from u where id=?",(u,)).fetchone() or [0])[0],"mult":(db.execute("select mult from u where id=?",(u,)).fetchone() or [1])[0] or 1,"rate":RATE,"sub":bool((db.execute("select sub from u where id=?",(u,)).fetchone() or [0])[0]),"nick":bool((db.execute("select nick from u where id=?",(u,)).fetchone() or [0])[0]),"referral_link":("https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)) if BOTNAME[0] else None,"withdrawals":wds}
     if path=="/api/referral-link":
         if not BOTNAME[0]:raise Err(503,"no_bot")
         return {"referral_link":"https://t.me/%s?start=ref_%d"%(BOTNAME[0],u)}
@@ -436,14 +474,14 @@ def act(u,path,b):
         return {"accepted":k,"mult":m,"clicks":db.execute("select clicks from u where id=?",(u,)).fetchone()[0],"daily_limit":CDAY}
     if path=="/api/drops":
         since=int(b.get("since",0));rows=db.execute("select id,who,case_id,idx,v from drops where id>? order by id desc limit 30",(since,)).fetchall()[::-1]
-        t=db.execute("select who,case_id,idx,v from drops where ts>? order by v desc,id desc limit 1",(time.time()-86400,)).fetchone()
-        return {"drops":[{"id":r[0],"who":r[1],"case":r[2],"i":r[3],"v":r[4]} for r in rows],"top":({"who":t[0],"case":t[1],"i":t[2],"v":t[3]} if t else None)}
+        t=db.execute("select who,case_id,idx,v from tops where ts>? order by v desc,id desc limit 1",(time.time()-86400,)).fetchone()
+        return {"drops":[{"id":r[0],"who":r[1],"case":r[2],"i":r[3],"v":r[4]} for r in rows],"top":({"who":t[0],"case":t[1],"i":t[2],"v":t[3]} if t else None),"el":EP["live"],"et":EP["top"]}
     if path=="/api/shop/invoice":
         kind=b.get("kind");bal(u)
         if kind=="feathers":
             stars=int(b.get("stars",0))
             if not MIN_STARS<=stars<=MAX_STARS:raise Err(400,"bad_amount")
-            title,desc="%d ★ на баланс"%(stars*RATE),"Пополнение игрового баланса. ★ — внутриигровая валюта: вывод и обмен невозможны."
+            title,desc="%d ★ на баланс"%(stars*RATE),"Пополнение игрового баланса ★. Вывод — заявка владельцу от 500 ★."
         elif kind in ():
             mm,stars=BOOST[kind]
             if (db.execute("select mult from u where id=?",(u,)).fetchone()[0] or 1)>=mm:raise Err(409,"already_owned")
@@ -551,6 +589,30 @@ def act(u,path,b):
         else:
             if not sf:raise Err(409,"no_safe_cell")
             win=math.floor(bet*emult(len(sf),n));add(u,win,"mines_win");db.execute("delete from mines where user=?",(u,));out={"win":win,"traps":t}
+    elif path=="/api/withdraw":
+        amount=int(b.get("amount",0))
+        if amount<500:raise Err(400,"min_amount")
+        if amount>10000000:raise Err(400,"bad_request")
+        if bal(u)<amount:raise Err(402,"insufficient_funds")
+        if db.execute("select 1 from wd where user=? and status='pending'",(u,)).fetchone():
+            raise Err(409,"pending")
+        add(u,-amount,"withdraw")
+        wid=db.execute("insert into wd(user,amount,ts,status) values(?,?,?,'pending')",(u,amount,int(time.time()))).lastrowid
+        r=db.execute("select username,first_name,balance from u where id=?",(u,)).fetchone()
+        uname=(r[0] or "-") if r else "-"
+        fname=(r[1] or "-") if r else "-"
+        left=r[2] if r else 0
+        text=("💸 Заявка на вывод #%d\n"
+              "Игрок: %s @%s\n"
+              "ID: %d\n"
+              "Сумма: %d ★\n"
+              "Баланс после: %d ★\n"
+              "request_id: %s\n\n"
+              "После выплаты: /wdok %d\n"
+              "Отклонить (вернуть ★): /wdno %d")%(wid,fname,uname,u,amount,left,rid,wid,wid)
+        WD_NOTIFY.append(text)
+        wds=[{"id":x[0],"amount":x[1],"ts":x[2],"status":x[3]} for x in db.execute("select id,amount,ts,status from wd where user=? order by id desc limit 30",(u,))]
+        out={"ok":True,"amount":amount,"id":wid,"message":"Заявка на %d ★ отправлена владельцу"%amount,"withdrawals":wds}
     else:raise Err(404,"not_found")
     out["balance"]=bal(u);db.execute("insert into req values(?,?,?)",(u,rid,json.dumps(out)));return out
 class H(BaseHTTPRequestHandler):
@@ -581,7 +643,13 @@ class H(BaseHTTPRequestHandler):
                 db.execute("begin immediate")
                 try:r=act(u,s.path.split("?")[0],b);db.execute("commit")
                 except BaseException:db.execute("rollback");raise
+            notes=WD_NOTIFY[:];WD_NOTIFY.clear()
             s.send(200,r)
+            for t in notes:
+                for a in ADMINS:say(a,t)
+                if BACKUP and (not ADMINS or (BACKUP.lstrip("-").isdigit() and int(BACKUP) not in ADMINS)):
+                    try:say(int(BACKUP) if BACKUP.lstrip("-").isdigit() else BACKUP,t)
+                    except Exception:pass
         except Err as e:s.send(e.code,{"error":e.msg})
         except (ValueError,TypeError,KeyError,AttributeError,OverflowError):s.send(400,{"error":"bad_request"})
         except Exception:s.send(500,{"error":"server"})
